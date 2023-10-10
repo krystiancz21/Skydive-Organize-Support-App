@@ -1,5 +1,5 @@
 # INŻYNIERKA 
-    Uruchomienie:
+Uruchomienie:
     ```
     npm i
     npm start
