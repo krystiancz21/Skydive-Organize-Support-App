@@ -39,6 +39,11 @@ git add .
 git commit -m "tresc wiadomości"
 ```
 * W ramach jednego brancha można walić wiele commitów ale jak już skończysz to wypychasz brancha na githuba
+* normalnie wypychamy zmiany za pomocą:
+```
+git push
+```
+* ewentualnie - ale to cośnie działa: 
 ```
 git push -u origin <nazwa brancha>
 ```
