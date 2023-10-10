@@ -1,0 +1,17 @@
+h1{
+    padding-top: 50px;
+    justify-content: center;
+}
+
+#btn-licence  {
+    width: 200px; 
+}
+
+#przycisk2{
+    justify-content: center;
+    margin: 15px;
+}
+.powrot{
+    float: left;
+    margin: 20px;
+}

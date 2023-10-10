@@ -1,0 +1,12 @@
+.form-col {
+    display: flex;
+}
+
+.icon-small { 
+    height: 20px;
+    width: 20px;
+}
+
+.full-width-button {
+    width: 65%;
+}

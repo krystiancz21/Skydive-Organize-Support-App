@@ -1,0 +1,15 @@
+svg{ /* obrazek domu i profilu */
+    height: 30px;
+    width: 30px;
+}
+.card{
+    margin-top: 200px;
+    margin-right: 80px;
+    justify-content: center;
+}
+.card-img-top{
+    border: 1px solid rgb(225, 221, 221);
+}
+.card-body{
+    border: 1px solid rgb(225, 221, 221);
+}
