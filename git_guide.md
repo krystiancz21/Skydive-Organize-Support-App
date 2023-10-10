@@ -30,7 +30,7 @@ git switch <nazwa nowego brancha>
 Zajebiście teraz pisz ten kołdzik
 
 ## Po wprowadzeniu zmian
-* Najpierw przenosisz wszystkie zmiany do staging area
+* Najpierw przenosisz wszystkie zmiany do staging area (teraz foldery node_modules są w gitignore więc są pomijane)
 ```
 git add .
 ```
@@ -42,5 +42,4 @@ git commit -m "tresc wiadomości"
 ```
 git push -u origin <nazwa brancha>
 ```
-ŻĄDNYCH PUSHY NA MAINA!!!!!1!!11
-No i git
+ŻADNYCH PUSHY NA MAINA!!!!!1!!11
