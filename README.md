@@ -2,6 +2,8 @@
 Uruchomienie:
     ```
     npm i
+    ```
+    ```
     npm start
     ```
 
