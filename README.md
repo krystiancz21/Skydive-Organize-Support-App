@@ -1,12 +1,11 @@
 # INŻYNIERKA 
     Uruchomienie:
-    ```cd frontend```
-    ```cd backend```
-    
-    ```npm i```
-    ```npm start```
+    ```
+    npm i
+    npm start
+    ```
 
-# [Instrukcja do gita]()
+# [Instrukcja do gita](https://github.com/krystiancz21/Inzynierka/blob/main/git_guide.md)
 
 # Zrobione:
  * widoki 
