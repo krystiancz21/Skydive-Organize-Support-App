@@ -15,8 +15,9 @@ const EditUserData = () => {
         phoneNumber: "",
         weight: "",
     })
-    const [error, setError] = useState("")
 
+    const [error, setError] = useState("")
+    const [updateSuccess, setUpdateSuccess] = useState(false);
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
@@ -57,6 +58,26 @@ const EditUserData = () => {
     const handleChange = ({ currentTarget: input }) => {
         setUserData({ ...userData, [input.name]: input.value })
     }
+
+    const handleEditUserData = async (e) => {
+        e.preventDefault();
+    
+        try {
+            const response = await axios.post('http://localhost:3001/api/user/updateUserData', userData);
+            if (response.data.error) {
+                setError(response.data.error);
+                setUpdateSuccess(false);
+            } else if (response.data.Status === "Success") {
+                setError('');
+                setUpdateSuccess(true);
+            } else {
+                console.error("Błąd podczas aktualizacji danych!");
+            }
+        } catch (error) {
+            // console.error(error);
+            console.error('Błąd podczas aktualizacji danych: ' + error.message);
+        }
+    };
 
     const handleDelete = () => {
         axios.get('http://localhost:3001/api/auth/logout')
@@ -126,22 +147,10 @@ const EditUserData = () => {
                                             name="email"
                                             value={userData.email}
                                             onChange={handleChange}
+                                            disabled
                                         />
                                     </Col>
                                 </Form.Group>
-                                {/* <Form.Group as={Row} controlId="formEditUserDataPassword" className="mb-3">
-                                    <Form.Label column sm={2}>
-                                        Hasło
-                                    </Form.Label>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            type="password"
-                                            name="password"
-                                            value={userData.password}
-                                            onChange={handleChange}
-                                        />
-                                    </Col>
-                                </Form.Group> */}
                                 <Form.Group as={Row} controlId="formEditUserDataPhone" className="mb-3">
                                     <Form.Label column sm={2}>
                                         Telefon
@@ -177,8 +186,15 @@ const EditUserData = () => {
                                     </Col>
                                 </Form.Group>
                             </div>
-                            <div className='mt-5'>
-                                <Button variant="success" className="mt-3" id="przycisk2"><BsPencilSquare /> EDYTUJ DANE</Button>
+
+                            {updateSuccess && <div className="alert alert-success">Dane zostały zaktualizowane poprawnie!</div>}
+                            {error && <div className="alert alert-danger">{error}</div>}
+                        
+                            <div className='mt-4'>
+                                <Button variant="success" className="mt-3" id="przycisk2" onClick={handleEditUserData}>
+                                    <BsPencilSquare /> EDYTUJ DANE
+                                </Button>
+                                {/* <Button variant="success" className="mt-3" id="przycisk2"><BsPencilSquare /> EDYTUJ DANE</Button> */}
                                 <Button variant="danger" className="mt-3" id="przycisk2"><BsFillTrashFill /> USUŃ KONTO</Button>
                             </div>
                         </Form>
