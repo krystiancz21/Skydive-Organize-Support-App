@@ -43,8 +43,11 @@ git commit -m "tresc wiadomości"
 ```
 git push
 ```
-* ewentualnie - ale to cośnie działa: 
+* ewentualnie - korzystamy: 
 ```
 git push -u origin <nazwa brancha>
+```
+```
+git push origin HEAD:<nazwa_brancha>
 ```
 ŻADNYCH PUSHY NA MAINA!!!!!1!!11
