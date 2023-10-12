@@ -77,8 +77,8 @@ router.post("/login", (req, res) => {
         }
 
         if (response) {
-          const name = data[0].mail;
-          const token = jwt.sign({ name }, process.env.JWT_SECRET_KEY, { expiresIn: "1d" }); // jwt-secret-key -> .env -> 32/256 znakow
+          const mail = data[0].mail;
+          const token = jwt.sign({ mail }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" }); // jwt-secret-key -> .env -> 32/256 znakow
           res.cookie("token", token);
           console.log("Logowanie udało się.");
           return res.json({ Status: "Success" });
@@ -102,7 +102,7 @@ const verifyUser = (req, res, next) => {
       if (err) {
         return res.json({ Error: "Token is not ok" });
       } else {
-        req.name = decoded.name;
+        req.mail = decoded.mail;
         next();
       }
     });
@@ -110,7 +110,7 @@ const verifyUser = (req, res, next) => {
 };
 
 router.get("/main", verifyUser, (req, res) => {
-  return res.json({ Status: "Success", name: req.name });
+  return res.json({ Status: "Success", mail: req.mail });
 });
 
 router.get("/logout", (req, res) => {

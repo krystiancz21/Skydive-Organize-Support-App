@@ -13,7 +13,7 @@ import { useEffect } from 'react';
 const Main = () => {
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
-    const [name, setName] = useState('');
+    const [mail, setMail] = useState('');
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -22,7 +22,7 @@ const Main = () => {
             .then(res => {
                 if (res.data.Status === "Success") {
                     setIsAuth(true);
-                    setName(res.data.name); //imie
+                    setMail(res.data.mail); //email
                 } else {
                     setIsAuth(false);
                     setMessage(res.data.Error);
@@ -50,7 +50,7 @@ const Main = () => {
                                 <Nav className="me-auto">
                                     <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                 </Nav>
-                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  User: {name}</Navbar.Brand></Nav.Link>
+                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  { mail }</Navbar.Brand></Nav.Link>
                                 <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
                             </Navbar.Collapse>
                         </Container>

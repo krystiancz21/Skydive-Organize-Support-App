@@ -60,7 +60,7 @@ const Signup = () => {
                 <Form onSubmit={handleSubmit} className="text-center">
                     <h4 className="mb-3">Podaj dane do rejestracji nowego konta</h4>
                     <div className='max-width-form'>
-                        <Form.Group as={Row} controlId="formSignupName" className="mb-3">
+                        <Form.Group as={Row} controlId="formSignupFirstName" className="mb-3">
                             <Form.Label column sm={2}>
                                 Imię
                             </Form.Label>
@@ -75,7 +75,7 @@ const Signup = () => {
                                 />
                             </Col>
                         </Form.Group>
-                        <Form.Group as={Row} controlId="formSignupEmail" className="mb-3">
+                        <Form.Group as={Row} controlId="formSignupLastName" className="mb-3">
                             <Form.Label column sm={2}>
                                 Nazwisko
                             </Form.Label>
