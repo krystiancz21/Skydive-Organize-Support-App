@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `skydive`.`user` (
   `haslo` VARCHAR(100) NOT NULL,
   `telefon` VARCHAR(15) NOT NULL,
   `masa` INT NOT NULL DEFAULT 0,
-  `usuniete_konto` TINYINT NULL,
+  `usuniete_konto` TINYINT NULL DEFAULT 0,
   `zablokowane_do` DATETIME NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE INDEX `username_UNIQUE` (`user_id`)

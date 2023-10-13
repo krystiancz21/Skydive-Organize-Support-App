@@ -70,6 +70,9 @@ router.post("/login", (req, res) => {
   db.query(sql, [req.body.email], (err, data) => {
     if (err) return res.json({ Error: "Login error in server" });
     if (data.length > 0) {
+      if (data[0].usuniete_konto === 1) {
+        return res.json({ Error: "This account has been deleted" });
+      }
       bcrypt.compare(req.body.password.toString(), data[0].haslo, (err, response) => {
         if (err) {
           console.error("Błąd podczas logowania:", err);

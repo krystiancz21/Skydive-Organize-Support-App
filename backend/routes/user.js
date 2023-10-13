@@ -50,4 +50,22 @@ router.post("/updateUserData", async (req, res) => {
     }
 });
 
+// Usuwanie konta
+router.delete("/deleteAccount",  async (req, res) => {
+    const userEmail = req.query.email;
+    const sql = "UPDATE user SET `usuniete_konto` = 1 WHERE `mail` = ?";
+    db.query(sql, [userEmail], (err, result) => {
+        if (err) {
+          console.error("Błąd podczas usuwania konta:", err);
+          return res.json({ Error: "Error deleting account" });
+        }
+    
+        // Wylogowanie użytkownika
+        res.clearCookie("token");
+        
+        return res.json({ Status: "Account deleted successfully" });
+    });
+});
+
+
 module.exports = router;

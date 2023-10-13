@@ -29,7 +29,7 @@ const Login = () => {
             if (response.data.Status === "Success") {
                 navigate('/main');
             } else if (response.data.Status !== "Success" || response.data.Error) {
-                setError("Incorrect login or password");
+                setError("Niewłaściwa nazwa użytkownika lub hasło, spróbuj ponownie");
             } else {
                 console.error("Błąd logowania: Niepoprawna odpowiedź z serwera");
                 alert("Error");  // response.data.Error;

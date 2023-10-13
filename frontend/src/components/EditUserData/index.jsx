@@ -86,6 +86,18 @@ const EditUserData = () => {
             }).catch(err => console.log(err));
     }
 
+    // Usuniecie konta
+    const handleDeleteAccount = () => {
+        if (window.confirm("Czy na pewno chcesz usunąć konto?")) {
+            axios.delete(`http://localhost:3001/api/user/deleteAccount/?email=${mail}`)
+              .then(res => {
+                // Przekierowanie na stronę główną po usunięciu konta
+                window.location.href = "http://localhost:3000/main";
+              })
+              .catch(err => console.log(err));
+          }
+    }
+
 
     return (
         <>
@@ -195,7 +207,7 @@ const EditUserData = () => {
                                     <BsPencilSquare /> EDYTUJ DANE
                                 </Button>
                                 {/* <Button variant="success" className="mt-3" id="przycisk2"><BsPencilSquare /> EDYTUJ DANE</Button> */}
-                                <Button variant="danger" className="mt-3" id="przycisk2"><BsFillTrashFill /> USUŃ KONTO</Button>
+                                <Button variant="danger" className="mt-3" id="przycisk2" onClick={handleDeleteAccount}><BsFillTrashFill /> USUŃ KONTO</Button>
                             </div>
                         </Form>
                     </Container></>
