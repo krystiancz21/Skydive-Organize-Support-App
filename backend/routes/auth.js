@@ -117,6 +117,10 @@ router.get("/userprofile", verifyUser, (req, res) => {
   return res.json({ Status: "Success", mail: req.mail });
 });
 
+router.get("/edit-user-data", verifyUser, (req, res) => {
+  return res.json({ Status: "Success", mail: req.mail });
+});
+
 router.get("/logout", (req, res) => {
   res.clearCookie("token");
   return res.json({ Status: "Success" });
