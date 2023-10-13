@@ -12,6 +12,8 @@ Uruchomienie:
 # Zrobione:
  * widoki 
  * logowanie / rejestracja / walidacja danych podczas logowania i rejestracji / generowanie tokenu itp
+ * edycja i usuwanie konta
+ 
 
 # Do zorbienia:
  * dużo xd

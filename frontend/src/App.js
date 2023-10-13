@@ -9,6 +9,7 @@ import EditUserData from './components/EditUserData';
 import UserProfile from './components/UserProfile';
 import Reservation from './components/Reservation';
 import Messages from './components/Messages';
+import Calendar from './components/Calendar';
 
 import OwnerEmployeeAccounts from './components/OwnerEmployeeAccounts';
 import OwnerCreateAccount from './components/OwnerCreateAccount';
@@ -40,6 +41,7 @@ function App() {
     
     <Routes>
       <Route path="/edit-user-data" element={<EditUserData />} />
+      <Route path="/calendar" element={<Calendar />} />
       <Route path="/employeemain" element={<EmployeeMain />} />
       <Route path="/login" element={<Login />} />
       <Route path="/main" element={<Main />} />

@@ -1,0 +1,15 @@
+.legend-box.legend-booked-red {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    margin-right: 5px;
+}
+
+.legend-box.legend-booked {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: blue;
+    margin-right: 5px;
+}
