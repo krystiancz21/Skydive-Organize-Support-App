@@ -18,9 +18,11 @@ const EditUserData = () => {
 
     const [error, setError] = useState("")
     const [updateSuccess, setUpdateSuccess] = useState(false);
+    const [updateFile, setUpdateFile] = useState(false);
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
+    const [file, setFile] = useState(null);
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -61,15 +63,17 @@ const EditUserData = () => {
 
     const handleEditUserData = async (e) => {
         e.preventDefault();
-    
+
         try {
             const response = await axios.post('http://localhost:3001/api/user/updateUserData', userData);
             if (response.data.error) {
                 setError(response.data.error);
                 setUpdateSuccess(false);
+                setUpdateFile(false);
             } else if (response.data.Status === "Success") {
                 setError('');
                 setUpdateSuccess(true);
+                setUpdateFile(false);
             } else {
                 console.error("Błąd podczas aktualizacji danych!");
             }
@@ -90,14 +94,45 @@ const EditUserData = () => {
     const handleDeleteAccount = () => {
         if (window.confirm("Czy na pewno chcesz usunąć konto?")) {
             axios.delete(`http://localhost:3001/api/user/deleteAccount/?email=${mail}`)
-              .then(res => {
-                // Przekierowanie na stronę główną po usunięciu konta
-                window.location.href = "http://localhost:3000/main";
-              })
-              .catch(err => console.log(err));
-          }
+                .then(res => {
+                    // Przekierowanie na stronę główną po usunięciu konta
+                    window.location.href = "http://localhost:3000/main";
+                })
+                .catch(err => console.log(err));
+        }
     }
 
+    // Dodanie licencji
+    const uploadFile = async () => {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const uploadResponse = await axios.post('http://localhost:3001/api/user/updateUserFile', formData);
+            const filePath = uploadResponse.data.filePath; // Oczekuj odpowiedzi z ścieżką do zapisanego pliku
+
+            const licenseData = {
+                sciezka_do_skanu_licencji: filePath, // Ścieżka do zapisanego pliku
+                email: mail, 
+            };
+
+            const dbResponse = await axios.post('http://localhost:3001/api/user/updateLicenseData', licenseData);
+            if (dbResponse.data.error) {
+                setError(dbResponse.data.error);
+                setUpdateFile(false);
+                setUpdateSuccess(false);
+            } else if (dbResponse.data.Status === "Success") {
+                setError('');
+                setUpdateSuccess(false);
+                setUpdateFile(true);
+            } else {
+                console.error("Błąd podczas aktualizacji danych!");
+            }
+            console.log("Dodano wpis do bazy danych:", dbResponse.data);
+        } catch (error) {
+            console.error("Błąd podczas przesyłania pliku: " + error.message);
+        }
+    }
 
     return (
         <>
@@ -189,19 +224,29 @@ const EditUserData = () => {
                                         />
                                     </Col>
                                 </Form.Group>
-                                <Form.Group as={Row} controlId="formEditUserDataLicense" className="mb-3">
-                                    <Form.Label column lg={2}>
+                                <Form.Group as={Row} controlId="formEditUserFile" className="mb-3">
+                                    <Form.Label column sm={2}>
                                         Licencja
                                     </Form.Label>
-                                    <Col lg={4}>
-                                        <Button variant="secondary" id="btn-licence">DODAJ LICENCJĘ</Button>
+                                    <Col sm={8}>
+                                        <div className="d-flex flex-column">
+                                            <input
+                                                type="file"
+                                                accept=".jpg, .jpeg, .png, .pdf"
+                                                onChange={(e) => setFile(e.target.files[0])}
+                                            />
+                                            <Button variant="secondary" onClick={uploadFile} className="mt-2" style={{ width: '100px' }}>
+                                                Dodaj plik
+                                            </Button>
+                                        </div>
                                     </Col>
                                 </Form.Group>
                             </div>
 
                             {updateSuccess && <div className="alert alert-success">Dane zostały zaktualizowane poprawnie!</div>}
+                            {updateFile && <div className="alert alert-success">Pomyślnie dodano załącznik!</div>}
                             {error && <div className="alert alert-danger">{error}</div>}
-                        
+
                             <div className='mt-4'>
                                 <Button variant="success" className="mt-3" id="przycisk2" onClick={handleEditUserData}>
                                     <BsPencilSquare /> EDYTUJ DANE

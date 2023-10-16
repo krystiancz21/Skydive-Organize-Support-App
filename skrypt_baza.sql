@@ -245,6 +245,14 @@ CREATE TABLE IF NOT EXISTS `skydive`.`rezerwacje_terminow` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
+-- -----------------------------------------------------
+-- INSERT INTO dla Tabel
+-- -----------------------------------------------------
+INSERT INTO `skydive`.`sposob_platnosci` (`nazwa`) VALUES ('BLIK'), ('PayU'), ('Przelew bankowy'), ('Karta debetowa');
+INSERT INTO `skydive`.`status_platnosci` (`nazwa`) VALUES ('Niezapłacone'), ('W trakcie'), ('Zapłacone');
+INSERT INTO `skydive`.`rola` (`nazwa`) VALUES ('user'), ('employee'), ('owner');
+INSERT INTO `skydive`.`status_skoku` (`nazwa`) VALUES ('Niezrealizowany'), ('Zrealizowany');
+INSERT INTO `skydive`.`status_terminu` (`nazwa`) VALUES ('Wolne'), ('Zajęte');
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
