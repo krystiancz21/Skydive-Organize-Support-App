@@ -54,6 +54,23 @@ router.post("/register", async (req, res) => {
               console.error("Błąd podczas wstawiania danych do bazy danych:", err);
               return res.json({ Error: "Inserting data error in server" });
             }
+
+            // Dodanie roli "user" dla nowo zarejestrowanego użytkownika
+            const currentDate = new Date().toISOString().slice(0, 19).replace("T", " "); // Pobranie aktualnej daty w formacie YYYY-MM-DD HH:mm:ss
+            const futureDate = new Date();
+            futureDate.setFullYear(futureDate.getFullYear() + 1); // Dodanie roku do daty
+
+            const formattedFutureDate = futureDate.toISOString().slice(0, 19).replace("T", " "); // Sformatowanie daty do odpowiedniego formatu
+            const insertUserRoleQuery = "INSERT INTO rola_user (rola_od, rola_do, user_id, rola_rola_id) VALUES (?, ?, ?, ?)";
+            const roleValues = [currentDate, formattedFutureDate, result.insertId, 1]; // 1 to ID roli "user"
+
+            db.query(insertUserRoleQuery, roleValues, (err, roleResult) => {
+              if (err) {
+                console.error("Błąd podczas dodawania roli dla użytkownika:", err);
+                return res.json({ Error: "Adding role error in server" });
+              }
+            });
+
             return res.json({ Status: "Success" });
           });
         });
@@ -81,13 +98,25 @@ router.post("/login", (req, res) => {
 
         if (response) {
           const mail = data[0].mail;
-          const token = jwt.sign({ mail }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" }); // jwt-secret-key -> .env -> 32/256 znakow
-          res.cookie("token", token);
-          console.log("Logowanie udało się.");
-          return res.json({ Status: "Success" });
-        } else {
-          return res.json({ Status: "Password not matched" });
-        }
+          // Pobranie roli użytkownika z bazy danych (możesz zmienić sposób na odpowiedni dla Twojej aplikacji)
+          const userRoleQuery = "SELECT r.nazwa AS rola FROM rola_user ru JOIN rola r ON ru.rola_rola_id = r.rola_id WHERE ru.user_id = ?";
+          db.query(userRoleQuery, [data[0].user_id], (err, roleData) => {
+            if (err) {
+              console.error("Błąd podczas pobierania roli użytkownika:", err);
+              return res.json({ Error: "Getting user role error in server" });
+            }
+
+            const userRole = roleData[0].rola; // Zakładam, że użytkownik ma jedną rolę
+            console.log(userRole);
+
+            const token = jwt.sign({ mail }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" }); // jwt-secret-key -> .env -> 32/256 znakow
+            res.cookie("token", token);
+            console.log("Logowanie udało się.");
+            return res.json({ Status: "Success" });
+          });
+          } else {
+            return res.json({ Status: "Password not matched" });
+          }
       }
       );
     } else {

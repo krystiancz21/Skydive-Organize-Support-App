@@ -250,9 +250,19 @@ CREATE TABLE IF NOT EXISTS `skydive`.`rezerwacje_terminow` (
 -- -----------------------------------------------------
 INSERT INTO `skydive`.`sposob_platnosci` (`nazwa`) VALUES ('BLIK'), ('PayU'), ('Przelew bankowy'), ('Karta debetowa');
 INSERT INTO `skydive`.`status_platnosci` (`nazwa`) VALUES ('Niezapłacone'), ('W trakcie'), ('Zapłacone');
-INSERT INTO `skydive`.`rola` (`nazwa`) VALUES ('user'), ('employee'), ('owner');
+INSERT INTO `skydive`.`rola` (`nazwa`) VALUES ('klient'), ('pracownik'), ('admin');
 INSERT INTO `skydive`.`status_skoku` (`nazwa`) VALUES ('Niezrealizowany'), ('Zrealizowany');
 INSERT INTO `skydive`.`status_terminu` (`nazwa`) VALUES ('Wolne'), ('Zajęte');
+
+INSERT INTO `user` (`user_id`, `imie`, `nazwisko`, `mail`, `haslo`, `telefon`, `masa`, `usuniete_konto`, `zablokowane_do`) VALUES
+(1, 'klient', 'klient', 'klient@gmail.com', '$2b$10$U/ic/ja1nStvJwZ1IHoByOjj.9rRfbL8IJOdUc5zEdFlQg9H3lqTS', '123123123', 0, 0, NULL),
+(2, 'pracownik', 'pracownik', 'pracownik@gmail.com', '$2b$10$/zW4PqduzBUmIIpCrn9nduqN34gx.eX032xCb8io.QkuBdN2LeVoK', '321321321', 0, 0, NULL),
+(3, 'admin', 'admin', 'admin@gmail.com', '$2b$10$usCT49C8dQ8WcZ5.Vea89.BVcjMTzljeccgjwskOngmrvELwW5E2y', '222333444', 0, 0, NULL);
+
+INSERT INTO `rola_user` (`rola_od`, `rola_do`, `user_id`, `rola_rola_id`) VALUES
+('2023-10-15 12:00:00', '2024-10-15 12:00:00', 1, 1),
+('2023-10-15 12:00:00', '2024-10-15 12:00:00', 2, 2),
+('2023-10-15 12:00:00', '2024-10-15 12:00:00', 3, 3);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
