@@ -16,4 +16,4 @@ Uruchomienie:
  
 
 # Do zorbienia:
- * dużo xd
+ 1. [] Logowanie
