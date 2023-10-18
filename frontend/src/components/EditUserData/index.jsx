@@ -86,7 +86,8 @@ const EditUserData = () => {
     const handleDelete = () => {
         axios.get('http://localhost:3001/api/auth/logout')
             .then(res => {
-                window.location.reload(true);
+                // Przekierowanie na stronę główną po wylogowaniu
+                window.location.href = "http://localhost:3000/main";
             }).catch(err => console.log(err));
     }
 
@@ -113,7 +114,7 @@ const EditUserData = () => {
 
             const licenseData = {
                 sciezka_do_skanu_licencji: filePath, // Ścieżka do zapisanego pliku
-                email: mail, 
+                email: mail,
             };
 
             const dbResponse = await axios.post('http://localhost:3001/api/user/updateLicenseData', licenseData);

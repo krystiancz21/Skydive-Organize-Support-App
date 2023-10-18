@@ -2,14 +2,18 @@ import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, Card
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
 import { BsFillPersonFill, BsArrowRightShort, BsFillBellFill } from 'react-icons/bs';
+import { Link } from "react-router-dom"
 import styles from "./style.css"
+import obraz from '../Images/obraz.jpg';
 import axios from "axios"
 import { useEffect, useState } from 'react';
 
 const UserProfile = () => {
+    const [error, setError] = useState("")
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
+    const [userRole, setUserRole] = useState('');
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -19,6 +23,7 @@ const UserProfile = () => {
                 if (res.data.Status === "Success") {
                     setIsAuth(true);
                     setMail(res.data.mail); //email
+                    setUserRole(res.data.userRole); // Ustaw rolę użytkownika
                 } else {
                     setIsAuth(false);
                     setMessage(res.data.Error);
@@ -30,14 +35,144 @@ const UserProfile = () => {
     const handleDelete = () => {
         axios.get('http://localhost:3001/api/auth/logout')
             .then(res => {
-                window.location.reload(true);
+                // Przekierowanie na stronę główną po wylogowaniu
+                window.location.href = "http://localhost:3000/main";
+                //window.location.reload(true);
             }).catch(err => console.log(err));
     }
 
     return (
         <>
             {isAuth ? (
-                // User zalogowany
+                <>
+                    {/* Wyświetl odpowiednią nawigację w zależności od roli */}
+                    {userRole === 'klient' && (
+                        // User zalogowany
+                        <>
+                            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                                <Container>
+                                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                                    <Navbar.Collapse id="responsive-navbar-nav">
+                                        <Nav className="me-auto">
+                                            <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                            <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                            <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>
+                                            <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                        </Nav>
+                                        <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
+                                        <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
+                                    </Navbar.Collapse>
+                                </Container>
+                            </Navbar>
+                            <Container>
+                                <h1 className="text-center">PROFIL UŻYTKOWNIKA</h1>
+                                <Row>
+                                    <Col className="text-center">
+                                        <Button variant="secondary" className="mt-3" id="btn-edit" href="/edit-user-data">
+                                            <div className="mt-3">
+                                                <BsFillPersonFill /> Edytuj dane <BsArrowRightShort />
+                                            </div>
+                                        </Button>
+                                    </Col>
+                                </Row>
+                                <Row >
+                                    <Col className="text-center">
+                                        <Button variant="secondary" className="mt-3" id="btn-jumps" href="/myjumps">
+                                            <div className="mt-3">
+                                                <BsFillBellFill /> Moje skoki <BsArrowRightShort />
+                                            </div>
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </Container>
+                        </>
+                    )}
+                    {userRole === 'pracownik' && (
+                        <>
+                            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                                <Container>
+                                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                                    <Navbar.Collapse id="responsive-navbar-nav">
+                                        <Nav className="me-auto">
+                                            <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                            <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                            <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>
+                                            <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                            <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                            <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                        </Nav>
+                                        <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
+                                        <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
+                                    </Navbar.Collapse>
+                                </Container>
+                            </Navbar>
+                            <Container>
+                                <h1 className="text-center">PROFIL PRACOWNIKA</h1>
+                                <Row>
+                                    <Col className="text-center">
+                                        <Button variant="secondary" className="mt-3" id="btn-edit" href="/edit-user-data">
+                                            <div className="mt-3">
+                                                <BsFillPersonFill /> Edytuj dane <BsArrowRightShort />
+                                            </div>
+                                        </Button>
+                                    </Col>
+                                </Row>
+                                <Row >
+                                    <Col className="text-center">
+                                        <Button variant="secondary" className="mt-3" id="btn-jumps" href="/myjumps">
+                                            <div className="mt-3">
+                                                <BsFillBellFill /> Moje skoki <BsArrowRightShort />
+                                            </div>
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </Container>
+                        </>
+                    )}
+                    {userRole === 'admin' && (
+                        <><Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                            <Container>
+                                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                                <Navbar.Collapse id="responsive-navbar-nav">
+                                    <Nav className="me-auto">
+                                        <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                        <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                        <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>
+                                        <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                        <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                        <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                        <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
+                                    </Nav>
+                                    <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
+                                    <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
+                                </Navbar.Collapse>
+                            </Container>
+                        </Navbar>
+                            <Container>
+                                <h1 className="text-center">PROFIL ADMINISTRATORA</h1>
+                                <Row>
+                                    <Col className="text-center">
+                                        <Button variant="secondary" className="mt-3" id="btn-edit" href="/edit-user-data">
+                                            <div className="mt-3">
+                                                <BsFillPersonFill /> Edytuj dane <BsArrowRightShort />
+                                            </div>
+                                        </Button>
+                                    </Col>
+                                </Row>
+                                <Row >
+                                    <Col className="text-center">
+                                        <Button variant="secondary" className="mt-3" id="btn-jumps" href="/myjumps">
+                                            <div className="mt-3">
+                                                <BsFillBellFill /> Moje skoki <BsArrowRightShort />
+                                            </div>
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </Container>
+                        </>
+                    )}</>
+            ) : (
+                // User niezalogowany
                 <>
                     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                         <Container>
@@ -45,51 +180,28 @@ const UserProfile = () => {
                             <Navbar.Collapse id="responsive-navbar-nav">
                                 <Nav className="me-auto">
                                     <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-                                    <Nav.Link href="/offer">OFERTA</Nav.Link>
-                                    <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>
-                                    <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                 </Nav>
-                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
-                                <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
+                                <Link to="/login">
+                                    <Button variant="success">ZALOGUJ</Button>
+                                </Link>
                             </Navbar.Collapse>
                         </Container>
                     </Navbar>
-                    <Container>
-                        <h1 className="text-center">PROFIL UŻYTKOWNIKA</h1>
-                        <Row>
-                            <Col className="text-center">
-                                <Button variant="secondary" className="mt-3" id="btn-edit" href="/edit-user-data">
-                                    <div className="mt-3">
-                                        <BsFillPersonFill /> Edytuj dane <BsArrowRightShort />
-                                    </div>
-                                </Button>
-                            </Col>
-                        </Row>
-                        <Row >
-                            <Col className="text-center">
-                                <Button variant="secondary" className="mt-3" id="btn-jumps" href="/myjumps">
-                                    <div className="mt-3">
-                                        <BsFillBellFill /> Moje skoki <BsArrowRightShort />
-                                    </div>
-                                </Button>
-                            </Col>
-                        </Row>
+                    <Container className={styles.content}>
+                        <h1 className="text-center">STRONA GŁÓWNA</h1>
+                        <h2>{message}</h2>
+                        <CardGroup>
+                            <Card>
+                                <Card.Img variant="top" src={obraz} alt="img-oferta" style={{ width: '200px', height: '200px' }} />
+                                <Card.Body>
+                                    <Card.Title><Button variant="primary" size="sm" href="/offer"> OFERTA <BsArrowRightShort /></Button></Card.Title>
+                                </Card.Body>
+                            </Card>
+                        </CardGroup>
                     </Container>
                 </>
-            ) : (
-                // User niezalogowany
-                <>jestes wylogowany - kiedys sie to poprawi</>
             )}
         </>
-
-
-    )
+    );
 }
-
-export default UserProfile
-
-{/* <Container className={styles.content}>
-                <h1>PROFIL UŻYTKOWNIKA</h1>
-                <Button variant="secondary" id="btn-edit"><BsFillPersonFill /> Edytuj dane <BsArrowRightShort /></Button>
-                <Button variant="secondary"><BsFillPersonFill /> Moje skoki <BsArrowRightShort /></Button>
-            </Container></> */}
+export default UserProfile;
