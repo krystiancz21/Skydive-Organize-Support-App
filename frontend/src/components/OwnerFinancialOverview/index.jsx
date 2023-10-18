@@ -3,8 +3,40 @@ import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
 import { BsArrowLeft, BsTrash, BsPencil } from 'react-icons/bs';
 import styles from "./style.css"
+import { useState } from "react"
+import { useEffect } from 'react';
+import axios from "axios"
 
 const OwnerFinancialOverview = () => {
+    const [isAuth, setIsAuth] = useState(false);
+    const [message, setMessage] = useState('');
+    const [mail, setMail] = useState('');
+    const [userRole, setUserRole] = useState('');
+
+    //sprawdzamy autoryzacje
+    axios.defaults.withCredentials = true;
+    useEffect(() => {
+        axios.get('http://localhost:3001/api/auth/main')
+            .then(res => {
+                if (res.data.Status === "Success") {
+                    setIsAuth(true);
+                    setMail(res.data.mail); //email
+                    setUserRole(res.data.userRole); // Ustaw rolę użytkownika
+                } else {
+                    setIsAuth(false);
+                    setMessage(res.data.Error);
+                }
+            })
+            .then(err => console.log(err));
+    }, []);
+
+    const handleDelete = () => {
+        axios.get('http://localhost:3001/api/auth/logout')
+            .then(res => {
+                window.location.reload(true);
+            }).catch(err => console.log(err));
+    }
+
     return (
         <>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -14,14 +46,13 @@ const OwnerFinancialOverview = () => {
                         <Nav className="me-auto">
                             <Nav.Link href="#"><BiHomeAlt /></Nav.Link>
                             <Nav.Link href="#">TERMINY SKOKÓW</Nav.Link>
-                            <Nav.Link href="#">KONTA PRACOWNIKÓW</Nav.Link>
+                            <Nav.Link href="/owner-employee-accounts">KONTA PRACOWNIKÓW</Nav.Link>
                         </Nav>
-                        <Nav.Link href="#"><Navbar.Brand><AiOutlineUser />  PROFIL WŁAŚCICIELA</Navbar.Brand></Nav.Link>
+                        <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
                         <Button variant="danger" href="#">WYLOGUJ</Button>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <div className='powrot'><BsArrowLeft /></div>
             <Container className={styles.content}>
                 <h1 className="text-center">PODSUMOWANIE FINANSOWE</h1>
                 <Row className="mb-2">

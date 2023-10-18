@@ -98,17 +98,6 @@ router.post("/login", (req, res) => {
 
         if (response) {
           const mail = data[0].mail;
-          // // Pobranie roli użytkownika z bazy danych (możesz zmienić sposób na odpowiedni dla Twojej aplikacji)
-          // const userRoleQuery = "SELECT r.nazwa AS rola FROM rola_user ru JOIN rola r ON ru.rola_rola_id = r.rola_id WHERE ru.user_id = ?";
-          // db.query(userRoleQuery, [data[0].user_id], (err, roleData) => {
-          //   if (err) {
-          //     console.error("Błąd podczas pobierania roli użytkownika:", err);
-          //     return res.json({ Error: "Getting user role error in server" });
-          //   }
-
-          //   const userRole = roleData[0].rola; // Zakładam, że użytkownik ma jedną rolę
-          //   console.log(userRole);
-
           const token = jwt.sign({ mail }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" }); // jwt-secret-key -> .env -> 32/256 znakow
           res.cookie("token", token);
           console.log("Logowanie udało się.");
@@ -124,64 +113,7 @@ router.post("/login", (req, res) => {
     }
   });
 });
-
-// const verifyUser = (req, res, next) => {
-//   const token = req.cookies.token;
-//   if (!token) {
-//     return res.json({ Error: "You are not authenticated" });
-//   } else {
-//     jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
-//       if (err) {
-//         return res.json({ Error: "Token is not ok" });
-//       } else {
-//         req.mail = decoded.mail;
-//         next();
-//       }
-//     });
-//   }
-// };
-
-// const verifyUser = (req, res, next) => {
-//   const token = req.cookies.token;
-//   if (!token) {
-//     return res.json({ Error: "You are not authenticated" });
-//   } else {
-//     jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
-//       if (err) {
-//         return res.json({ Error: "Token is not ok" });
-//       } else {
-//         req.mail = decoded.mail;
-
-
-//         // // Pobranie roli użytkownika z bazy danych (możesz zmienić sposób na odpowiedni dla Twojej aplikacji)
-//           // const userRoleQuery = "SELECT r.nazwa AS rola FROM rola_user ru JOIN rola r ON ru.rola_rola_id = r.rola_id WHERE ru.user_id = ?";
-//           // db.query(userRoleQuery, [data[0].user_id], (err, roleData) => {
-//           //   if (err) {
-//           //     console.error("Błąd podczas pobierania roli użytkownika:", err);
-//           //     return res.json({ Error: "Getting user role error in server" });
-//           //   }
-
-//           //   const userRole = roleData[0].rola; // Zakładam, że użytkownik ma jedną rolę
-//           //   console.log(userRole);
-
-//         // Odczytaj rolę użytkownika z bazy danych i przypisz ją do req.userRole
-//         const userRoleQuery = "SELECT r.nazwa AS rola FROM rola_user ru JOIN rola r ON ru.rola_rola_id = r.rola_id WHERE ru.user_id = ?";
-//         db.query(userRoleQuery, [data[0].user_id], (err, roleData) => {
-//           if (err) {
-//             console.error("Błąd podczas pobierania roli użytkownika:", err);
-//             return res.json({ Error: "Getting user role error in server" });
-//           }
-
-//           req.userRole = roleData[0].rola; // Zakładam, że użytkownik ma jedną rolę
-
-//           // Przypisanie roli powinno być zrobione przed wywołaniem next()
-//           next();
-//         });
-//       }
-//     });
-//   }
-// };
-
+   
 const verifyUser = (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
@@ -233,11 +165,11 @@ router.get("/main", verifyUser, (req, res) => {
 
 
 router.get("/userprofile", verifyUser, (req, res) => {
-  return res.json({ Status: "Success", mail: req.mail });
+  return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
 });
 
 router.get("/edit-user-data", verifyUser, (req, res) => {
-  return res.json({ Status: "Success", mail: req.mail });
+  return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
 });
 
 router.get("/logout", (req, res) => {

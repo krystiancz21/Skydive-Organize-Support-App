@@ -161,19 +161,19 @@ const Main = () => {
                                     <Card>
                                         <Card.Img variant="top" src={obraz} alt="img-oferta" className="p-2" />
                                         <Card.Body>
-                                            <Card.Title><Button variant="primary" size="sm">GRAFIK SKOKÓW <BsArrowRightShort /></Button></Card.Title>
+                                            <Card.Title><Button variant="primary" size="sm" href='#'>GRAFIK SKOKÓW <BsArrowRightShort /></Button></Card.Title>
                                         </Card.Body>
                                     </Card>
                                     <Card>
                                         <Card.Img variant="top" src={obraz} alt="img-terminy" className="p-2" />
                                         <Card.Body>
-                                            <Card.Title><Button variant="primary" size="sm">KONTA PRACOWNIKÓW <BsArrowRightShort /></Button></Card.Title>
+                                            <Card.Title><Button variant="primary" size="sm" href='/owner-create-account'>KONTA PRACOWNIKÓW <BsArrowRightShort /></Button></Card.Title>
                                         </Card.Body>
                                     </Card>
                                     <Card>
                                         <Card.Img variant="top" src={obraz} alt="img-wiadomosci" className="p-2" />
                                         <Card.Body>
-                                            <Card.Title><Button variant="primary" size="sm">PODSUMOWANIE FINANSOWE <BsArrowRightShort /> </Button></Card.Title>
+                                            <Card.Title><Button variant="primary" size="sm" href='/owner-financial-overview'>PODSUMOWANIE FINANSOWE <BsArrowRightShort /> </Button></Card.Title>
                                         </Card.Body>
                                     </Card>
                                 </CardGroup>
@@ -215,126 +215,3 @@ const Main = () => {
 }
 
 export default Main
-
-//     return (
-//         <>
-//             {isAuth ? (
-//                 // User zalogowany
-//                 <>
-//                     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-//                         <Container>
-//                             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-//                             <Navbar.Collapse id="responsive-navbar-nav">
-//                                 <Nav className="me-auto">
-//                                     <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-//                                 </Nav>
-//                                 <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  { mail }</Navbar.Brand></Nav.Link>
-//                                 <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
-//                             </Navbar.Collapse>
-//                         </Container>
-//                     </Navbar>
-//                     <Container className={styles.content}>
-//                         <h1 className="text-center my-4">STRONA GŁÓWNA</h1>
-//                         <CardGroup>
-//                             <Card>
-//                                 <Card.Img variant="top" src={obraz} alt="img-oferta" />
-//                                 <Card.Body>
-//                                     <Card.Title><Button variant="primary" size="sm" href="/offer">OFERTA <BsArrowRightShort /></Button></Card.Title>
-//                                 </Card.Body>
-//                             </Card>
-//                             <Card>
-//                                 <Card.Img variant="top" src={obraz} alt="img-terminy" />
-//                                 <Card.Body>
-//                                     <Card.Title><Button variant="primary" size="sm" href="/reservation">TERMINY SKOKÓW <BsArrowRightShort /></Button></Card.Title>
-//                                 </Card.Body>
-//                             </Card>
-//                             <Card>
-//                                 <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
-//                                 <Card.Body>
-//                                     <Card.Title><Button variant="primary" size="sm" href="/messages">WIADOMOŚCI <BsArrowRightShort /> </Button></Card.Title>
-//                                 </Card.Body>
-//                             </Card>
-//                         </CardGroup>
-//                     </Container>
-//                 </>
-//             ) : (
-//                 // User niezalogowany
-//                 <>
-//                     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-//                         <Container>
-//                             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-//                             <Navbar.Collapse id="responsive-navbar-nav">
-//                                 <Nav className="me-auto">
-//                                     <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-//                                 </Nav>
-//                                 <Link to="/login">
-//                                     <Button variant="success">ZALOGUJ</Button>
-//                                 </Link>
-//                             </Navbar.Collapse>
-//                         </Container>
-//                     </Navbar>
-//                     <Container className={styles.content}>
-//                         <h1 className="text-center">STRONA GŁÓWNA</h1>
-//                         <h2>{message}</h2>
-//                         <CardGroup>
-//                             <Card>
-//                                 <Card.Img variant="top" src={obraz} alt="img-oferta" style={{ width: '200px', height: '200px' }} />
-//                                 <Card.Body>
-//                                     <Card.Title><Button variant="primary" size="sm" href="/offer"> OFERTA <BsArrowRightShort /></Button></Card.Title>
-//                                 </Card.Body>
-//                             </Card>
-//                         </CardGroup>
-//                     </Container>
-//                 </>
-//             )}
-//         </>
-//     )
-// }
-
-
-
-
-
-
-
-
-// const Main = () => {
-//     return (
-//         <>
-//             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-//                 <Container>
-//                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-//                     <Navbar.Collapse id="responsive-navbar-nav">
-//                         <Nav className="me-auto">
-//                             <Nav.Link href="#"><BiHomeAlt /></Nav.Link>
-//                         </Nav>
-//                         <Nav.Link href="#"><Navbar.Brand><AiOutlineUser />  PROFIL UŻYTKOWNIKA</Navbar.Brand></Nav.Link>
-//                         <Button variant="danger" href="#">WYLOGUJ</Button>
-//                     </Navbar.Collapse>
-//                 </Container>
-//             </Navbar>
-//             <Container className={styles.content}>
-//                 <h1>STRONA GŁÓWNA</h1>
-//                 <CardGroup>
-//                     <Card>
-//                         <Card.Img variant="top" src={obraz} alt="img-oferta" />
-//                         <Card.Body>
-//                             <Card.Title><Button variant="primary" size="sm">OFERTA <BsArrowRightShort /></Button></Card.Title>
-//                         </Card.Body>
-//                     </Card>
-//                     <Card>
-//                         <Card.Img variant="top" src={obraz} alt="img-terminy" />
-//                         <Card.Body>
-//                             <Card.Title><Button variant="primary" size="sm">TERMINY SKOKÓW <BsArrowRightShort /></Button></Card.Title>
-//                         </Card.Body>
-//                     </Card>
-//                     <Card>
-//                         <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
-//                         <Card.Body>
-//                             <Card.Title><Button variant="primary" size="sm">WIADOMOŚCI <BsArrowRightShort /> </Button></Card.Title>
-//                         </Card.Body>
-//                     </Card>
-//                 </CardGroup>
-//             </Container></>
-//     )
-// }

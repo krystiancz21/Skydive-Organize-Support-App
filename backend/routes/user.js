@@ -60,7 +60,6 @@ router.delete("/deleteAccount", async (req, res) => {
             console.error("Błąd podczas usuwania konta:", err);
             return res.json({ Error: "Error deleting account" });
         }
-
         // Wylogowanie użytkownika
         res.clearCookie("token");
 
