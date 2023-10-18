@@ -259,7 +259,7 @@ const EditUserData = () => {
                     </Container></>
             ) : (
                 // User niezalogowany
-                <>jestes wylogowany - kiedys sie to poprawi</>
+                <></>
             )}
         </>
     )
