@@ -59,7 +59,7 @@ const UserProfile = () => {
                                             <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>
                                             <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                         </Nav>
-                                        <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
+                                        <Nav.Link href="#"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
                                         <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
                                     </Navbar.Collapse>
                                 </Container>
@@ -101,7 +101,7 @@ const UserProfile = () => {
                                             <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
                                             <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
                                         </Nav>
-                                        <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
+                                        <Nav.Link href="#"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
                                         <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
                                     </Navbar.Collapse>
                                 </Container>
@@ -143,7 +143,7 @@ const UserProfile = () => {
                                         <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
                                         <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
                                     </Nav>
-                                    <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
+                                    <Nav.Link href="#"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
                                     <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
                                 </Navbar.Collapse>
                             </Container>
@@ -174,31 +174,6 @@ const UserProfile = () => {
             ) : (
                 // User niezalogowany
                 <>
-                    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-                        <Container>
-                            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                            <Navbar.Collapse id="responsive-navbar-nav">
-                                <Nav className="me-auto">
-                                    <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-                                </Nav>
-                                <Link to="/login">
-                                    <Button variant="success">ZALOGUJ</Button>
-                                </Link>
-                            </Navbar.Collapse>
-                        </Container>
-                    </Navbar>
-                    <Container className={styles.content}>
-                        <h1 className="text-center">STRONA GŁÓWNA</h1>
-                        <h2>{message}</h2>
-                        <CardGroup>
-                            <Card>
-                                <Card.Img variant="top" src={obraz} alt="img-oferta" style={{ width: '200px', height: '200px' }} />
-                                <Card.Body>
-                                    <Card.Title><Button variant="primary" size="sm" href="/offer"> OFERTA <BsArrowRightShort /></Button></Card.Title>
-                                </Card.Body>
-                            </Card>
-                        </CardGroup>
-                    </Container>
                 </>
             )}
         </>
