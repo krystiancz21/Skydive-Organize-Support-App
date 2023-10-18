@@ -5,7 +5,7 @@ import { BsFillPersonFill, BsArrowRightShort, BsFillBellFill } from 'react-icons
 import { Link } from "react-router-dom"
 import styles from "./style.css"
 import obraz from '../Images/obraz.jpg';
-import axios from "axios"
+import axios from "axios";
 import { useEffect, useState } from 'react';
 
 const UserProfile = () => {
@@ -59,7 +59,7 @@ const UserProfile = () => {
                                             <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>
                                             <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                         </Nav>
-                                        <Nav.Link href="#"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
+                                        <Nav.Link href="#"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
                                         <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
                                     </Navbar.Collapse>
                                 </Container>

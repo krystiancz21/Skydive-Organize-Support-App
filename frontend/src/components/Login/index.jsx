@@ -28,11 +28,17 @@ const Login = () => {
             const response = await axios.post("http://localhost:3001/api/auth/login", data); // /api/auth
             if (response.data.Status === "Success") {
                 navigate('/main');
-            } else if (response.data.Status !== "Success" || response.data.Error) {
-                setError("Niewłaściwa nazwa użytkownika lub hasło, spróbuj ponownie");
+            } else if (response.data.Error === "InvalidPassword") { // Obsłuż komunikat o niepoprawnym haśle
+                setError("Niewłaściwe hasło, spróbuj ponownie");
+            } else if (response.data.Error === "DeletedAccount") {
+                setError("To konto zostało usunięte");
+            } else if (response.data.Error === "BlockedAccount") {
+                const blockedUntil = new Date(response.data.blockedUntil);
+                const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                const formattedBlockedUntil = blockedUntil.toLocaleDateString('pl-PL', options); 
+                setError(`To konto jest zablokowane do ${formattedBlockedUntil}`);
             } else {
-                console.error("Błąd logowania: Niepoprawna odpowiedź z serwera");
-                alert("Error");  // response.data.Error;
+                setError("Niewłaściwe dane logowania, spróbuj ponownie");
             }
 
             console.log(response.data);

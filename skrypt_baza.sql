@@ -264,6 +264,12 @@ INSERT INTO `rola_user` (`rola_od`, `rola_do`, `user_id`, `rola_rola_id`) VALUES
 ('2023-10-15 12:00:00', '2024-10-15 12:00:00', 2, 2),
 ('2023-10-15 12:00:00', '2024-10-15 12:00:00', 3, 3);
 
+INSERT INTO rodzaj_skoku (skok_id, nazwa, cena, liczba_miejsc_w_samolocie, wymagana_licencja, max_masa) VALUES 
+('1','Skok samodzielny z licencją','600.00','1','1','120'),
+('2','Skok w tandemie','900.00','2','0','120'),
+('3','Skok w tandemie z kamerzystą','1100.00','3','0','120');
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

@@ -13,7 +13,7 @@ const UserProfile = () => {
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
     // do kalendarza
-    const [date, setDate] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState(new Date());
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -38,9 +38,11 @@ const UserProfile = () => {
             }).catch(err => console.log(err));
     }
 
-    const onChangeDate = () => {
-        setDate(date);
-    }
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+        console.log(date);
+    };
+
 
     return (
         <>
@@ -79,14 +81,17 @@ const UserProfile = () => {
                                 </div>
                             </Col>
                             <Col className="text-center">
-                                <Calendar onChange={onChangeDate} />
+                                <Calendar
+                                    value={selectedDate}
+                                    onChange={handleDateChange}
+                                />
                             </Col>
                         </Row>
                     </Container>
                 </>
             ) : (
                 // User niezalogowany
-                <>jestes wylogowany - kiedys sie to poprawi</>
+                <></>
             )}
         </>
 
