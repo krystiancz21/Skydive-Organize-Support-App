@@ -20,7 +20,7 @@ Uruchomienie:
 2. Funkcjonalności zalogowanego użytkownika (klienta):
 - [ ] możliwość rezerwacji terminu, poprzez wypełnienie formularza: (wybranie wolnego terminu oraz godziny, wybranie rodzaju skoku, wprowadzenie masy ciała, wybranie sposobu płatności)
 - [ ] podgląd, edycja lub rezygnacja z zarezerwowanych terminów,
-- [ ] podgląd, edycja własnych danych osobowych,
+- [X] podgląd, edycja własnych danych osobowych,
 - [ ] możliwość wysyłania wiadomości,
 - [X] możliwość wylogowania,
 - [X] usunięcie konta.
