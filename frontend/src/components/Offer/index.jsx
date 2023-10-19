@@ -31,7 +31,7 @@ const Offer = () => {
                     setMessage(res.data.Error);
                 }
             })
-            .then(err => console.log(err));
+            .catch(err => console.log(err));
     }, []);
 
     const handleDelete = () => {
@@ -44,7 +44,7 @@ const Offer = () => {
     }
 
     const handleReserveClick = (type) => {
-        navigate(`/calendar?type=${type}`);
+        navigate(`/calendar/${type}`);
     }
 
     return (
@@ -108,5 +108,3 @@ const Offer = () => {
 }
 
 export default Offer
-
-/* 767pix do 576pix */ 

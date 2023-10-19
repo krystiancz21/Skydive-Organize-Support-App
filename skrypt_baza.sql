@@ -269,6 +269,15 @@ INSERT INTO rodzaj_skoku (skok_id, nazwa, cena, liczba_miejsc_w_samolocie, wymag
 ('2','Skok w tandemie','900.00','2','0','120'),
 ('3','Skok w tandemie z kamerzystą','1100.00','3','0','120');
 
+INSERT INTO `planowane_terminy` (`nazwa`, `data_czas`, `liczba_miejsc_w_samolocie`, `miejsce_startu`, `status_terminu_id`) VALUES
+('Skok samodzielny z licencją', '2023-11-20 10:00:00', 2, 'Lublin', 1),
+('Skok samodzielny z licencją', '2023-11-24 18:00:00', 2, 'Lublin', 1),
+('Skok samodzielny z licencją', '2023-11-24 08:00:00', 7, 'Lublin', 1),
+('Skok samodzielny z licencją', '2023-11-29 12:00:00', 10, 'Lublin', 2),
+('Skok w tandemie', '2023-10-31 18:00:00', 5, 'Lublin', 1),
+('Skok w tandemie', '2023-12-02 08:00:00', 6, 'Lublin', 1),
+('Skok w tandemie z kamerzystą', '2023-12-12 10:00:00', 2, 'Lublin', 1),
+('Skok w tandemie z kamerzystą', '2023-12-19 08:00:00', 8, 'Lublin', 1);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

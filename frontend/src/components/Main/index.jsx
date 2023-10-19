@@ -30,7 +30,7 @@ const Main = () => {
                     setMessage(res.data.Error);
                 }
             })
-            .then(err => console.log(err));
+            .catch(err => console.log(err));
     }, []);
 
     const handleDelete = () => {
