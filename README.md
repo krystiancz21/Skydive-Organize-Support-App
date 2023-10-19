@@ -16,6 +16,7 @@ Uruchomienie:
 - [ ] możliwość sprawdzenia wolnych terminów na skoki spadochronowe,
 - [X] możliwość zalogowania.
 
+
 2. Funkcjonalności zalogowanego użytkownika (klienta):
 - [ ] możliwość rezerwacji terminu, poprzez wypełnienie formularza: (wybranie wolnego terminu oraz godziny, wybranie rodzaju skoku, wprowadzenie masy ciała, wybranie sposobu płatności)
 - [ ] podgląd, edycja lub rezygnacja z zarezerwowanych terminów,
@@ -24,14 +25,16 @@ Uruchomienie:
 - [X] możliwość wylogowania,
 - [X] usunięcie konta.
 
+
 3. Funkcjonalności pracownika
 - [ ] odpowiadanie na pytania
 - [ ] planowanie terminów skoków,
 - [ ] potwierdzenie dokonania płatności,
-- [ ] zarządzanie ofertą (dodawanie rodzaju skoku,( bo i tak są z góry dane 3 rodzaje skoku), określanie akceptowanych metod płatności, - [ ] określanie cen skoków, określenie dodatkowych warunków które musi spełniać skoczek,)
+- [ ] zarządzanie ofertą (dodawanie rodzaju skoku,( bo i tak są z góry dane 3 rodzaje skoku), określanie akceptowanych metod płatności, określanie cen skoków, określenie dodatkowych warunków które musi spełniać skoczek)
 - [ ] planowanie grafiku zarezerwowanych skoków,
 - [ ] odwoływanie oraz rozesłanie informacji klientom,
 - [ ] zarządzanie danymi klientów (zakładanie kont klientów, ewidencjonowanie licencji klientów)
+
 
 4. Funkcjonalności administratora
 - [ ] możliwość przeglądu kont pracowników,
