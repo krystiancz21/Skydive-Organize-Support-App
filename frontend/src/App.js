@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Main from './components/Main';
@@ -40,8 +40,10 @@ function App() {
     // </Routes>
     
     <Routes>
+      <Route path='/' element={<Navigate replace to="/login" />} />
       <Route path="/edit-user-data" element={<EditUserData />} />
-      <Route path="/calendar/:type" element={<JumpCalendar />} />
+      <Route path="/jump-calendar/:type" element={<JumpCalendar />} />
+      <Route path="/reservation/:jumpId" element={<Reservation />} />
       <Route path="/employeemain" element={<EmployeeMain />} />
       <Route path="/login" element={<Login />} />
       <Route path="/main" element={<Main />} />
@@ -49,7 +51,6 @@ function App() {
       <Route path="/myjumps" element={<MyJumps />} />
       <Route path="/offer" element={<Offer />} />
       <Route path="/ownermain" element={<OwnerMain />} />
-      <Route path="/reservation" element={<Reservation />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/userprofile" element={<UserProfile />} />
       <Route path="/owner-employee-accounts" element={<OwnerEmployeeAccounts />} />

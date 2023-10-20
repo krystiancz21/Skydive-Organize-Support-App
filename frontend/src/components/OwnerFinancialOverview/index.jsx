@@ -30,7 +30,7 @@ const OwnerFinancialOverview = () => {
             .catch(err => console.log(err));
     }, []);
 
-    const handleDelete = () => {
+    const handleLogout = () => {
         axios.get('http://localhost:3001/api/auth/logout')
             .then(res => {
                 window.location.reload(true);

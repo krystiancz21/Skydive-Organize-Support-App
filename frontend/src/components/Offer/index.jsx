@@ -34,17 +34,17 @@ const Offer = () => {
             .catch(err => console.log(err));
     }, []);
 
-    const handleDelete = () => {
+    const handleLogout = () => {
         axios.get('http://localhost:3001/api/auth/logout')
             .then(res => {
                 // Przekierowanie na stronę główną po wylogowaniu
-                window.location.href = "http://localhost:3000/main";
+                window.location.href = "/main";
                 //window.location.reload(true);
             }).catch(err => console.log(err));
     }
 
     const handleReserveClick = (type) => {
-        navigate(`/calendar/${type}`);
+        navigate(`/jump-calendar/${type}`);
     }
 
     return (
@@ -60,7 +60,7 @@ const Offer = () => {
                                 <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                             </Nav>
                             <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
-                            <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
+                            <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                         </Navbar.Collapse>
                     </Container>
                 </Navbar>

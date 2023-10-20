@@ -32,11 +32,11 @@ const UserProfile = () => {
             .catch(err => console.log(err));
     }, []);
 
-    const handleDelete = () => {
+    const handleLogout = () => {
         axios.get('http://localhost:3001/api/auth/logout')
             .then(res => {
                 // Przekierowanie na stronę główną po wylogowaniu
-                window.location.href = "http://localhost:3000/main";
+                window.location.href = "/main";
                 //window.location.reload(true);
             }).catch(err => console.log(err));
     }
@@ -60,7 +60,7 @@ const UserProfile = () => {
                                             <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                         </Nav>
                                         <Nav.Link href="#"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
-                                        <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
+                                        <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                                     </Navbar.Collapse>
                                 </Container>
                             </Navbar>
@@ -102,7 +102,7 @@ const UserProfile = () => {
                                             <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
                                         </Nav>
                                         <Nav.Link href="#"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
-                                        <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
+                                        <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                                     </Navbar.Collapse>
                                 </Container>
                             </Navbar>
@@ -144,7 +144,7 @@ const UserProfile = () => {
                                         <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
                                     </Nav>
                                     <Nav.Link href="#"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
-                                    <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
+                                    <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                                 </Navbar.Collapse>
                             </Container>
                         </Navbar>

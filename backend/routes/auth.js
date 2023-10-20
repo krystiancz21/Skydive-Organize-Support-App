@@ -185,6 +185,14 @@ router.get("/offer", verifyUser, (req, res) => {
   }
 });
 
+router.get("/jump-calendar", verifyUser, (req, res) => {
+  if (req.userRole === "admin" || req.userRole === "pracownik" || req.userRole === "klient") {
+    return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
+  } else {
+    return res.json({ Status: "Error" });
+  }
+});
+
 router.get("/logout", (req, res) => {
   res.clearCookie("token");
   return res.json({ Status: "Success" });

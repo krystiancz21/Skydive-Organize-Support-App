@@ -3,12 +3,12 @@ import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
 import { BsArrowRightShort } from 'react-icons/bs';
 import { Link } from "react-router-dom"
-import { useState } from "react"
-import axios from "axios"
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 import styles from "./style.css"
 import obraz from '../Images/obraz.jpg';
-import { useEffect } from 'react';
+
 
 const Main = () => {
     const [isAuth, setIsAuth] = useState(false);
@@ -33,10 +33,10 @@ const Main = () => {
             .catch(err => console.log(err));
     }, []);
 
-    const handleDelete = () => {
+    const handleLogout = () => {
         axios.get('http://localhost:3001/api/auth/logout')
             .then(res => {
-                window.location.reload(true);
+                window.location.href = "/main";
             }).catch(err => console.log(err));
     }
 
@@ -56,7 +56,7 @@ const Main = () => {
                                             <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                         </Nav>
                                         <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
-                                        <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
+                                        <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                                     </Navbar.Collapse>
                                 </Container>
                             </Navbar>
@@ -95,7 +95,7 @@ const Main = () => {
                                             <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                         </Nav>
                                         <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
-                                        <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
+                                        <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                                     </Navbar.Collapse>
                                 </Container>
                             </Navbar>
@@ -151,7 +151,7 @@ const Main = () => {
                                             <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                         </Nav>
                                         <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
-                                        <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
+                                        <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                                     </Navbar.Collapse>
                                 </Container>
                             </Navbar>
