@@ -87,9 +87,12 @@ router.post("/login", (req, res) => {
   db.query(sql, [req.body.email], (err, data) => {
     if (err) return res.json({ Error: "Login error in server" });
     if (data.length > 0) {
-      if (data[0].usuniete_konto === 1) {
-        return res.json({ Error: "This account has been deleted" });
-      }
+      // if (data[0].usuniete_konto === 1) {
+      //   return res.json({ Error: "DeletedAccount" });
+      // }
+      // if (data[0].zablokowane_do && data[0].zablokowane_do > new Date()) {
+      //   return res.json({ Error: "BlockedAccount", blockedUntil: data[0].zablokowane_do });
+      // }
       bcrypt.compare(req.body.password.toString(), data[0].haslo, (err, response) => {
         if (err) {
           console.error("Błąd podczas logowania:", err);
@@ -100,20 +103,24 @@ router.post("/login", (req, res) => {
           const mail = data[0].mail;
           const token = jwt.sign({ mail }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" }); // jwt-secret-key -> .env -> 32/256 znakow
           res.cookie("token", token);
-          console.log("Logowanie udało się.");
-          return res.json({ Status: "Success" });
-          // });
+
+          if (data[0].usuniete_konto === 1) {
+            return res.json({ Error: "DeletedAccount" });
+          } else if (data[0].zablokowane_do && data[0].zablokowane_do > new Date()) {
+            return res.json({ Error: "BlockedAccount", blockedUntil: data[0].zablokowane_do });
+          } else {
+            return res.json({ Status: "Success" });
+          }
         } else {
-          return res.json({ Status: "Password not matched" });
+          return res.json({ Error: "InvalidPassword" });
         }
-      }
-      );
+      });
     } else {
       return res.json({ Error: "No email existed" });
     }
   });
 });
-   
+
 const verifyUser = (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
@@ -144,32 +151,46 @@ const verifyUser = (req, res, next) => {
   }
 };
 
-// router.get("/main", verifyUser, (req, res) => {
-//   // Możesz teraz użyć req.userRole w zależności od roli użytkownika
-//   return res.json({ Status: "Success", mail: req.mail });
-
-// });
-
 router.get("/main", verifyUser, (req, res) => {
   // Możesz teraz użyć req.userRole w zależności od roli użytkownika
-  if (req.userRole === "admin") {
-    return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
-  } else if (req.userRole === "pracownik") {
-    return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
-  } else if (req.userRole === "klient") {
+  if (req.userRole === "admin" || req.userRole === "pracownik" || req.userRole === "klient") {
     return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
   } else {
-    return res.json({ Status: "Error"});
+    return res.json({ Status: "Error" });
   }
 });
 
 
 router.get("/userprofile", verifyUser, (req, res) => {
-  return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
+  if (req.userRole === "admin" || req.userRole === "pracownik" || req.userRole === "klient") {
+    return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
+  } else {
+    return res.json({ Status: "Error" });
+  }
 });
 
 router.get("/edit-user-data", verifyUser, (req, res) => {
-  return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
+  if (req.userRole === "admin" || req.userRole === "pracownik" || req.userRole === "klient") {
+    return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
+  } else {
+    return res.json({ Status: "Error" });
+  }
+});
+
+router.get("/offer", verifyUser, (req, res) => {
+  if (req.userRole === "admin" || req.userRole === "pracownik" || req.userRole === "klient") {
+    return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
+  } else {
+    return res.json({ Status: "Error" });
+  }
+});
+
+router.get("/jump-calendar", verifyUser, (req, res) => {
+  if (req.userRole === "admin" || req.userRole === "pracownik" || req.userRole === "klient") {
+    return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
+  } else {
+    return res.json({ Status: "Error" });
+  }
 });
 
 router.get("/logout", (req, res) => {

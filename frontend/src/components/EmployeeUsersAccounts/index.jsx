@@ -48,7 +48,7 @@ const EmployeeUsersAccounts = () => {
                     </Row>
                 </Row>
                 <Row className="mt-3">
-                    <Col>
+                    <Col className="text-center">
                         <h3>Dodaj nowego użytkownika</h3>
                         <Button variant="success" className="mt-3">UTWÓRZ KONTO</Button>
                     </Col>

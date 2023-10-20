@@ -39,7 +39,7 @@ const EditUserData = () => {
                     setMessage(res.data.Error);
                 }
             })
-            .then(err => console.log(err));
+            .catch(err => console.log(err));
     }, []);
 
     useEffect(() => {
@@ -85,11 +85,11 @@ const EditUserData = () => {
         }
     };
 
-    const handleDelete = () => {
+    const handleLogout = () => {
         axios.get('http://localhost:3001/api/auth/logout')
             .then(res => {
                 // Przekierowanie na stronę główną po wylogowaniu
-                window.location.href = "http://localhost:3000/main";
+                window.location.href = "/main";
             }).catch(err => console.log(err));
     }
 
@@ -171,8 +171,8 @@ const EditUserData = () => {
                                     <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
                                     <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
                                 </Nav>
-                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
-                                <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
+                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
+                                <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                             </Navbar.Collapse>
                         </Container>
                     </Navbar>

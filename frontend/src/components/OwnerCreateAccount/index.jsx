@@ -27,10 +27,10 @@ const OwnerCreateAccount = () => {
                     setMessage(res.data.Error);
                 }
             })
-            .then(err => console.log(err));
+            .catch(err => console.log(err));
     }, []);
 
-    const handleDelete = () => {
+    const handleLogout = () => {
         axios.get('http://localhost:3001/api/auth/logout')
             .then(res => {
                 window.location.reload(true);
