@@ -253,6 +253,9 @@ INSERT INTO `skydive`.`status_platnosci` (`nazwa`) VALUES ('Niezapłacone'), ('W
 INSERT INTO `skydive`.`rola` (`nazwa`) VALUES ('klient'), ('pracownik'), ('admin');
 INSERT INTO `skydive`.`status_skoku` (`nazwa`) VALUES ('Niezrealizowany'), ('Zrealizowany');
 INSERT INTO `skydive`.`status_terminu` (`nazwa`) VALUES ('Wolne'), ('Zajęte');
+INSERT INTO `rodzaj_skoku`(`skok_id`, `nazwa`, `cena`, `liczba_miejsc_w_samolocie`, `wymagana_licencja`, `max_masa`) VALUES ('1','Skok samodzielny z licencją','600.00','1','1','120');
+INSERT INTO `rodzaj_skoku`(`skok_id`, `nazwa`, `cena`, `liczba_miejsc_w_samolocie`, `wymagana_licencja`, `max_masa`) VALUES ('2','Skok w tandemie','900.00','2','0','120');
+INSERT INTO `rodzaj_skoku`(`skok_id`, `nazwa`, `cena`, `liczba_miejsc_w_samolocie`, `wymagana_licencja`, `max_masa`) VALUES ('3','Skok w tandemie z kamerzystą','1100.00','3','0','120');
 
 INSERT INTO `user` (`user_id`, `imie`, `nazwisko`, `mail`, `haslo`, `telefon`, `masa`, `usuniete_konto`, `zablokowane_do`) VALUES
 (1, 'klient', 'klient', 'klient@gmail.com', '$2b$10$U/ic/ja1nStvJwZ1IHoByOjj.9rRfbL8IJOdUc5zEdFlQg9H3lqTS', '123123123', 0, 0, NULL),

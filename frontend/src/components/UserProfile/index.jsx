@@ -45,7 +45,6 @@ const UserProfile = () => {
         <>
             {isAuth ? (
                 <>
-                    {/* Wyświetl odpowiednią nawigację w zależności od roli */}
                     {userRole === 'klient' && (
                         // User zalogowany
                         <>
