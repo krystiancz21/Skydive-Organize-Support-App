@@ -152,7 +152,7 @@ const EditUserData = () => {
                                 <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                             </Nav>
                             <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
-                            <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
+                            <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                         </Navbar.Collapse>
                     </Container>
                 </Navbar>
@@ -193,7 +193,7 @@ const EditUserData = () => {
                                     <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
                                 </Nav>
                                 <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
-                                <Button variant="danger" onClick={handleDelete}>WYLOGUJ</Button>
+                                <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                             </Navbar.Collapse>
                         </Container>
                     </Navbar>
@@ -208,7 +208,7 @@ const EditUserData = () => {
             {isAuth ? (
                 // User zalogowany
                 <>
-                    {getNavbar(userRole, mail, handleDelete)}
+                    {getNavbar(userRole, mail, handleLogout)}
                     <Container className={styles.content}>
                         <h1 className="text-center">DANE OSOBOWE</h1>
                         <Form className="text-center">
