@@ -137,7 +137,7 @@ const Reservation = () => {
                                                 <Form.Label>Data</Form.Label>
                                                 <Form.Control
                                                     type="text"
-                                                    name="nazwa"
+                                                    name="data"
                                                     value={moment(jumpData.data_czas).format('DD.MM.YYYY')}
                                                     readOnly
                                                     disabled
@@ -149,7 +149,7 @@ const Reservation = () => {
                                                 <Form.Label>Godzina</Form.Label>
                                                 <Form.Control
                                                     type="text"
-                                                    name="nazwa"
+                                                    name="godzina"
                                                     value={moment(jumpData.data_czas).format('HH:mm')}
                                                     readOnly
                                                     disabled
@@ -171,7 +171,6 @@ const Reservation = () => {
                                                 placeholder="max 110kg"
                                                 name="masa"
                                                 value={userData.masa}
-
                                             />
                                         </Form.Group>
                                     </Col>
