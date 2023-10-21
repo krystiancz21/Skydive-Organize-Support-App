@@ -61,8 +61,13 @@ const editUserSchema = Joi.object({
 
 const passwordComplexityInstance = passwordComplexity(complexityOptions);
 
+const editUserWeight = Joi.object({
+  userWeight: Joi.number().greater(29).less(111).required().label("Masa")
+}).messages(customMessages);
+
 module.exports = {
   userSchema,
   editUserSchema,
+  editUserWeight,
   passwordComplexityInstance,
 };
