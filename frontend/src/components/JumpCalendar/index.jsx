@@ -5,7 +5,7 @@ import { BsFillPersonFill, BsArrowRightShort, BsFillBellFill } from 'react-icons
 import styles from "./style.css"
 import axios from "axios";
 import Calendar from 'react-calendar';
-import moment from 'moment'
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import 'react-calendar/dist/Calendar.css';

@@ -2,6 +2,20 @@ require('dotenv').config()
 const router = require("express").Router();
 const db = require("../db");
 
+router.post('/showJumpTypes', (req, res) => {
+  const jumpName = req.body.jumpName;
+  const sql = 'SELECT * FROM rodzaj_skoku WHERE nazwa = ?';
+
+  db.query(sql, [jumpName], (err, results) => {
+    if (err) {
+      console.error('Błąd zapytania do bazy danych: ' + err.message);
+      res.status(500).json({ error: 'Błąd zapytania do bazy danych' });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
 router.post('/availableDates', (req, res) => {
   const selectedDate = req.body.date;
   const selectedType = req.body.selectedType;
