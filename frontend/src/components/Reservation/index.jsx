@@ -10,16 +10,19 @@ import styles from "./style.css";
 
 const Reservation = () => {
     const [isAuth, setIsAuth] = useState(false);
+    const [userRole, setUserRole] = useState('');
+
     const [updateSuccess, setUpdateSuccess] = useState(false);
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
+
     const [mail, setMail] = useState('');
-    const [userRole, setUserRole] = useState('');
     const [jumpData, setJumpData] = useState(null);
-    const [userData, setUserData] = useState(null); // do wywalenia
+    const [userData, setUserData] = useState([]); // do wywalenia
+
     const [paymentMethods, setPaymentMethods] = useState([]);
-    const [jumpPrice, setJumpPrice] = useState('');
-    const [userWeight, setUserWeight] = useState('');
+    const [jumpType, setJumpType] = useState([]);
+    const [paymentMethodId, setPaymentMethodId] = useState(null);
 
     const { jumpId } = useParams();
 
@@ -68,8 +71,8 @@ const Reservation = () => {
             axios.get(`http://localhost:3001/api/user/getUserData?email=${mail}`)
                 .then(res => {
                     if (res.data && res.data.length > 0) {
-                        // setUserData(res.data[0]);
-                        setUserWeight(res.data[0].masa)
+                        setUserData(res.data[0]); // wszystkie dane użytkownika
+                        // setUserWeight(res.data[0].masa) 
                     }
                 })
                 .catch(err => console.log(err));
@@ -94,72 +97,51 @@ const Reservation = () => {
             })
                 .then(res => {
                     if (res.data && res.data.length > 0) {
-                        setJumpPrice(res.data[0].cena);
+                        setJumpType(res.data[0]);
                     }
                 })
                 .catch(err => console.log(err));
         }
     }, [isAuth, jumpData]);
 
-    // aktualizacja masy usera
-    // const handleEditUserWeight = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         const response = await axios.post('http://localhost:3001/api/user/updateUserWeight', {
-    //             userWeight: userWeight,
-    //             mail: mail
-    //         });
-    //         if (response.data.error) {
-    //             setError(response.data.error);
-    //             setUpdateSuccess(false);
-    //         } else if (response.data.Status === "Success") {
-    //             setError('');
-    //             setUpdateSuccess(true);
-    //         } else {
-    //             console.error("Błąd podczas aktualizacji danych!");
-    //         }
-    //     } catch (error) {
-    //         // console.error(error);
-    //         console.error('Błąd podczas aktualizacji danych: ' + error.message);
-    //     }
-    // };
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-
-    //     try {
-    //         const response = await axios.post('http://localhost:3001/api/jump/reserveJump');
-    //         if (response.data.error) {
-    //             setError(response.data.error);
-    //             setUpdateSuccess(false);
-    //         } else if (response.data.Status === "Success") {
-    //             setError('');
-    //             setUpdateSuccess(true);
-    //         } else {
-    //             console.error("Błąd podczas aktualizacji danych!");
-    //         }
-    //     } catch (error) {
-    //         // console.error(error);
-    //         console.error('Błąd podczas aktualizacji danych: ' + error.message);
-    //     }
-    // }
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
+        // Sprawdź, czy paymentMethodId nie jest null
+        if (!paymentMethodId) {
+            setError('Proszę wybrać metodę płatności.');
+            return;
+        }
+
+        const paymentData = {
+            data_platnosci: new Date(),
+            wplacona_kwota: 0, //cena skoku -narazie zero
+            status_platnosci_id: 1, // 1-niezapłacone - zobaczymy co dalej 
+            sposob_platnosci_id: paymentMethodId // wybrany sposób płatności
+        };
+        
+        const paymentResponse = await axios.post('http://localhost:3001/api/payment/addPayment', paymentData);
+
+        if (paymentResponse.data.Status !== "Success") {
+            // Jeśli coś poszło nie tak z dodawaniem płatności, wyświetl błąd i przerwij dalsze działanie
+            console.error('Błąd podczas dodawania płatności: ' + paymentResponse.data.error);
+            setError(paymentResponse.data.error);
+            return;
+        }
+
         const formData = {
-            userWeight: userWeight,
+            userWeight: userData.masa,
             mail: mail,
-            //userId: userId, // musisz zdefiniować ten stan
+            userId: userData.user_id, // musisz zdefiniować ten stan
             planowaneTerminyId: jumpData.terminy_id, // id skoku
             statusSkokuId: 1,  // to domyślnie 1- niezrealizowany
-            //rodzajSkokuId: rodzajSkokuId, // musisz zdefiniować ten stan
-            //platnoscId: platnoscId, // trzeba zdefiniować ten stan
-            cena: jumpPrice // cena skoku
+            rodzajSkokuId: jumpType.skok_id, // musisz zdefiniować ten stan
+            platnoscId: paymentResponse.data.platnosc_id, // trzeba zdefiniować ten stan
+            cena: jumpType.cena // cena skoku
         };
-    
+
         try {
-            const response = await axios.post('http://localhost:3001/api/user/reserveJump', formData);
+            const response = await axios.post('http://localhost:3001/api/jumps/reserveJump', formData);
             if (response.data.error) {
                 setError(response.data.error);
                 setUpdateSuccess(false);
@@ -195,8 +177,6 @@ const Reservation = () => {
                     </Navbar>
                     <Container>
                         <h1 className="text-center">REZERWACJA SKOKU</h1>
-
-                        {/* roboczy ekran: */}
                         <Card className="reservation-container mx-auto">
                             {jumpData && (
                                 <div>
@@ -244,40 +224,26 @@ const Reservation = () => {
 
                             <h4 className="mt-4">Uzupełnij dane</h4>
                             <Row>
-                                {/* {userData && (
-                                    <Col md={4}>
-                                        <Form.Group className="mb-2">
-                                            <Form.Label>Masa ciała</Form.Label>
-                                            <FormControl
-                                                type="number"
-                                                placeholder="max 110kg"
-                                                name="masa"
-                                                value={userData.masa}
-                                                onChange={(e) => setUserWeight(e)}
-                                            />
-                                        </Form.Group>
-                                    </Col>
-                                )} */}
                                 <Col md={4}>
                                     <Form.Group className="mb-2">
                                         <Form.Label>Masa ciała</Form.Label>
                                         <FormControl
                                             type="number"
                                             name="userWeight"
-                                            value={userWeight}
-                                            onChange={(e) => setUserWeight(e.target.value)}
+                                            // value={userData.masa}
+                                            value={userData && userData.masa ? userData.masa : ''}
+                                            onChange={(e) => setUserData({ ...userData, masa: e.target.value })}
                                             required
                                         />
                                     </Form.Group>
                                 </Col>
-
                                 <Col md={4}>
                                     <Form.Group className="mb-2">
                                         <Form.Label>Metoda płatności</Form.Label>
-                                        <Form.Select as="select" required>
+                                        <Form.Select as="select" onChange={(e) => setPaymentMethodId(e.target.value)} required>
                                             <option value="">Wybierz metodę płatności</option>
                                             {paymentMethods.map((method) => (
-                                                <option key={method.sposob_platnosci_id} value={method.nazwa}>
+                                                <option key={method.sposob_platnosci_id} value={method.sposob_platnosci_id}>
                                                     {method.nazwa}
                                                 </option>
                                             ))}
@@ -290,7 +256,7 @@ const Reservation = () => {
                                         <FormControl
                                             type="text"
                                             name="cena"
-                                            value={`${jumpPrice} PLN`}
+                                            value={`${jumpType.cena} PLN`}
                                             readOnly
                                             disabled
                                         />

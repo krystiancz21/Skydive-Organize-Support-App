@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../db");
 const multer = require("multer");
-const { editUserWeight } = require("../utils/validation");
 
 router.get("/getUserData", async (req, res) => {
     const email = req.query.email;
@@ -50,35 +49,6 @@ router.post("/updateUserData", async (req, res) => {
         return res.status(500).json({ error: "Błąd podczas aktualizacji danych" });
     }
 });
-
-// Aktualizacja wagi usera
-// router.post("/updateUserWeight", async (req, res) => {
-//     try {
-//         const { error } = editUserWeight.validate({ userWeight: req.body.userWeight });
-
-//         if (error) {
-//             return res.json({ error: error.details[0].message });
-//         }
-        
-//         const values = [
-//             req.body.userWeight,
-//             req.body.mail
-//         ];
-
-//         const sql = "UPDATE user SET `masa` = ? WHERE `mail` = ?";
-
-//         db.query(sql, values, (err, result) => {
-//             if (err) {
-//                 res.status(500).send({ error: 'Wystąpił błąd podczas aktualizacji wagi użytkownika' });
-//             } else {
-//                 res.send({ Status: 'Success' });
-//             }
-//         });
-//     } catch (error) {
-//         console.error("Błąd podczas aktualizacji danych: " + error.message);
-//         return res.status(500).json({ error: "Błąd podczas aktualizacji danych" });
-//     }
-// });
 
 // Usuwanie konta
 router.delete("/deleteAccount", async (req, res) => {

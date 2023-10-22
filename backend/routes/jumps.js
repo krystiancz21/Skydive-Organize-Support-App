@@ -1,6 +1,7 @@
 require('dotenv').config()
 const router = require("express").Router();
 const db = require("../db");
+const { editUserWeight } = require("../utils/validation");
 
 // Pobranie rodzajów skoków
 router.post('/showJumpTypes', (req, res) => {
@@ -92,6 +93,7 @@ router.post("/reserveJump", async (req, res) => {
 
       db.query(sqlWeight, valuesWeight, (err, result) => {
           if (err) {
+              console.error('Błąd podczas aktualizacji wagi użytkownika: ' + err.message);
               res.status(500).send({ error: 'Wystąpił błąd podczas aktualizacji wagi użytkownika' });
           } else {
               // Rezerwacja skoku po pomyślnej aktualizacji wagi
@@ -108,6 +110,7 @@ router.post("/reserveJump", async (req, res) => {
               
               db.query(sqlReservation, valuesReservation, (err, result) => {
                   if (err) {
+                      console.error('Błąd podczas rezerwacji skoku: ' + err.message);
                       res.status(500).send({ error: 'Wystąpił błąd podczas rezerwacji skoku' });
                   } else {
                       res.send({ Status: 'Success' });
