@@ -107,7 +107,7 @@ const Main = () => {
                                             <Card>
                                                 <Card.Img variant="top" src={obraz} alt="img-oferta" />
                                                 <Card.Body>
-                                                    <Card.Title><Button variant="primary" size="sm">WIADOMOŚCI <BsArrowRightShort /></Button></Card.Title>
+                                                    <Card.Title><Button variant="primary" size="sm" href="/messages">WIADOMOŚCI <BsArrowRightShort /></Button></Card.Title>
                                                 </Card.Body>
                                             </Card>
                                         </Col>
@@ -115,7 +115,7 @@ const Main = () => {
                                             <Card>
                                                 <Card.Img variant="top" src={obraz} alt="img-terminy" />
                                                 <Card.Body>
-                                                    <Card.Title><Button variant="primary" size="sm">KONTA PRACOWNIKÓW <BsArrowRightShort /></Button></Card.Title>
+                                                    <Card.Title><Button variant="primary" size="sm" href="/employee-users-accounts">KONTA KLIENTÓW <BsArrowRightShort /></Button></Card.Title>
                                                 </Card.Body>
                                             </Card>
                                         </Col>
@@ -125,7 +125,7 @@ const Main = () => {
                                             <Card>
                                                 <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
                                                 <Card.Body>
-                                                    <Card.Title><Button variant="primary" size="sm">OFERTA <BsArrowRightShort /> </Button></Card.Title>
+                                                    <Card.Title><Button variant="primary" size="sm" href="/offer">OFERTA <BsArrowRightShort /> </Button></Card.Title>
                                                 </Card.Body>
                                             </Card>
                                         </Col>
@@ -133,7 +133,7 @@ const Main = () => {
                                             <Card>
                                                 <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
                                                 <Card.Body>
-                                                    <Card.Title><Button variant="primary" size="sm">ZARZĄDZANIE SKOKAMI <BsArrowRightShort /> </Button></Card.Title>
+                                                    <Card.Title><Button variant="primary" size="sm" href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI <BsArrowRightShort /> </Button></Card.Title>
                                                 </Card.Body>
                                             </Card>
                                         </Col>
@@ -203,7 +203,7 @@ const Main = () => {
                             <Card>
                                 <Card.Img variant="top" src={obraz} alt="img-oferta" style={{ width: '200px', height: '200px' }} />
                                 <Card.Body>
-                                    <Card.Title><Button variant="primary" size="sm" href="/offer"> OFERTA <BsArrowRightShort /></Button></Card.Title>
+                                    <Card.Title><Link to="/offer"><Button variant="primary" size="sm"> OFERTA <BsArrowRightShort /></Button></Link></Card.Title>
                                 </Card.Body>
                             </Card>
                         </CardGroup>

@@ -193,6 +193,26 @@ router.get("/jump-calendar", verifyUser, (req, res) => {
   }
 });
 
+// PRACOWNIK
+router.get("/employee-users-accounts", verifyUser, (req, res) => {
+  if (req.userRole === "admin" || req.userRole === "pracownik" || req.userRole === "klient") {
+    return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
+  } else {
+    return res.json({ Status: "Error" });
+  }
+});
+
+router.get("/employee-create-account", verifyUser, (req, res) => {
+  if (req.userRole === "admin" || req.userRole === "pracownik" || req.userRole === "klient") {
+    return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
+  } else {
+    return res.json({ Status: "Error" });
+  }
+});
+
+
+
+
 router.get("/logout", (req, res) => {
   res.clearCookie("token");
   return res.json({ Status: "Success" });
