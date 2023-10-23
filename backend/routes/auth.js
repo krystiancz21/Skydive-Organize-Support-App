@@ -195,7 +195,7 @@ router.get("/jump-calendar", verifyUser, (req, res) => {
 
 // PRACOWNIK
 router.get("/employee-users-accounts", verifyUser, (req, res) => {
-  if (req.userRole === "admin" || req.userRole === "pracownik" || req.userRole === "klient") {
+  if (req.userRole === "admin" || req.userRole === "pracownik") {
     return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
   } else {
     return res.json({ Status: "Error" });
@@ -203,7 +203,7 @@ router.get("/employee-users-accounts", verifyUser, (req, res) => {
 });
 
 router.get("/employee-create-account", verifyUser, (req, res) => {
-  if (req.userRole === "admin" || req.userRole === "pracownik" || req.userRole === "klient") {
+  if (req.userRole === "admin" || req.userRole === "pracownik") {
     return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
   } else {
     return res.json({ Status: "Error" });

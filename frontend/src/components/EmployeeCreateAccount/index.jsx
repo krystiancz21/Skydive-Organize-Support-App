@@ -19,8 +19,9 @@ const EmployeeCreateAccount = () => {
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
-    const [error, setError] = useState("")
-    const navigate = useNavigate()
+    const [createUserSuccess, setCreateUserSuccess] = useState(false);
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
 
     const handleChange = ({ currentTarget: input }) => {
         setData({ ...data, [input.name]: input.value })
@@ -34,7 +35,10 @@ const EmployeeCreateAccount = () => {
             const response = await axios.post("http://localhost:3001/api/auth/register", data); // /api/auth
             if (response.data.error) {
                 setError(response.data.error);
+                setCreateUserSuccess(false);
             } else if (response.data.Status === "Success") {
+                setError('');
+                setCreateUserSuccess(true);
             } else {
                 console.error("Błąd rejestracji: Niepoprawna odpowiedź z serwera");
             }
@@ -93,8 +97,8 @@ const EmployeeCreateAccount = () => {
                                 </Container>
                             </Navbar>
                             <Container className={styles.content}>
-                                <h1 className="text-center">TWORZENIE KONTA</h1>
-                                <Form onSubmit={handleSubmit}className="text-center">
+                                <h1 className="text-center">TWORZENIE KONTA UŻYTKOWNIKA</h1>
+                                <Form onSubmit={handleSubmit} className="text-center">
                                     <div className='max-width-form'>
                                         <Form.Group as={Row} controlId="formOwnerCreateAccountName" className="mb-3">
                                             <Form.Label column sm={2}>
@@ -186,6 +190,8 @@ const EmployeeCreateAccount = () => {
                                             </Col>
                                         </Form.Group> */}
                                     </div>
+
+                                    {createUserSuccess && <div className="alert alert-success">Pomyślnie udało się utworzyć konto nowego użytkownika!</div>}
                                     {error && <div className="alert alert-danger">{error}</div>}
                                     <Button variant="success" type="submit">UTWÓRZ KONTO</Button>
                                 </Form>
