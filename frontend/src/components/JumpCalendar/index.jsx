@@ -55,7 +55,7 @@ const JumpCalendar = () => {
         setDate(currentDate);
     }
 
-    //zaznaczenie konkretnej daty
+    // zaznaczenie konkretnej daty
     useEffect(() => {
         axios.post('http://localhost:3001/api/jumps/availableDates', { date: date, selectedType: selectedType })
             .then(res => {
@@ -150,7 +150,7 @@ const JumpCalendar = () => {
                                     </>
                                 ) : (
                                     <>
-                                        <p>W tym dniu nie ma zaplanowanych skoków.</p>
+                                        <p>W tym dniu nie ma zaplanowanych skoków. Wybierz inną datę.</p>
                                     </>
                                 )}
                             </Col>
