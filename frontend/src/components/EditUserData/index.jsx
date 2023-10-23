@@ -283,9 +283,9 @@ const EditUserData = () => {
                                     <Form.Label column sm={2}>
                                         Licencja
                                     </Form.Label>
-                                    <Col sm={8}>
+                                    <Col sm={10}>
                                         <div className="d-flex flex-column">
-                                            <input
+                                            <Form.Control
                                                 type="file"
                                                 accept=".jpg, .jpeg, .png, .pdf"
                                                 onChange={(e) => setFile(e.target.files[0])}
@@ -296,24 +296,6 @@ const EditUserData = () => {
                                         </div>
                                     </Col>
                                 </Form.Group>
-                                {/* <Form.Group as={Row} controlId="formEditUserFile" className="mb-3">
-                                    <Form.Label column sm={2}>
-                                        Licencja
-                                    </Form.Label>
-                                    <Col sm={10}>
-                                        <div className="d-flex flex-column">
-                                            <Form.Control
-                                                type="file"
-                                                accept=".jpg, .jpeg, .png, .pdf"
-                                                onChange={(e) => setFile(e.target.files[0])}
-                                            />
-
-                                            <Button variant="secondary" onClick={uploadFile} className="mt-2" style={{ width: '100px' }}>
-                                                Dodaj plik
-                                            </Button>
-                                        </div>
-                                    </Col>
-                                </Form.Group> */}
                             </div>
 
                             {updateSuccess && <div className="alert alert-success">Dane zostały zaktualizowane poprawnie!</div>}
@@ -338,3 +320,22 @@ const EditUserData = () => {
 }
 
 export default EditUserData
+
+
+{/* <Form.Group as={Row} controlId="formEditUserFile" className="mb-3">
+    <Form.Label column sm={2}>
+        Licencja
+    </Form.Label>
+    <Col sm={8}>
+        <div className="d-flex flex-column">
+            <input
+                type="file"
+                accept=".jpg, .jpeg, .png, .pdf"
+                onChange={(e) => setFile(e.target.files[0])}
+            />
+            <Button variant="secondary" onClick={uploadFile} className="mt-2" style={{ width: '100px' }}>
+                Dodaj plik
+            </Button>
+        </div>
+    </Col>
+</Form.Group> */}
