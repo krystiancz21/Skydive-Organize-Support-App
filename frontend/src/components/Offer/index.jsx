@@ -20,7 +20,7 @@ const Offer = () => {
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
     useEffect(() => {
-        axios.get('http://localhost:3001/api/auth/userprofile')
+        axios.get('http://localhost:3001/api/auth/offer')
             .then(res => {
                 if (res.data.Status === "Success") {
                     setIsAuth(true);
@@ -101,6 +101,7 @@ const Offer = () => {
             ) : (
                 // User niezalogowany
                 <>
+                <h1>asdasd</h1>
                 </>
             )}
         </>

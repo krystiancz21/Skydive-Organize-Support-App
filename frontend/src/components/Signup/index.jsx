@@ -20,7 +20,7 @@ const Signup = () => {
 
     const handleChange = ({ currentTarget: input }) => {
         setData({ ...data, [input.name]: input.value })
-        // console.log(data); // Wyświetlanie w przeglądarce zmian w polach formularza, przechwycinych przez handleChange
+        //console.log(data); // Wyświetlanie w przeglądarce zmian w polach formularza, przechwycinych przez handleChange
     }
 
     const handleSubmit = async (e) => {
