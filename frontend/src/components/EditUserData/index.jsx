@@ -129,10 +129,15 @@ const EditUserData = () => {
                 setUpdateSuccess(false);
                 setUpdateFile(true);
             } else {
-                console.error("Błąd podczas aktualizacji danych!");
+                console.error("Błąd podczas dodawania licencji!");
             }
             console.log("Dodano wpis do bazy danych:", dbResponse.data);
         } catch (error) {
+            if (error.response && error.response.data && error.response.data.error) {
+                setError(error.response.data.error);
+            } else {
+                setError('Wystąpił błąd podczas przesyłania pliku');
+            }
             console.error("Błąd podczas przesyłania pliku: " + error.message);
         }
     }

@@ -3,7 +3,7 @@ import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
 import { BsArrowLeft, BsPersonCircle, BsArrowRight } from 'react-icons/bs';
 import styles from "./style.css"
-import { Link, useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -15,11 +15,16 @@ const EmployeeEditAccount = () => {
         phoneNumber: "",
     });
     const [isAuth, setIsAuth] = useState(false);
+    const [editUserSuccess, setEditUserSuccess] = useState(false);
+
+    const [updateSuccess, setUpdateSuccess] = useState(false);
+    const [updateFile, setUpdateFile] = useState(false);
     const [message, setMessage] = useState('');
+    const [error, setError] = useState("");
+
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
-    const [editUserSuccess, setEditUserSuccess] = useState(false);
-    const [error, setError] = useState("");
+    const [file, setFile] = useState(null);
 
     const { clientId } = useParams();
 
@@ -77,13 +82,13 @@ const EmployeeEditAccount = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault(); // Zapobiega przeładowaniu strony
-    
+
         try {
             const response = await axios.post('http://localhost:3001/api/user/updateClientDataById', {
                 formData: data,
                 clientId: clientId
             });
-    
+
             if (response.data.Status === 'Success') {
                 setEditUserSuccess(true);
                 setError('');
@@ -95,6 +100,43 @@ const EmployeeEditAccount = () => {
             console.error(error);
             setError('Wystąpił błąd podczas aktualizacji danych użytkownika');
             setEditUserSuccess(false);
+        }
+    };
+
+    // Dodanie licencji
+    const uploadFile = async () => {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const uploadResponse = await axios.post('http://localhost:3001/api/user/updateUserFile', formData);
+            const filePath = uploadResponse.data.filePath; // Oczekuj odpowiedzi z ścieżką do zapisanego pliku
+
+            const licenseData = {
+                sciezka_do_skanu_licencji: filePath, // Ścieżka do zapisanego pliku
+                email: data.email, // adres email edytowanego usera
+            };
+
+            const dbResponse = await axios.post('http://localhost:3001/api/user/updateLicenseData', licenseData);
+            if (dbResponse.data.error) {
+                setError(dbResponse.data.error);
+                setUpdateFile(false);
+                setUpdateSuccess(false);
+            } else if (dbResponse.data.Status === "Success") {
+                setError('');
+                setUpdateSuccess(false);
+                setUpdateFile(true);
+            } else {
+                console.error("Błąd podczas dodawania licencji!");
+            }
+            console.log("Dodano wpis do bazy danych:", dbResponse.data);
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.error) {
+                setError(error.response.data.error);
+            } else {
+                setError('Wystąpił błąd podczas przesyłania pliku');
+            }
+            console.error("Błąd podczas przesyłania pliku: " + error.message);
         }
     };
 
@@ -185,8 +227,26 @@ const EmployeeEditAccount = () => {
                                                 />
                                             </Col>
                                         </Form.Group>
+                                        <Form.Group as={Row} controlId="formEditUserFile" className="mb-3">
+                                            <Form.Label column sm={2}>
+                                                Licencja
+                                            </Form.Label>
+                                            <Col sm={10}>
+                                                <div className="d-flex flex-column">
+                                                    <Form.Control
+                                                        type="file"
+                                                        accept=".jpg, .jpeg, .png, .pdf"
+                                                        onChange={(e) => setFile(e.target.files[0])}
+                                                    />
+                                                    <Button variant="secondary" onClick={uploadFile} className="mt-2" style={{ width: '100px' }}>
+                                                        Dodaj plik
+                                                    </Button>
+                                                </div>
+                                            </Col>
+                                        </Form.Group>
                                     </div>
                                     {editUserSuccess && <div className="alert alert-success">Pomyślnie udało zmienić dane użytkownika!</div>}
+                                    {updateFile && <div className="alert alert-success">Pomyślnie dodano załącznik!</div>}
                                     {error && <div className="alert alert-danger">{error}</div>}
                                     <Button variant="success" type="submit">EDYTUJ KONTO</Button>
                                 </Form>

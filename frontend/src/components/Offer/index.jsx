@@ -202,9 +202,9 @@ const Offer = () => {
                                     <Card.Body>
                                         <Card.Title>{offer.nazwa}</Card.Title>
                                         <Card.Text>Cena: {offer.cena} zł</Card.Text>
-                                        <Link to={`/jump-calendar/${offer.skok_id}`}>
+                                        {/* <Link to={`/jump-calendar/${offer.skok_id}`}>
                                             <Button variant="primary">ZAREZERWUJ SKOK</Button>
-                                        </Link>
+                                        </Link> */}
                                     </Card.Body>
                                 </Card>
                             ))}

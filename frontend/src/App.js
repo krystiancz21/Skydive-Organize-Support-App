@@ -42,7 +42,7 @@ function App() {
     // </Routes>
     
     <Routes>
-      <Route path='/' element={<Navigate replace to="/login" />} />
+      <Route path='/' element={<Navigate replace to="/main" />} />
       <Route path="/edit-user-data" element={<EditUserData />} />
       <Route path="/jump-calendar/:type" element={<JumpCalendar />} />
       <Route path="/reservation/:jumpId" element={<Reservation />} />
