@@ -51,7 +51,7 @@ function App() {
       <Route path="/messages" element={<Messages />} />
       <Route path="/myjumps" element={<MyJumps />} />
       <Route path="/offer" element={<Offer />} />
-      <Route path="/offer-edit/:type" element={<OfferEdit />} />
+      <Route path="/offer-edit/:offerId" element={<OfferEdit />} />
       <Route path="/ownermain" element={<OwnerMain />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/userprofile" element={<UserProfile />} />

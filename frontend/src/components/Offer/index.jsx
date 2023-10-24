@@ -9,17 +9,12 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 
 const Offer = () => {
-    // const [offerData, setOfferData] = useState({
-    //     jumpName: "",
-    //     jumpPrice: "",
-    // })
-
     const [error, setError] = useState("")
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
-    const [offerData, setOfferData] = useState(null);
+    const [jumpData, setJumpData] = useState([]);
 
     const { offerId } = useParams();
     const navigate = useNavigate();
@@ -33,6 +28,7 @@ const Offer = () => {
                     setIsAuth(true);
                     setMail(res.data.mail); //email
                     setUserRole(res.data.userRole); // rola użytkownika
+
                 } else {
                     setIsAuth(false);
                     setMessage(res.data.Error);
@@ -54,26 +50,21 @@ const Offer = () => {
         navigate(`/jump-calendar/${type}`);
     }
 
-    const handleOfferEditClick = (type) => {
-        navigate(`/offer-edit/${type}`);
+    const handleOfferEditClick = (skokId) => {
+        navigate(`/offer-edit/${skokId}`);
     }
 
-    // useEffect(() => {
-    //     if (isAuth) {
-    //         axios.post('http://localhost:3001/api/offer/showOffer', { offerId: offerId })
-    //             .then(res => {
-    //                 if (Array.isArray(res.data) && res.data.length > 0) {
-    //                     setOfferData(res.data[0]);
-    //                 } else {
-    //                     // Sytuacja, gdy nie znaleziono rekordu
-    //                     console.log('Nie znaleziono rekordu.');
-    //                     // Możesz również ustawić stan lub wyświetlić odpowiednią wiadomość na stronie
-    //                     // np. setJumpData(null) lub setMessage("Nie znaleziono rekordu.")
-    //                 }
-    //             })
-    //             .catch(err => console.log(err));
-    //     }
-    // }, [isAuth, offerId]);
+    useEffect(() => {
+        axios.get('http://localhost:3001/api/offer/showAllOffers')
+            .then(res => {
+                if (res.data.Status === 'Success') {
+                    setJumpData(res.data.offers);
+                } else {
+                    console.error(res.data.Error);
+                }
+            })
+            .catch(err => console.error(err));
+    }, []);
 
     return (
         <>
@@ -96,44 +87,21 @@ const Offer = () => {
                                 </Navbar.Collapse>
                             </Container>
                         </Navbar>
-                            <Container className={styles.content}>
+                        <Container className={styles.content}>
                                 <h1 className="text-center">OFERTA</h1>
                                 <CardGroup>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-oferta" />
-                                        <Card.Body>
-                                            <Card.Title>Skok samodzielny z licencją
-                                                <p>Cena: 600zł</p>
-                                            </Card.Title>
-                                            <Button variant="primary" className='przyciskButton' onClick={() => handleReserveClick('skok_samodzielny')}>
-                                                ZAREZERWUJ SKOK <BsArrowRightShort />
-                                            </Button>
-                                        </Card.Body>
-                                    </Card>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-terminy" />
-                                        <Card.Body>
-                                            <Card.Title>Skok w tandemie
-                                                <p>Cena: 900zł</p>
-                                            </Card.Title>
-                                            <div className="mb-2">
-                                                <Button variant="primary" className='przyciskButton' onClick={() => handleReserveClick('skok_w_tandemie')}>
-                                                    ZAREZERWUJ SKOK <BsArrowRightShort />
-                                                </Button>
-                                            </div>
-                                        </Card.Body>
-                                    </Card>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
-                                        <Card.Body>
-                                            <Card.Title>Skok w tandemie z kamerzystą
-                                                <p>Cena: 1100zł</p>
-                                            </Card.Title>
-                                            <Button variant="primary" className='przyciskButton' onClick={() => handleReserveClick('skok_w_tandemie_z_kamerzysta')}>
-                                                ZAREZERWUJ SKOK <BsArrowRightShort />
-                                            </Button>
-                                        </Card.Body>
-                                    </Card>
+                                    {jumpData.map((offer) => (
+                                        <Card key={offer.skok_id}>
+                                            <Card.Img variant="top" src={obraz} alt="img-oferta" />
+                                            <Card.Body>
+                                                <Card.Title>{offer.nazwa}</Card.Title>
+                                                <Card.Text>Cena: {offer.cena} zł</Card.Text>
+                                                <Link to={`/jump-calendar/${offer.skok_id}`}>
+                                                    <Button variant="primary">ZAREZERWUJ SKOK</Button>
+                                                </Link>
+                                            </Card.Body>
+                                        </Card>
+                                    ))}
                                 </CardGroup>
                             </Container></>
                     )}
@@ -156,38 +124,21 @@ const Offer = () => {
                             <Container className={styles.content}>
                                 <h1 className="text-center">OFERTA</h1>
                                 <CardGroup>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-oferta" />
-                                        <Card.Body>
-                                            <Card.Title>Skok samodzielny z licencją<p>Cena: 600zł</p></Card.Title>
-                                            <Button variant="primary" className='przyciskButton' onClick={() => handleReserveClick('skok_samodzielny')}>
-                                                ZAREZERWUJ SKOK <BsArrowRightShort />
-                                            </Button>
-                                            <Button variant="success" className='przyciskButton' onClick={() => handleOfferEditClick('skok_samodzielny')} >EDYTUJ OFERTĘ</Button>
-                                        </Card.Body>
-                                    </Card>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-terminy" />
-                                        <Card.Body>
-                                            <Card.Title>Skok w tandemie<p>Cena: 900zł</p></Card.Title>
-                                            <div className="mb-2">
-                                                <Button variant="primary" className='przyciskButton' onClick={() => handleReserveClick('skok_w_tandemie')}>
-                                                    ZAREZERWUJ SKOK <BsArrowRightShort />
-                                                </Button>
-                                                <Button variant="success" className='przyciskButton' onClick={() => handleOfferEditClick('skok_w_tandemie')}>EDYTUJ OFERTĘ</Button>
-                                            </div>
-                                        </Card.Body>
-                                    </Card>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
-                                        <Card.Body>
-                                            <Card.Title>Skok w tandemie z kamerzystą<p>Cena: 1100zł</p></Card.Title>
-                                            <Button variant="primary" className='przyciskButton' onClick={() => handleReserveClick('skok_w_tandemie_z_kamerzysta')}>
-                                                ZAREZERWUJ SKOK <BsArrowRightShort />
-                                            </Button>
-                                            <Button variant="success" className='przyciskButton' onClick={() => handleOfferEditClick('skok_samodzielny')}  >EDYTUJ OFERTĘ</Button>
-                                        </Card.Body>
-                                    </Card>
+                                    {jumpData.map((offer) => (
+                                        <Card key={offer.skok_id}>
+                                            <Card.Img variant="top" src={obraz} alt="img-oferta" />
+                                            <Card.Body>
+                                                <Card.Title>{offer.nazwa}</Card.Title>
+                                                <Card.Text>Cena: {offer.cena} zł</Card.Text>
+                                                <Link to={`/jump-calendar/${offer.skok_id}`}>
+                                                    <Button variant="primary">ZAREZERWUJ SKOK</Button>
+                                                </Link><p></p>
+                                                <Link to={`/offer-edit/${offer.skok_id}`}>
+                                                    <Button variant="success">EDYTUJ SKOK</Button>
+                                                </Link>
+                                            </Card.Body>
+                                        </Card>
+                                    ))}
                                 </CardGroup>
                             </Container></>
                     )}
@@ -210,29 +161,21 @@ const Offer = () => {
                             <Container className={styles.content}>
                                 <h1 className="text-center">OFERTA</h1>
                                 <CardGroup>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-oferta" />
-                                        <Card.Body>
-                                            <Card.Title>Skok samodzielny z licencją<p>Cena: 600zł</p></Card.Title>
-                                            <Button variant="success" className='przyciskButton'  >EDYTUJ OFERTĘ</Button>
-                                        </Card.Body>
-                                    </Card>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-terminy" />
-                                        <Card.Body>
-                                            <Card.Title>Skok w tandemie<p>Cena: 900zł</p></Card.Title>
-                                            <div className="mb-2">
-                                                <Button variant="success" className='przyciskButton' >EDYTUJ OFERTĘ</Button>
-                                            </div>
-                                        </Card.Body>
-                                    </Card>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
-                                        <Card.Body>
-                                            <Card.Title>Skok w tandemie z kamerzystą<p>Cena: 1100zł</p></Card.Title>
-                                            <Button variant="success" className='przyciskButton'  >EDYTUJ OFERTĘ</Button>
-                                        </Card.Body>
-                                    </Card>
+                                    {jumpData.map((offer) => (
+                                        <Card key={offer.skok_id}>
+                                            <Card.Img variant="top" src={obraz} alt="img-oferta" />
+                                            <Card.Body>
+                                                <Card.Title>{offer.nazwa}</Card.Title>
+                                                <Card.Text>Cena: {offer.cena} zł</Card.Text>
+                                                <Link to={`/jump-calendar/${offer.skok_id}`}>
+                                                    <Button variant="primary">ZAREZERWUJ SKOK</Button>
+                                                </Link><p></p>
+                                                <Link to={`/offer-edit/${offer.skok_id}`}>
+                                                    <Button variant="success">EDYTUJ SKOK</Button>
+                                                </Link>
+                                            </Card.Body>
+                                        </Card>
+                                    ))}
                                 </CardGroup>
                             </Container></>
                     )}
@@ -255,40 +198,21 @@ const Offer = () => {
                     </Navbar>
                     <Container className={styles.content}>
                         <h1 className="text-center">OFERTA</h1>
-                        <h2>{message}</h2>
                         <CardGroup>
-                            <Card>
-                                <Card.Img variant="top" src={obraz} alt="img-oferta" />
-                                <Card.Body>
-                                    <Card.Title>Skok samodzielny z licencją<p>Cena: 600zł</p></Card.Title>
-                                    <Button variant="primary" className='przyciskButton' onClick={() => handleReserveClick('skok_samodzielny')}>
-                                        ZAREZERWUJ SKOK <BsArrowRightShort />
-                                    </Button>
-                                </Card.Body>
-                            </Card>
-                            <Card>
-                                <Card.Img variant="top" src={obraz} alt="img-terminy" />
-                                <Card.Body>
-                                    <Card.Title>Skok w tandemie<p>Cena: 900zł</p></Card.Title>
-                                    <div className="mb-2">
-                                        <Button variant="primary" className='przyciskButton' onClick={() => handleReserveClick('skok_w_tandemie')}>
-                                            ZAREZERWUJ SKOK <BsArrowRightShort />
-                                        </Button>
-                                    </div>
-                                </Card.Body>
-                            </Card>
-                            <Card>
-                                <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
-                                <Card.Body>
-                                    <Card.Title>Skok w tandemie z kamerzystą<p>Cena: 1100zł</p></Card.Title>
-                                    <Button variant="primary" className='przyciskButton' onClick={() => handleReserveClick('skok_w_tandemie_z_kamerzysta')}>
-                                        ZAREZERWUJ SKOK <BsArrowRightShort />
-                                    </Button>
-                                </Card.Body>
-                            </Card>
+                            {jumpData.map((offer) => (
+                                <Card key={offer.skok_id}>
+                                    <Card.Img variant="top" src={obraz} alt="img-oferta" />
+                                    <Card.Body>
+                                        <Card.Title>{offer.nazwa}</Card.Title>
+                                        <Card.Text>Cena: {offer.cena} zł</Card.Text>
+                                        <Link to={`/jump-calendar/${offer.skok_id}`}>
+                                            <Button variant="primary">ZAREZERWUJ SKOK</Button>
+                                        </Link>
+                                    </Card.Body>
+                                </Card>
+                            ))}
                         </CardGroup>
-                    </Container>
-                </>
+                    </Container></>
             )}
         </>
     )

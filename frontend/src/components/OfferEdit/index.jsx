@@ -9,11 +9,14 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
 const OfferEdit = () => {
-    const [error, setError] = useState("")
+    const { offerId } = useParams();
+    const [error, setError] = useState("");
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
+    const [jumpName, setJumpName] = useState('');
+    const [jumpPrice, setJumpPrice] = useState('');
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -41,6 +44,24 @@ const OfferEdit = () => {
             }).catch(err => console.log(err));
     }
 
+    //sprawdzamy autoryzacje
+    axios.defaults.withCredentials = true;
+    useEffect(() => {
+        axios.get(`http://localhost:3001/api/offer/showOffer/${offerId}`)
+            .then(res => {
+                if (res.data.Status === "Success") {
+                    setIsAuth(true);
+                    setMail(res.data.mail); //email
+                    setUserRole(res.data.userRole); // rola użytkownika
+                    setJumpName(res.data.jumpName); // nazwa skoku
+                    setJumpPrice(res.data.jumpPrice); // cena skoku
+                } else {
+                    setIsAuth(false);
+                    setMessage(res.data.Error);
+                }
+            })
+            .catch(err => console.log(err));
+    }, [offerId]);
 
     return (
         <>
@@ -76,7 +97,7 @@ const OfferEdit = () => {
                                                 <FormControl
                                                     type="text"
                                                     name="jumpName"
-                                                //value={userData.firstName}
+                                                    value={jumpName}
                                                 //onChange={handleChange}
                                                 />
                                             </Col>
@@ -89,7 +110,7 @@ const OfferEdit = () => {
                                                 <FormControl
                                                     type="text"
                                                     name="jumpPrice"
-                                                //value={userData.lastName}
+                                                    value={jumpPrice}
                                                 //onChange={handleChange}
                                                 />
                                             </Col>
