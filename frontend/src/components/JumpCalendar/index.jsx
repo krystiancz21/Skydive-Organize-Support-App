@@ -17,15 +17,9 @@ const JumpCalendar = () => {
     const [date, setDate] = useState(new Date());
     const [availableJumps, setAvailableJumps] = useState([]);
     const [availableDates, setAvailableDates] = useState([]);
-
-    const typeMapping = {
-        skok_samodzielny: 'Skok samodzielny z licencją',
-        skok_w_tandemie: 'Skok w tandemie',
-        skok_w_tandemie_z_kamerzysta: 'Skok w tandemie z kamerzystą',
-    };
+    const [jumpName, setJumpName] = useState('');
 
     const { type } = useParams();
-    const selectedType = typeMapping[type];
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -55,20 +49,15 @@ const JumpCalendar = () => {
         setDate(currentDate);
     }
 
-    // zaznaczenie konkretnej daty
-    useEffect(() => {
-        axios.post('http://localhost:3001/api/jumps/availableDates', { date: date, selectedType: selectedType })
-            .then(res => {
-                setAvailableJumps(res.data); // Ustaw dostępne skoki na podstawie wyników z serwera
-                // console.log(res.data);
-            })
-            .catch(err => console.log(err));
-    }, [date, selectedType]);
-
-
     // wyswietlanie dat w kalendarzu
     useEffect(() => {
-        axios.post('http://localhost:3001/api/jumps/freeDates', { selectedType: selectedType })
+        axios.post('http://localhost:3001/api/jumps/showJumpName', { type: type })
+            .then(res => {
+                setJumpName(res.data[0].nazwa);
+            })
+            .catch(err => console.log(err));
+
+        axios.post('http://localhost:3001/api/jumps/freeDatesOnJump', { type: type })
             .then(res => {
                 const formattedDates = res.data.map(item => {
                     const date = new Date(item.data_czas);
@@ -76,10 +65,9 @@ const JumpCalendar = () => {
                     return formattedDate;
                 });
                 setAvailableDates(formattedDates);
-                // console.log(formattedDates);
             })
             .catch(err => console.log(err));
-    }, []);
+    }, [type]);
 
     // podświetlanie pól w kalendarzu ( wolny termin)
     const tileContent = ({ date, view }) => {
@@ -91,6 +79,17 @@ const JumpCalendar = () => {
         }
         return null;
     };
+
+
+    // Szczegóły dot. danego terminu (konkretna data/godzina skoku wybrana przez usera)
+    useEffect(() => {
+        axios.post('http://localhost:3001/api/jumps/availableDatesByJumpId', { date: date, type: type })
+            .then(res => {
+                setAvailableJumps(res.data); // Ustaw dostępne skoki na podstawie wyników z serwera
+                console.log(res.data);
+            })
+            .catch(err => console.log(err));
+    }, [date, type]);
 
     return (
         <>
@@ -116,7 +115,7 @@ const JumpCalendar = () => {
                         <Row className='mt-5'>
                             <Col >
                                 <h2>Wybierz termin i zarezerwuj skok</h2>
-                                <h5>Rodzaj skoku: <b>{selectedType}</b></h5>
+                                <h5>Rodzaj skoku: <b>{ jumpName }</b></h5>
                                 <div className="my-3">
                                     <p>
                                         <span className="text-success">Kolor zielony</span> - oznacza wolne terminy

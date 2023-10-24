@@ -18,74 +18,95 @@ router.post('/showJumpTypes', (req, res) => {
   });
 });
 
-// Pobranie wszystkich dostępnych terminów na konkretny skok (od aktualnego dnia)
-// zaznaczenie konkretnej daty w kalendarzu
-router.post('/availableDates', (req, res) => {
-  const selectedDate = req.body.date;
-  const selectedType = req.body.selectedType;
+// Pobranie nazwy skoku
+router.post('/showJumpName', (req, res) => {
+  const selectedType = req.body.type;
 
-  let seatsCondition = '';
-
-  // W zależności od wybranego typu skoku, ustaw odpowiedni warunek
-  if (selectedType === 'Skok samodzielny z licencją') {
-    seatsCondition = 'AND liczba_miejsc_w_samolocie > 0';
-  } else if (selectedType === 'Skok w tandemie') {
-    seatsCondition = 'AND liczba_miejsc_w_samolocie > 1';
-  } else if (selectedType === 'Skok w tandemie z kamerzystą') {
-    seatsCondition = 'AND liczba_miejsc_w_samolocie > 2';
-  }
-
-  // Zbuduj zapytanie SQL z uwzględnieniem warunku liczby miejsc w samolocie
-  const sql = `SELECT * FROM planowane_terminy 
-                WHERE CAST(data_czas as DATE) = CAST(? as DATE)
-                AND data_czas >= CURDATE()
-                AND nazwa = ?
-                ${seatsCondition}`; // jeszcze muszę obsłużyć statusy terminów wolne/zajęte
-
-  // const sql = `SELECT * FROM planowane_terminy 
-  //                WHERE CAST(data_czas as DATE) = CAST(? as DATE)
-  //                AND data_czas >= CURDATE()
-  //                AND nazwa = ?
-  //                AND liczba_miejsc_w_samolocie > 0`;
-
-  db.query(sql, [selectedDate, selectedType], (err, results) => {
+  const sqlJumpType = `SELECT nazwa FROM rodzaj_skoku WHERE skok_id = ?`;
+  db.query(sqlJumpType, [selectedType], (err, results) => {
     if (err) {
-      console.error('Błąd zapytania do bazy danych: ' + err.message);
-      res.status(500).json({ error: 'Błąd zapytania do bazy danych' });
+      console.error('Błąd zapytania do bazy danych (/freeDatesOnJump): ' + err.message);
+      res.status(500).json({ error: 'Błąd zapytania do bazy danych: /freeDatesOnJump' });
     } else {
       res.status(200).json(results);
     }
   });
 });
 
-// Pobranie wolnych godzin terminów w wybranym dniu na konkretny rodzaj skoku (to daty w kalendarzu)
+// Pobranie wszystkich wolnych terminów na dany skok
 // ogólnie wyswietlanie dat w kalendarzu
-router.post('/freeDates', (req, res) => {
-  const selectedType = req.body.selectedType;
+router.post('/freeDatesOnJump', (req, res) => {
+  const selectedType = req.body.type;
 
-  let seatsCondition = '';
-
-  // W zależności od wybranego typu skoku, ustaw odpowiedni warunek
-  if (selectedType === 'Skok samodzielny z licencją') {
-    seatsCondition = 'AND liczba_miejsc_w_samolocie > 0';
-  } else if (selectedType === 'Skok w tandemie') {
-    seatsCondition = 'AND liczba_miejsc_w_samolocie > 1';
-  } else if (selectedType === 'Skok w tandemie z kamerzystą') {
-    seatsCondition = 'AND liczba_miejsc_w_samolocie > 2';
-  }
-  const sql = `SELECT data_czas FROM planowane_terminy 
-               WHERE data_czas > NOW()
-               AND nazwa = ?
-               ${seatsCondition}`; // AND liczba_miejsc_w_samolocie > 0`;
-               // jeszcze muszę obsłużyć statusy terminów wolne/zajęte
-
-  db.query(sql, [selectedType], (err, results) => {
+  const sqlJumpType = `SELECT * FROM rodzaj_skoku WHERE skok_id = ?`;
+  db.query(sqlJumpType, [selectedType], (err, results) => {
     if (err) {
-      console.error('Błąd zapytania do bazy danych: ' + err.message);
-      res.status(500).json({ error: 'Błąd zapytania do bazy danych' });
+      console.error('Błąd zapytania do bazy danych (/freeDatesOnJump): ' + err.message);
+      res.status(500).json({ error: 'Błąd zapytania do bazy danych: /freeDatesOnJump' });
     } else {
-      // Zwróć wyniki jako odpowiedź w formacie JSON
-      res.status(200).json(results);
+      if (results.length > 0) {
+        const nazwa = results[0].nazwa;
+        const liczbaMiejsc = results[0].liczba_miejsc_w_samolocie;
+
+        const sql = `SELECT data_czas FROM planowane_terminy 
+          WHERE data_czas > NOW()
+          AND status_terminu_id = 1
+          AND nazwa = ?
+          AND liczba_miejsc_w_samolocie > ?`;
+
+        // Wykonujemy drugie zapytanie, przekazując nazwę z wyników pierwszego zapytania
+        db.query(sql, [nazwa, liczbaMiejsc], (err, secondResults) => {
+          if (err) {
+            console.error('Błąd drugiego zapytania do bazy danych: ' + err.message);
+            res.status(500).json({ error: 'Błąd drugiego zapytania do bazy danych' });
+          } else {
+            // Tutaj możesz użyć wyników drugiego zapytania (secondResults)
+            res.status(200).json(secondResults);
+          }
+        });
+      } else {
+        res.status(404).json({ error: 'Brak wyników dla podanego typu skoku.' });
+      }
+    }
+  });
+});
+
+// Pobranie wszystkich dostępnych terminów na konkretny skok (od aktualnego dnia)
+// zaznaczenie konkretnej daty w kalendarzu
+router.post('/availableDatesByJumpId', (req, res) => {
+  const selectedType = req.body.type;
+  const selectedDate = req.body.date;
+
+  const sqlJumpType = `SELECT * FROM rodzaj_skoku WHERE skok_id = ?`;
+
+  db.query(sqlJumpType, [selectedType], (err, results) => {
+    if (err) {
+      console.error('Błąd zapytania do bazy danych (/availableDatesByJumpId): ' + err.message);
+      res.status(500).json({ error: 'Błąd zapytania do bazy danych: /availableDatesByJumpId' });
+    } else {
+      if (results.length > 0) {
+        const jumpName = results[0].nazwa;
+        const seatsCount = results[0].liczba_miejsc_w_samolocie;
+
+        const sql = `SELECT * FROM planowane_terminy 
+                    WHERE CAST(data_czas as DATE) = CAST(? as DATE)
+                    AND data_czas >= CURDATE()
+                    AND nazwa = ?
+                    AND liczba_miejsc_w_samolocie > ?`;
+
+        db.query(sql, [selectedDate, jumpName, seatsCount], (err, secondResults) => {
+          if (err) {
+            console.error('Błąd drugiego zapytania do bazy danych: ' + err.message);
+            res.status(500).json({ error: 'Błąd drugiego zapytania do bazy danych' });
+          } else {
+            // Tutaj możesz użyć wyników drugiego zapytania (secondResults)
+            res.status(200).json(secondResults);
+          }
+        });
+
+      } else {
+        res.status(404).json({ error: 'Brak wyników dla podanego typu skoku.' });
+      }
     }
   });
 });

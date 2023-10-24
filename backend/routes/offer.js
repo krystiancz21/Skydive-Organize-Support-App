@@ -6,7 +6,6 @@ router.get('/showAllOffers', async (req, res) => {
   const sql = `SELECT * FROM rodzaj_skoku`;
 
   try {
-    //const sql = `SELECT * FROM rodzaj_skoku`;
     db.query(sql, (error, results) => {
       if (error) {
         console.error(error);
