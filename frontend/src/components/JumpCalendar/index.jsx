@@ -5,7 +5,7 @@ import { BsFillPersonFill, BsArrowRightShort, BsFillBellFill } from 'react-icons
 import styles from "./style.css"
 import axios from "axios";
 import Calendar from 'react-calendar';
-import moment from 'moment'
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import 'react-calendar/dist/Calendar.css';
@@ -55,7 +55,7 @@ const JumpCalendar = () => {
         setDate(currentDate);
     }
 
-    //zaznaczenie konkretnej daty
+    // zaznaczenie konkretnej daty
     useEffect(() => {
         axios.post('http://localhost:3001/api/jumps/availableDates', { date: date, selectedType: selectedType })
             .then(res => {
@@ -150,7 +150,7 @@ const JumpCalendar = () => {
                                     </>
                                 ) : (
                                     <>
-                                        <p>W tym dniu nie ma zaplanowanych skoków.</p>
+                                        <p>W tym dniu nie ma zaplanowanych skoków. Wybierz inną datę.</p>
                                     </>
                                 )}
                             </Col>

@@ -4,7 +4,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../db");
 const multer = require("multer");
-const { editUserSchema } = require("../utils/validation");
+const { editClientSchema } = require("../utils/validation");
+
 
 router.get("/getUserData", async (req, res) => {
     const email = req.query.email;
@@ -17,6 +18,51 @@ router.get("/getUserData", async (req, res) => {
             res.send(data);
         }
     })
+});
+
+router.post("/getUserDataById", async (req, res) => {
+    const clientId = req.body.clientId;
+    const sql = "SELECT * FROM user WHERE user_id = ?";
+
+    db.query(sql, [clientId], (err, data) => {
+        if (err) {
+            res.status(500).send({ error: 'Wystąpił błąd podczas pobierania danych użytkownika' });
+        } else {
+            res.status(200).send(data);
+        }
+    })
+});
+
+router.post("/updateClientDataById", async (req, res) => {
+    // Tutaj możesz dodać logikę weryfikacji danych wejściowych
+    // Sprawdzenie, czy email istnieje w bazie danych, itp
+    try {
+        const { error } = editClientSchema.validate(req.body.formData);
+
+        if (error) {
+            return res.json({ error: error.details[0].message });
+        }
+
+        const values = [
+            req.body.formData.firstName,
+            req.body.formData.lastName,
+            req.body.formData.email,
+            req.body.formData.phoneNumber,
+            req.body.clientId,
+        ];
+
+        const sql = "UPDATE user SET `imie` = ?, `nazwisko` = ?, `mail` = ?, `telefon` = ? WHERE `user_id` = ?";
+        db.query(sql, values, (err, result) => {
+            if (err) {
+                res.status(500).send({ error: 'Wystąpił błąd podczas aktualizacji danych użytkownika' });
+            } else {
+                res.send({ Status: 'Success' });
+            }
+        });
+    } catch (error) {
+        console.error("Błąd podczas aktualizacji danych: " + error.message);
+        return res.status(500).json({ error: "Błąd podczas aktualizacji danych" });
+    }
 });
 
 router.post("/updateUserData", async (req, res) => {
@@ -138,6 +184,22 @@ router.post("/updateLicenseData", async (req, res) => {
         console.error("Błąd podczas obsługi żądania /updateLicenseData:", error.message);
         res.status(500).json({ error: "Błąd podczas aktualizacji danych licencji" });
     }
+});
+
+router.get("/showUserAccounts", async (req, res) => {
+    // Wyszukanie kont klientów, rola == 1
+    const sql = 'SELECT u.user_id, imie, nazwisko, mail FROM `user` u ' +
+        'JOIN rola_user ru ON ru.user_id = u.user_id ' +
+        'WHERE ru.rola_rola_id = 1';
+
+    db.query(sql, (err, results) => {
+        if (err) {
+          console.error('Błąd zapytania do bazy danych: ' + err.message);
+          res.status(500).json({ error: 'Błąd zapytania do bazy danych' });
+        } else {
+          res.status(200).json(results);
+        }
+      });
 });
 
 module.exports = router;

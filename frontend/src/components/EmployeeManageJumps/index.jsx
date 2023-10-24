@@ -25,15 +25,15 @@ const EmployeeManageJumps = () => {
             </Navbar>
             <Container className={styles.content}>
                 <h1 className="text-center">ZARZĄDZANIE SKOKAMI</h1>
-                <Row>
-                    <Col>
+                <Row >
+                    <Col className="text-center">
                         <Button variant="secondary" className="mt-3" id="btn-edit">
                             <BsFillCalendarPlusFill /> Zaplanuj skoki <BsArrowRightShort />
                         </Button>
                     </Col>
                 </Row>
                 <Row>
-                    <Col>
+                    <Col className="text-center">
                         <Button variant="secondary" className="mt-3" id="btn-jumps">
                             <ImCancelCircle /> Odwołaj skoki <BsArrowRightShort />
                         </Button>
