@@ -46,7 +46,7 @@ const EditUserData = () => {
         axios.get(`http://localhost:3001/api/user/getUserData?email=${mail}`)
             .then(res => {
                 if (res.data && res.data.length > 0) {
-                    // console.log(res.data[0])
+                    //console.log(res.data[0])
                     setUserData({
                         firstName: res.data[0].imie,
                         lastName: res.data[0].nazwisko,

@@ -1,6 +1,7 @@
 require('dotenv').config()
 const router = require("express").Router();
 const db = require("../db");
+const { editOfferSchema } = require("../utils/validation");
 
 router.get('/showAllOffers', async (req, res) => {
   const sql = `SELECT * FROM rodzaj_skoku`;
@@ -21,38 +22,47 @@ router.get('/showAllOffers', async (req, res) => {
   }
 });
 
+router.get("/showOffer", async (req, res) => {
+  const sql = `SELECT * FROM rodzaj_skoku WHERE skok_id = ?`;
+  const offerId = req.query.offerId;
 
-router.post('/showOffer', (req, res) => {
-  const offerId = req.body.offerId;
-  const sql = `SELECT skok_id, nazwa, cena FROM rodzaj_skoku WHERE skok_id = ?`;
-
-  db.query(sql, [offerId], (err, results) => {
+  db.query(sql, [offerId], (err, data) => {
     if (err) {
-      console.error('Błąd zapytania do bazy danych: ' + err.message);
-      res.status(500).json({ error: 'Błąd zapytania do bazy danych' });
+      res.status(500).send({ error: 'Wystąpił błąd podczas pobierania danych ofert' });
     } else {
-      // Zwróć wyniki jako odpowiedź w formacie JSON
-      res.status(200).json(results);
+      // console.log(data);
+      res.send(data);
     }
-  });
+  })
 });
 
-// router.post('/editOffer', (req, res) => {
-//   const offerId = req.body.offerId;
-//   const newName = req.body.newName; // Nowa nazwa oferty
-//   const newPrice = req.body.newPrice; // Nowa cena oferty
+router.post("/updateOfferData", async (req, res) => {
 
-//   const sql = `UPDATE rodzaj_skoku SET nazwa = ?, cena = ? WHERE skok_id = ?`;
+  try {
+    const { error } = editOfferSchema.validate(req.body.offerData);
 
-//   db.query(sql, [newName, newPrice, offerId], (err, results) => {
-//     if (err) {
-//       console.error('Błąd zapytania do bazy danych: ' + err.message);
-//       res.status(500).json({ error: 'Błąd zapytania do bazy danych' });
-//     } else {
-//       // Zwróć potwierdzenie edycji jako odpowiedź w formacie JSON
-//       res.status(200).json({ message: 'Oferta została zaktualizowana' });
-//     }
-//   });
-// });
+    if (error) {
+      return res.json({ error: error.details[0].message });
+    }
+
+    const values = [
+      req.body.offerData.jumpName,
+      req.body.offerData.jumpPrice,
+      req.body.offerId,
+    ];
+
+    const sql = "UPDATE rodzaj_skoku SET `nazwa` = ?, `cena` = ? WHERE `skok_id` = ?";
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        res.status(500).send({ error: 'Wystąpił błąd podczas aktualizacji danych oferty' });
+      } else {
+        res.send({ Status: 'Success' });
+      }
+    });
+  } catch (error) {
+    console.error("Błąd podczas aktualizacji danych: " + error.message);
+    return res.status(500).json({ error: "Błąd podczas aktualizacji danych" });
+  }
+});
 
 module.exports = router;
