@@ -26,7 +26,7 @@ Uruchomienie:
 - [X] usunięcie konta.
 
 
-3. Funkcjonalności pracownika
+3. Funkcjonalności pracownika:
 - [ ] odpowiadanie na pytania
 - [ ] planowanie terminów skoków,
 - [ ] potwierdzenie dokonania płatności,
@@ -36,7 +36,7 @@ Uruchomienie:
 - [X] zarządzanie danymi klientów (zakładanie kont klientów, ewidencjonowanie licencji klientów)
 
 
-4. Funkcjonalności administratora
+4. Funkcjonalności administratora:
 - [ ] możliwość przeglądu kont pracowników,
 - [ ] możliwość podglądu podsumowania finansowego, 
 - [ ] możliwość tworzenia kont użytkowników,
