@@ -4,6 +4,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Main from './components/Main';
 import Offer from './components/Offer';
+import OfferEdit from './components/OfferEdit';
 import MyJumps from './components/MyJumps';
 import EditUserData from './components/EditUserData';
 import UserProfile from './components/UserProfile';
@@ -51,6 +52,7 @@ function App() {
       <Route path="/messages" element={<Messages />} />
       <Route path="/myjumps" element={<MyJumps />} />
       <Route path="/offer" element={<Offer />} />
+      <Route path="/offer-edit/:offerId" element={<OfferEdit />} />
       <Route path="/ownermain" element={<OwnerMain />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/userprofile" element={<UserProfile />} />
