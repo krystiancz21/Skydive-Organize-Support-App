@@ -30,7 +30,7 @@ router.get("/showOffer", async (req, res) => {
     if (err) {
       res.status(500).send({ error: 'Wystąpił błąd podczas pobierania danych ofert' });
     } else {
-      console.log(data);
+      // console.log(data);
       res.send(data);
     }
   })
@@ -39,15 +39,16 @@ router.get("/showOffer", async (req, res) => {
 router.post("/updateOfferData", async (req, res) => {
 
   try {
-    const { error } = editOfferSchema.validate(req.body);
+    const { error } = editOfferSchema.validate(req.body.offerData);
 
     if (error) {
       return res.json({ error: error.details[0].message });
     }
 
     const values = [
-      req.body.jumpName,
-      req.body.jumpPrice,
+      req.body.offerData.jumpName,
+      req.body.offerData.jumpPrice,
+      req.body.offerId,
     ];
 
     const sql = "UPDATE rodzaj_skoku SET `nazwa` = ?, `cena` = ? WHERE `skok_id` = ?";

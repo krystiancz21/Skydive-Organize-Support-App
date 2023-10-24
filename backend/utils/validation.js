@@ -74,11 +74,19 @@ const editClientSchema = Joi.object({
   phoneNumber: Joi.string().min(9).max(15).required().label("Telefon"),
 }).messages(customMessages);
 
+// const editOfferSchema = Joi.object({
+//   jumpName: Joi.string()
+//     .min(3)
+//     .required()
+//     .pattern(new RegExp("^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$"))
+//     .label("Nazwa"),
+//   jumpPrice: Joi.number().required().label("Cena")
+// }).messages(customMessages);
 const editOfferSchema = Joi.object({
   jumpName: Joi.string()
     .min(3)
     .required()
-    .pattern(new RegExp("^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$"))
+    .pattern(new RegExp("^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ ]+$"))
     .label("Nazwa"),
   jumpPrice: Joi.number().required().label("Cena")
 }).messages(customMessages);

@@ -53,7 +53,7 @@ const OfferEdit = () => {
         axios.get(`http://localhost:3001/api/offer/showOffer?offerId=${offerId}`)
             .then(res => {
                 if (res.data && res.data.length > 0) {
-                    console.log(res.data[0])
+                    // console.log(res.data[0])
                     setOfferData({
                         jumpName: res.data[0].nazwa,
                         jumpPrice: res.data[0].cena
@@ -65,7 +65,7 @@ const OfferEdit = () => {
 
     const handleChange = ({ currentTarget: input }) => {
         setOfferData({ ...offerData, [input.name]: input.value })
-        //console.log(`Nowa wartość pola ${input.name}: ${input.value}`);
+        // console.log(`Nowa wartość pola ${input.name}: ${input.value}`);
     }
 
     // Edycja oferty
@@ -73,7 +73,11 @@ const OfferEdit = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:3001/api/offer/updateOfferData', offerData);
+            // const response = await axios.post('http://localhost:3001/api/offer/updateOfferData', offerData);
+            const response = await axios.post('http://localhost:3001/api/offer/updateOfferData', {
+                offerData: offerData,
+                offerId: offerId
+            });
             if (response.data.error) {
                 setError(response.data.error);
                 setUpdateSuccess(false);
@@ -144,6 +148,7 @@ const OfferEdit = () => {
                                         </Form.Group>
                                     </div>
                                     {updateSuccess && <div className="alert alert-success">Dane oferty zostały zaktualizowane</div>}
+                                    {error && <div className="alert alert-danger">{error}</div>}
                                     <div className='mt-4'>
                                         <Button variant="success" className="mt-3" id="przycisk2" onClick={handleOfferEdit}>
                                             <BsPencilSquare /> EDYTUJ SKOK
