@@ -42,17 +42,16 @@ const Offer = () => {
             .then(res => {
                 // Przekierowanie na stronę główną po wylogowaniu
                 window.location.href = "/main";
-                //window.location.reload(true);
             }).catch(err => console.log(err));
     }
 
-    const handleReserveClick = (type) => {
-        navigate(`/jump-calendar/${type}`);
-    }
+    // const handleReserveClick = (type) => {
+    //     navigate(`/jump-calendar/${type}`);
+    // }
 
-    const handleOfferEditClick = (skokId) => {
-        navigate(`/offer-edit/${skokId}`);
-    }
+    // const handleOfferEditClick = (skokId) => {
+    //     navigate(`/offer-edit/${skokId}`);
+    // }
 
     useEffect(() => {
         axios.get('http://localhost:3001/api/offer/showAllOffers')
@@ -70,7 +69,6 @@ const Offer = () => {
         <>
             {isAuth ? (
                 <>
-                    {/* Wyświetl odpowiednią nawigację w zależności od roli */}
                     {userRole === 'klient' && (
                         // User zalogowany
                         <><Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -87,7 +85,7 @@ const Offer = () => {
                                 </Navbar.Collapse>
                             </Container>
                         </Navbar>
-                        <Container className={styles.content}>
+                            <Container className={styles.content}>
                                 <h1 className="text-center">OFERTA</h1>
                                 <CardGroup>
                                     {jumpData.map((offer) => (
@@ -182,20 +180,19 @@ const Offer = () => {
                 </>
             ) : (
                 // User niezalogowany
-                <>
-                    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-                        <Container>
-                            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                            <Navbar.Collapse id="responsive-navbar-nav">
-                                <Nav className="me-auto">
-                                    <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-                                </Nav>
-                                <Link to="/login">
-                                    <Button variant="success">ZALOGUJ</Button>
-                                </Link>
-                            </Navbar.Collapse>
-                        </Container>
-                    </Navbar>
+                <><Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                    <Container>
+                        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                        <Navbar.Collapse id="responsive-navbar-nav">
+                            <Nav className="me-auto">
+                                <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                            </Nav>
+                            <Link to="/login">
+                                <Button variant="success">ZALOGUJ</Button>
+                            </Link>
+                        </Navbar.Collapse>
+                    </Container>
+                </Navbar>
                     <Container className={styles.content}>
                         <h1 className="text-center">OFERTA</h1>
                         <CardGroup>

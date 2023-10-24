@@ -59,10 +59,20 @@ const editUserSchema = Joi.object({
   weight: Joi.number().greater(29).less(111).required().label("Masa"),
 }).messages(customMessages);
 
+const editOfferSchema = Joi.object({
+  jumpName: Joi.string()
+    .min(3)
+    .required()
+    .pattern(new RegExp("^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$"))
+    .label("Nazwa"),
+  jumpPrice: Joi.number().required().label("Cena")
+}).messages(customMessages);
+
 const passwordComplexityInstance = passwordComplexity(complexityOptions);
 
 module.exports = {
   userSchema,
+  editOfferSchema,
   editUserSchema,
   passwordComplexityInstance,
 };

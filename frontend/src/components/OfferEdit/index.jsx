@@ -6,17 +6,22 @@ import obraz from '../Images/obraz.jpg';
 import styles from "./style.css"
 import axios from "axios";
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
 const OfferEdit = () => {
-    const { offerId } = useParams();
+    const [offerData, setOfferData] = useState({
+        jumpName: "",
+        jumpPrice: "",
+    })
     const [error, setError] = useState("");
+    const [updateSuccess, setUpdateSuccess] = useState(false);
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
-    const [jumpName, setJumpName] = useState('');
-    const [jumpPrice, setJumpPrice] = useState('');
+
+    const { offerId } = useParams();
+    const navigate = useNavigate();
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -35,39 +40,59 @@ const OfferEdit = () => {
             .catch(err => console.log(err));
     }, []);
 
+    // Wylogowanie
     const handleLogout = () => {
         axios.get('http://localhost:3001/api/auth/logout')
             .then(res => {
                 // Przekierowanie na stronę główną po wylogowaniu
                 window.location.href = "/main";
-                //window.location.reload(true);
             }).catch(err => console.log(err));
     }
 
-    //sprawdzamy autoryzacje
-    axios.defaults.withCredentials = true;
     useEffect(() => {
-        axios.get(`http://localhost:3001/api/offer/showOffer/${offerId}`)
+        axios.get(`http://localhost:3001/api/offer/showOffer?offerId=${offerId}`)
             .then(res => {
-                if (res.data.Status === "Success") {
-                    setIsAuth(true);
-                    setMail(res.data.mail); //email
-                    setUserRole(res.data.userRole); // rola użytkownika
-                    setJumpName(res.data.jumpName); // nazwa skoku
-                    setJumpPrice(res.data.jumpPrice); // cena skoku
-                } else {
-                    setIsAuth(false);
-                    setMessage(res.data.Error);
+                if (res.data && res.data.length > 0) {
+                    console.log(res.data[0])
+                    setOfferData({
+                        jumpName: res.data[0].nazwa,
+                        jumpPrice: res.data[0].cena
+                    });
                 }
             })
             .catch(err => console.log(err));
     }, [offerId]);
 
+    const handleChange = ({ currentTarget: input }) => {
+        setOfferData({ ...offerData, [input.name]: input.value })
+        //console.log(`Nowa wartość pola ${input.name}: ${input.value}`);
+    }
+
+    // Edycja oferty
+    const handleOfferEdit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.post('http://localhost:3001/api/offer/updateOfferData', offerData);
+            if (response.data.error) {
+                setError(response.data.error);
+                setUpdateSuccess(false);
+            } else if (response.data.Status === "Success") {
+                setError('');
+                setUpdateSuccess(true);
+            } else {
+                console.error("Błąd podczas aktualizacji oferty!");
+            }
+        } catch (error) {
+            // console.error(error);
+            console.error('Błąd podczas aktualizacji oferty: ' + error.message);
+        }
+    };
+
     return (
         <>
             {isAuth ? (
                 <>
-                    {/* Wyświetl odpowiednią nawigację w zależności od roli */}
                     {userRole === 'pracownik' && (
                         // User zalogowany
                         <><Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -97,8 +122,9 @@ const OfferEdit = () => {
                                                 <FormControl
                                                     type="text"
                                                     name="jumpName"
-                                                    value={jumpName}
-                                                //onChange={handleChange}
+                                                    value={offerData.jumpName}
+                                                    onChange={handleChange}
+                                                    // onChange={(e) => setJumpName(e.target.value)}
                                                 />
                                             </Col>
                                         </Form.Group>
@@ -110,53 +136,21 @@ const OfferEdit = () => {
                                                 <FormControl
                                                     type="text"
                                                     name="jumpPrice"
-                                                    value={jumpPrice}
-                                                //onChange={handleChange}
+                                                    value={offerData.jumpPrice}
+                                                    onChange={handleChange}
+                                                    // onChange={(e) => setJumpPrice(e.target.value)}
                                                 />
                                             </Col>
                                         </Form.Group>
                                     </div>
+                                    {updateSuccess && <div className="alert alert-success">Dane oferty zostały zaktualizowane</div>}
                                     <div className='mt-4'>
-                                        <Button variant="success" className="mt-3" id="przycisk2" /*onClick={handleEditUserData}*/>
+                                        <Button variant="success" className="mt-3" id="przycisk2" onClick={handleOfferEdit}>
                                             <BsPencilSquare /> EDYTUJ SKOK
                                         </Button>
                                     </div>
                                 </Form>
                             </Container></>
-                        /*{ <CardGroup>
-                            <Card>
-                                <Card.Img variant="top" src={obraz} alt="img-oferta" />
-                                <Card.Body>
-                                    <Card.Title>Skok samodzielny z licencją<p>Cena: 600zł</p></Card.Title>
-                                    <Button variant="primary" className='przyciskButton' onClick={() => handleReserveClick('skok_samodzielny')}>
-                                        ZAREZERWUJ SKOK <BsArrowRightShort />
-                                    </Button>
-                                    <Button variant="success" className='przyciskButton' onClick={() => handleOfferEditClick('skok_samodzielny')} >EDYTUJ OFERTĘ</Button>
-                                </Card.Body>
-                            </Card>
-                            <Card>
-                                <Card.Img variant="top" src={obraz} alt="img-terminy" />
-                                <Card.Body>
-                                    <Card.Title>Skok w tandemie<p>Cena: 900zł</p></Card.Title>
-                                    <div className="mb-2">
-                                        <Button variant="primary" className='przyciskButton' onClick={() => handleReserveClick('skok_w_tandemie')}>
-                                            ZAREZERWUJ SKOK <BsArrowRightShort />
-                                        </Button>
-                                        <Button variant="success" className='przyciskButton' onClick={() => handleOfferEditClick('skok_w_tandemie')}>EDYTUJ OFERTĘ</Button>
-                                    </div>
-                                </Card.Body>
-                            </Card>
-                            <Card>
-                                <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
-                                <Card.Body>
-                                    <Card.Title>Skok w tandemie z kamerzystą<p>Cena: 1100zł</p></Card.Title>
-                                    <Button variant="primary" className='przyciskButton' onClick={() => handleReserveClick('skok_w_tandemie_z_kamerzysta')}>
-                                        ZAREZERWUJ SKOK <BsArrowRightShort />
-                                    </Button>
-                                    <Button variant="success" className='przyciskButton' onClick={() => handleOfferEditClick('skok_samodzielny')}  >EDYTUJ OFERTĘ</Button>
-                                </Card.Body>
-                            </Card>
-                        </CardGroup> }*/
                     )
                     }
                     {
