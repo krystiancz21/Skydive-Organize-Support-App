@@ -3,6 +3,54 @@ import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
 import { BsArrowLeft, BsPersonCircle } from 'react-icons/bs';
 import styles from "./style.css"
+import logo from '../Images/logo.jpg';
+
+const Logo = () => (
+    <div className='logo'>
+        {/*https://www.vecteezy.com/vector-art/17127793-parachute-logo-icon-design-and-symbol-skydiving-vector */}
+        <img src={logo} alt="Logo" />
+    </div>
+);
+
+const FooterMenu = () => (
+    <div>
+        <h4>Szybkie linki</h4>
+        <ul>
+            <li><a href="/main">Strona główna</a></li>
+            <li><a href="/offer">Oferta</a></li>
+            <li><a href="/reservation">Terminy skoków</a></li>
+            <li><a href="/messages">Wiadomości</a></li>
+        </ul>
+    </div>
+);
+
+const ContactInfo = () => (
+    <div>
+        <h4>Autorzy</h4>
+        <p>Krystian Czapla</p>
+        <p>Kacper Czajka</p>
+        <p>Mariusz Choroś</p>
+    </div>
+);
+
+const Stopka = () => (
+    <footer className="big-footer">
+        <Container>
+            <Row>
+                <Col md={4}>
+                    <Logo />
+                    <p>&copy; 2023 System wspomagający organizację skoków spadochronowych</p>
+                </Col>
+                <Col md={4}>
+                    <FooterMenu />
+                </Col>
+                <Col md={4}>
+                    <ContactInfo />
+                </Col>
+            </Row>
+        </Container>
+    </footer>
+)
 
 const Messages = () => {
     return (
@@ -59,6 +107,7 @@ const Messages = () => {
                     </Col>
                 </Row>
             </Container>
+            <Stopka />
         </>
     )
 }
