@@ -282,6 +282,44 @@ INSERT INTO `planowane_terminy` (`nazwa`, `data_czas`, `liczba_miejsc_w_samoloci
 ('Skok w tandemie z kamerzystą', '2023-12-12 10:00:00', 2, 'Lublin', 1),
 ('Skok w tandemie z kamerzystą', '2023-12-19 08:00:00', 8, 'Lublin', 1);
 
+-- -----------------------------------------------------
+-- TRIGGER dla Tabel
+-- -----------------------------------------------------
+USE skydive;
+
+DELIMITER //
+CREATE TRIGGER decrease_seats
+AFTER INSERT ON rezerwacje_terminow
+FOR EACH ROW
+BEGIN
+	DECLARE seats_to_decrease INT;
+	DECLARE available_seats INT;
+
+   IF NEW.rodzaj_skoku_id = 1 THEN
+      SET seats_to_decrease = 1;
+   ELSEIF NEW.rodzaj_skoku_id = 2 THEN
+      SET seats_to_decrease = 2;
+   ELSE
+      SET seats_to_decrease = 3;
+   END IF;
+   
+
+   SET available_seats = (SELECT liczba_miejsc_w_samolocie FROM planowane_terminy WHERE terminy_id = NEW.planowane_terminy_id);
+   
+   -- Jeśli dostępna liczba miejsc jest wystarczająca, zaktualizuj ją
+   IF available_seats >= seats_to_decrease THEN
+      UPDATE planowane_terminy
+      SET liczba_miejsc_w_samolocie = available_seats - seats_to_decrease
+      WHERE terminy_id = NEW.planowane_terminy_id;
+   END IF;
+END;
+//
+DELIMITER ;
+
+-- W razie jakby trzeba było usunąć trigger:
+-- USE skydive;
+-- DROP TRIGGER IF EXISTS decrease_seats;
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

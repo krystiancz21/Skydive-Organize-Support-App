@@ -74,7 +74,7 @@ const UserProfile = () => {
                                         </Button>
                                     </Col>
                                 </Row>
-                                <Row >
+                                <Row>
                                     <Col className="text-center">
                                         <Button variant="secondary" className="mt-3" id="btn-jumps" href="/myjumps">
                                             <div className="mt-3">

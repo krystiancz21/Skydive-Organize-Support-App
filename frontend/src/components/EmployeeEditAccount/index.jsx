@@ -3,51 +3,30 @@ import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
 import { BsArrowLeft, BsPersonCircle, BsArrowRight } from 'react-icons/bs';
 import styles from "./style.css"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const EmployeeCreateAccount = () => {
+const EmployeeEditAccount = () => {
     const [data, setData] = useState({
         firstName: "",
         lastName: "",
         email: "",
-        password: "",
         phoneNumber: "",
-    })
+    });
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
-    const [createUserSuccess, setCreateUserSuccess] = useState(false);
+    const [editUserSuccess, setEditUserSuccess] = useState(false);
     const [error, setError] = useState("");
-    const navigate = useNavigate();
+
+    const { clientId } = useParams();
 
     const handleChange = ({ currentTarget: input }) => {
         setData({ ...data, [input.name]: input.value })
         //console.log(data); // Wyświetlanie w przeglądarce zmian w polach formularza, przechwycinych przez handleChange
     }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        try {
-            const response = await axios.post("http://localhost:3001/api/auth/register", data); // /api/auth
-            if (response.data.error) {
-                setError(response.data.error);
-                setCreateUserSuccess(false);
-            } else if (response.data.Status === "Success") {
-                setError('');
-                setCreateUserSuccess(true);
-            } else {
-                console.error("Błąd rejestracji: Niepoprawna odpowiedź z serwera");
-            }
-
-            console.log(response.data);
-        } catch (error) {
-            console.error('Błąd podczas rejestracji: ' + error.message);
-        }
-    };
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -73,6 +52,52 @@ const EmployeeCreateAccount = () => {
             }).catch(err => console.log(err));
     }
 
+    useEffect(() => {
+        if (isAuth) {
+            axios.post(`http://localhost:3001/api/user/getUserDataById`, { clientId: clientId })
+                .then(res => {
+                    if (Array.isArray(res.data) && res.data.length > 0) {
+                        setData({
+                            firstName: res.data[0].imie,
+                            lastName: res.data[0].nazwisko,
+                            email: res.data[0].mail,
+                            phoneNumber: res.data[0].telefon,
+                        });
+                    } else {
+                        // Sytuacja, gdy nie znaleziono rekordu
+                        console.log('Nie znaleziono rekordu.');
+                        setData(null);
+                        // Możesz również ustawić stan lub wyświetlić odpowiednią wiadomość na stronie
+                        // np.  lub setMessage("Nie znaleziono rekordu.")
+                    }
+                })
+                .catch(err => console.error(err));
+        }
+    }, [clientId, isAuth]);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault(); // Zapobiega przeładowaniu strony
+    
+        try {
+            const response = await axios.post('http://localhost:3001/api/user/updateClientDataById', {
+                formData: data,
+                clientId: clientId
+            });
+    
+            if (response.data.Status === 'Success') {
+                setEditUserSuccess(true);
+                setError('');
+            } else {
+                setError(response.data.error);
+                setEditUserSuccess(false);
+            }
+        } catch (error) {
+            console.error(error);
+            setError('Wystąpił błąd podczas aktualizacji danych użytkownika');
+            setEditUserSuccess(false);
+        }
+    };
+
     return (
         <>
             {isAuth ? (
@@ -97,10 +122,10 @@ const EmployeeCreateAccount = () => {
                                 </Container>
                             </Navbar>
                             <Container className={styles.content}>
-                                <h1 className="text-center">TWORZENIE KONTA UŻYTKOWNIKA</h1>
+                                <h1 className="text-center">EDYCJA KONTA UŻYTKOWNIKA</h1>
                                 <Form onSubmit={handleSubmit} className="text-center">
                                     <div className='max-width-form'>
-                                        <Form.Group as={Row} controlId="formOwnerCreateAccountName" className="mb-3">
+                                        <Form.Group as={Row} controlId="formOwnerEditAccountName" className="mb-3">
                                             <Form.Label column sm={2}>
                                                 Imię
                                             </Form.Label>
@@ -115,7 +140,7 @@ const EmployeeCreateAccount = () => {
                                                 />
                                             </Col>
                                         </Form.Group>
-                                        <Form.Group as={Row} controlId="formOwnerCreateAccountLastName" className="mb-3">
+                                        <Form.Group as={Row} controlId="formOwnerEditAccountLastName" className="mb-3">
                                             <Form.Label column sm={2}>
                                                 Nazwisko
                                             </Form.Label>
@@ -130,7 +155,7 @@ const EmployeeCreateAccount = () => {
                                                 />
                                             </Col>
                                         </Form.Group>
-                                        <Form.Group as={Row} controlId="formOwnerCreateAccountEmail" className="mb-3">
+                                        <Form.Group as={Row} controlId="formOwnerEditAccountEmail" className="mb-3">
                                             <Form.Label column sm={2}>
                                                 E-mail
                                             </Form.Label>
@@ -145,22 +170,7 @@ const EmployeeCreateAccount = () => {
                                                 />
                                             </Col>
                                         </Form.Group>
-                                        <Form.Group as={Row} controlId="formOwnerCreateAccountPassword" className="mb-3">
-                                            <Form.Label column sm={2}>
-                                                Hasło
-                                            </Form.Label>
-                                            <Col sm={10}>
-                                                <FormControl
-                                                    type="password"
-                                                    placeholder="********"
-                                                    name="password"
-                                                    onChange={handleChange}
-                                                    value={data.password}
-                                                    required
-                                                />
-                                            </Col>
-                                        </Form.Group>
-                                        <Form.Group as={Row} controlId="formOwnerCreateAccountPhone" className="mb-3">
+                                        <Form.Group as={Row} controlId="formOwnerEditAccountPhone" className="mb-3">
                                             <Form.Label column sm={2}>
                                                 Telefon
                                             </Form.Label>
@@ -175,25 +185,10 @@ const EmployeeCreateAccount = () => {
                                                 />
                                             </Col>
                                         </Form.Group>
-                                        {/* <Form.Group as={Row} controlId="formOwnerCreateAccountRole" className="mb-3">
-                                            <Form.Label column sm={2}>
-                                                Rola
-                                            </Form.Label>
-                                            <Col md={10} className="form-col">
-                                                <Form>
-                                                    <div className='przyciskiradio'>
-                                                        <label class="radio-inline">
-                                                            <input type="radio" name="myRadio" value="userAccount" checked disabled />  Użytkownik
-                                                        </label>
-                                                    </div>
-                                                </Form>
-                                            </Col>
-                                        </Form.Group> */}
                                     </div>
-
-                                    {createUserSuccess && <div className="alert alert-success">Pomyślnie udało się utworzyć konto nowego użytkownika!</div>}
+                                    {editUserSuccess && <div className="alert alert-success">Pomyślnie udało zmienić dane użytkownika!</div>}
                                     {error && <div className="alert alert-danger">{error}</div>}
-                                    <Button variant="success" type="submit">UTWÓRZ KONTO</Button>
+                                    <Button variant="success" type="submit">EDYTUJ KONTO</Button>
                                 </Form>
                             </Container></>
                     )}
@@ -206,4 +201,4 @@ const EmployeeCreateAccount = () => {
     );
 }
 
-export default EmployeeCreateAccount
+export default EmployeeEditAccount

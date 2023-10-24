@@ -22,6 +22,7 @@ import EmployeeMain from './components/EmployeeMain';
 import EmployeeOffer from './components/EmployeeOffer';
 import EmployeeUsersAccounts from './components/EmployeeUsersAccounts';
 import EmployeeCreateAccount from './components/EmployeeCreateAccount';
+import EmployeeEditAccount from './components/EmployeeEditAccount';
 import EmployeeManageJumps from './components/EmployeeManageJumps';
 import EmployeePlanJumps from './components/EmployeePlanJumps';
 import EmployeeCancelJumps from './components/EmployeeCanceJumps';
@@ -55,13 +56,16 @@ function App() {
       <Route path="/ownermain" element={<OwnerMain />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/userprofile" element={<UserProfile />} />
+
       <Route path="/owner-employee-accounts" element={<OwnerEmployeeAccounts />} />
       <Route path="/owner-create-account" element={<OwnerCreateAccount />} />
       <Route path="/owner-manage-account" element={<OwnerManageAccount />} />
       <Route path="/owner-financial-overview" element={<OwnerFinancialOverview />} />
+      
       <Route path="/employee-offer" element={<EmployeeOffer />} />
       <Route path="/employee-users-accounts" element={<EmployeeUsersAccounts />} />
       <Route path="/employee-create-account" element={<EmployeeCreateAccount />} />
+      <Route path="/employee-edit-account/:clientId" element={<EmployeeEditAccount />} />
       <Route path="/employee-manage-jumps" element={<EmployeeManageJumps />} />
       <Route path="/employee-plan-jumps" element={<EmployeePlanJumps />} />
       <Route path="/employee-cancel-jumps" element={<EmployeeCancelJumps />} />

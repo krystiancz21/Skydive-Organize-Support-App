@@ -59,10 +59,31 @@ const editUserSchema = Joi.object({
   weight: Joi.number().greater(29).less(111).required().label("Masa"),
 }).messages(customMessages);
 
+const editClientSchema = Joi.object({
+  firstName: Joi.string()
+    .min(3)
+    .required()
+    .pattern(new RegExp("^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$"))
+    .label("Imię"),
+  lastName: Joi.string()
+    .min(3)
+    .required()
+    .pattern(new RegExp("^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$"))
+    .label("Nazwisko"),
+  email: Joi.string().email().required().label("E-mail"),
+  phoneNumber: Joi.string().min(9).max(15).required().label("Telefon"),
+}).messages(customMessages);
+
 const passwordComplexityInstance = passwordComplexity(complexityOptions);
+
+const editUserWeight = Joi.object({
+  userWeight: Joi.number().greater(29).less(111).required().label("Masa")
+}).messages(customMessages);
 
 module.exports = {
   userSchema,
   editUserSchema,
+  editClientSchema,
+  editUserWeight,
   passwordComplexityInstance,
 };
