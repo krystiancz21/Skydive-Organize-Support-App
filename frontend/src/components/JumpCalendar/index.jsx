@@ -141,7 +141,7 @@ const JumpCalendar = () => {
                                                     <p className="mb-1">Godzina: {moment(jump.data_czas).format('HH:mm')}</p>
                                                     <p className="mb-1">Liczba wolnych miejsc: {jump.liczba_miejsc_w_samolocie}</p>
                                                     <Link to={`/reservation/${jump.terminy_id}`}>
-                                                        <Button variant="primary" className="mt-2">Zamów</Button>
+                                                        <Button variant="primary" className="mt-2">Zarezerwuj</Button>
                                                     </Link>
                                                 </li>
                                             ))}
