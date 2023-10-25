@@ -41,7 +41,7 @@ Uruchomienie:
 - [ ] możliwość podglądu podsumowania finansowego, 
 - [ ] możliwość tworzenia kont użytkowników,
 - [ ] możliwość zarządzania rolami użytkowników,
-- [ ] możliwość edycji kont użytkowników,
-- [ ] możliwość usuwania kont użytkowników,
-- [ ] blokowanie kont/odblokowanie.
+- [X] możliwość edycji kont użytkowników,
+- [X] możliwość usuwania kont użytkowników,
+- [X] blokowanie kont/odblokowanie.
 
