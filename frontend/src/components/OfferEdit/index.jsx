@@ -93,120 +93,99 @@ const OfferEdit = () => {
         }
     };
 
+    // Nawigacja dla poszczególnych ról
+    const getNavbar = (role, mail, handleDelete) => {
+        switch (role) {
+            case 'pracownik':
+                return (
+                    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                        <Container>
+                            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                            <Navbar.Collapse id="responsive-navbar-nav">
+                                <Nav className="me-auto">
+                                    <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                    <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                    <Nav.Link href="/employeeusersaccounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                    <Nav.Link href="/employeemanagejumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                </Nav>
+                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
+                                <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
+                );
+            case 'admin':
+                return (
+                    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                        <Container>
+                            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                            <Navbar.Collapse id="responsive-navbar-nav">
+                                <Nav className="me-auto">
+                                    <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                    <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                    <Nav.Link href="/employeeusersaccounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                    <Nav.Link href="/employeemanagejumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                    <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
+                                </Nav>
+                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
+                                <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
+                );
+            default:
+                return null;
+        }
+    }
+
     return (
         <>
             {isAuth ? (
+                // User zalogowany
                 <>
-                    {userRole === 'pracownik' && (
-                        // User zalogowany
-                        <><Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-                            <Container>
-                                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                                <Navbar.Collapse id="responsive-navbar-nav">
-                                    <Nav className="me-auto">
-                                        <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-                                        <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
-                                        <Nav.Link href="/employeeusersaccounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
-                                        <Nav.Link href="/employeemanagejumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
-                                    </Nav>
-                                    <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
-                                    <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
-                                </Navbar.Collapse>
-                            </Container>
-                        </Navbar>
-                            <Container className={styles.content}>
-                                <h1 className="text-center">EDYCJA OFERTY SKOKU</h1>
-                                <Form className="text-center">
-                                    <div className='max-width-form'>
-                                        <Form.Group as={Row} controlId="formEditOfferName" className="mb-3">
-                                            <Form.Label column sm={2}>
-                                                Nazwa
-                                            </Form.Label>
-                                            <Col sm={10}>
-                                                <FormControl
-                                                    type="text"
-                                                    name="jumpName"
-                                                    value={offerData.jumpName}
-                                                    onChange={handleChange}
-                                                    // onChange={(e) => setJumpName(e.target.value)}
-                                                />
-                                            </Col>
-                                        </Form.Group>
-                                        <Form.Group as={Row} controlId="formEditOfferPrice" className="mb-3">
-                                            <Form.Label column sm={2}>
-                                                Cena
-                                            </Form.Label>
-                                            <Col sm={10}>
-                                                <FormControl
-                                                    type="text"
-                                                    name="jumpPrice"
-                                                    value={offerData.jumpPrice}
-                                                    onChange={handleChange}
-                                                    // onChange={(e) => setJumpPrice(e.target.value)}
-                                                />
-                                            </Col>
-                                        </Form.Group>
-                                    </div>
-                                    {updateSuccess && <div className="alert alert-success">Dane oferty zostały zaktualizowane</div>}
-                                    {error && <div className="alert alert-danger">{error}</div>}
-                                    <div className='mt-4'>
-                                        <Button variant="success" className="mt-3" id="przycisk2" onClick={handleOfferEdit}>
-                                            <BsPencilSquare /> EDYTUJ SKOK
-                                        </Button>
-                                    </div>
-                                </Form>
-                            </Container></>
-                    )
-                    }
-                    {
-                        userRole === 'admin' && (
-                            <><Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-                                <Container>
-                                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                                    <Navbar.Collapse id="responsive-navbar-nav">
-                                        <Nav className="me-auto">
-                                            <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-                                            <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
-                                            <Nav.Link href="/employeeusersaccounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
-                                            <Nav.Link href="/employeemanagejumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
-                                        </Nav>
-                                        <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
-                                        <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
-                                    </Navbar.Collapse>
-                                </Container>
-                            </Navbar>
-                                <Container className={styles.content}>
-                                    <h1 className="text-center">EDYCJA OFERTY SKOKU</h1>
-                                    {/* <CardGroup>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-oferta" />
-                                        <Card.Body>
-                                            <Card.Title>Skok samodzielny z licencją<p>Cena: 600zł</p></Card.Title>
-                                            <Button variant="success" className='przyciskButton'  >EDYTUJ OFERTĘ</Button>
-                                        </Card.Body>
-                                    </Card>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-terminy" />
-                                        <Card.Body>
-                                            <Card.Title>Skok w tandemie<p>Cena: 900zł</p></Card.Title>
-                                            <div className="mb-2">
-                                                <Button variant="success" className='przyciskButton' >EDYTUJ OFERTĘ</Button>
-                                            </div>
-                                        </Card.Body>
-                                    </Card>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
-                                        <Card.Body>
-                                            <Card.Title>Skok w tandemie z kamerzystą<p>Cena: 1100zł</p></Card.Title>
-                                            <Button variant="success" className='przyciskButton'  >EDYTUJ OFERTĘ</Button>
-                                        </Card.Body>
-                                    </Card>
-                                </CardGroup> */}
-                                </Container></>
-                        )
-                    }
-                </>
-            ) : (
+                    {getNavbar(userRole, mail, handleLogout)}
+                    <Container className={styles.content}>
+                        <h1 className="text-center">EDYCJA OFERTY SKOKU</h1>
+                        <Form className="text-center">
+                            <div className='max-width-form'>
+                                <Form.Group as={Row} controlId="formEditOfferName" className="mb-3">
+                                    <Form.Label column sm={2}>
+                                        Nazwa
+                                    </Form.Label>
+                                    <Col sm={10}>
+                                        <FormControl
+                                            type="text"
+                                            name="jumpName"
+                                            value={offerData.jumpName}
+                                            onChange={handleChange}
+                                        // onChange={(e) => setJumpName(e.target.value)}
+                                        />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} controlId="formEditOfferPrice" className="mb-3">
+                                    <Form.Label column sm={2}>
+                                        Cena
+                                    </Form.Label>
+                                    <Col sm={10}>
+                                        <FormControl
+                                            type="text"
+                                            name="jumpPrice"
+                                            value={offerData.jumpPrice}
+                                            onChange={handleChange}
+                                        // onChange={(e) => setJumpPrice(e.target.value)}
+                                        />
+                                    </Col>
+                                </Form.Group>
+                            </div>
+                            {updateSuccess && <div className="alert alert-success">Dane oferty zostały zaktualizowane</div>}
+                            {error && <div className="alert alert-danger">{error}</div>}
+                            <div className='mt-4'>
+                                <Button variant="success" className="mt-3" id="przycisk2" onClick={handleOfferEdit}>
+                                    <BsPencilSquare /> EDYTUJ SKOK
+                                </Button>
+                            </div>
+                        </Form>
+                    </Container></>) : (
                 // User niezalogowany
                 <>
                     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">

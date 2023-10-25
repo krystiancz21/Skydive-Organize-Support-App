@@ -97,7 +97,7 @@ router.post("/updateUserData", async (req, res) => {
     }
 });
 
-// Usuwanie konta
+// Usuwanie konta z wyczyszczeniem tokenu
 router.delete("/deleteAccount", async (req, res) => {
     const userEmail = req.query.email;
     const sql = "UPDATE user SET `usuniete_konto` = 1 WHERE `mail` = ?";
@@ -110,6 +110,57 @@ router.delete("/deleteAccount", async (req, res) => {
         res.clearCookie("token");
 
         return res.json({ Status: "Account deleted successfully" });
+    });
+});
+
+// Usuniecie konta bez wyczyszczenia tokenu
+router.delete("/deleteAccountByAdmin", async (req, res) => {
+    const userEmail = req.query.email;
+    const sql = "UPDATE user SET `usuniete_konto` = 1 WHERE `mail` = ?";
+    db.query(sql, [userEmail], (err, result) => {
+        if (err) {
+            console.error("Błąd podczas usuwania konta:", err);
+            return res.json({ Error: "Error deleting account" });
+        }
+
+        return res.json({ Status: "Account deleted successfully" });
+    });
+});
+
+// Zablokowanie konta 
+router.post("/blockAccount", async (req, res) => {
+    const userEmail = req.query.email;
+
+    const today = new Date();
+    const blockedUntil = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
+    const sql = "UPDATE user SET `zablokowane_do` = ? WHERE `mail` = ?";
+    const values = [blockedUntil, userEmail];
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            console.error("Błąd podczas zablokowania konta:", err);
+            return res.json({ Error: "Error blocking account" });
+        }
+
+        return res.json({ Status: "Account blocked successfully" });
+    });
+});
+
+// Odblokowanie konta
+router.post("/unblockAccount", async (req, res) => {
+    const userEmail = req.query.email;
+
+    const unblockedDate = "NULL"
+    const sql = "UPDATE user SET `zablokowane_do` = ? WHERE `mail` = ?";
+    const values = [unblockedDate, userEmail];
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            console.error("Błąd podczas odblokowywania konta:", err);
+            return res.json({ Error: "Error unblocking account" });
+        }
+
+        return res.json({ Status: "Account unblocked successfully" });
     });
 });
 
@@ -194,12 +245,12 @@ router.get("/showUserAccounts", async (req, res) => {
 
     db.query(sql, (err, results) => {
         if (err) {
-          console.error('Błąd zapytania do bazy danych: ' + err.message);
-          res.status(500).json({ error: 'Błąd zapytania do bazy danych' });
+            console.error('Błąd zapytania do bazy danych: ' + err.message);
+            res.status(500).json({ error: 'Błąd zapytania do bazy danych' });
         } else {
-          res.status(200).json(results);
+            res.status(200).json(results);
         }
-      });
+    });
 });
 
 module.exports = router;

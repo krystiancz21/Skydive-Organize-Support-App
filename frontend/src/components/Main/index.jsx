@@ -200,8 +200,8 @@ const Main = () => {
                                                 <Card.Img variant="top" src={obraz} alt="img-terminy" />
                                                 <Card.Body>
                                                     <Card.Title>
-                                                        <Link to='/employee-users-accounts'>
-                                                            <Button variant="primary" size="sm">KONTA KLIENTÓW <BsArrowRightShort /></Button>
+                                                        <Link to='/offer'>
+                                                            <Button variant="primary" size="sm">OFERTA <BsArrowRightShort /></Button>
                                                         </Link>
                                                     </Card.Title>
                                                 </Card.Body>
@@ -214,8 +214,8 @@ const Main = () => {
                                                 <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
                                                 <Card.Body>
                                                     <Card.Title>
-                                                        <Link to='/offer'>
-                                                            <Button variant="primary" size="sm">OFERTA <BsArrowRightShort /></Button>
+                                                        <Link to='/employee-users-accounts'>
+                                                            <Button variant="primary" size="sm">KONTA UŻYTKOWNIKÓW <BsArrowRightShort /></Button>
                                                         </Link>
                                                     </Card.Title>
                                                 </Card.Body>
@@ -254,24 +254,58 @@ const Main = () => {
                             <Container className={styles.content}>
                                 <h1 className="text-center">STRONA GŁÓWNA</h1>
                                 <CardGroup>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-oferta" className="p-2" />
-                                        <Card.Body>
-                                            <Card.Title><Button variant="primary" size="sm" href='#'>GRAFIK SKOKÓW <BsArrowRightShort /></Button></Card.Title>
-                                        </Card.Body>
-                                    </Card>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-terminy" className="p-2" />
-                                        <Card.Body>
-                                            <Card.Title><Button variant="primary" size="sm" href='/owner-create-account'>KONTA PRACOWNIKÓW <BsArrowRightShort /></Button></Card.Title>
-                                        </Card.Body>
-                                    </Card>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-wiadomosci" className="p-2" />
-                                        <Card.Body>
-                                            <Card.Title><Button variant="primary" size="sm" href='/owner-financial-overview'>PODSUMOWANIE FINANSOWE <BsArrowRightShort /> </Button></Card.Title>
-                                        </Card.Body>
-                                    </Card>
+                                    <Row>
+                                        <Col>
+                                            <Card>
+                                                <Card.Img variant="top" src={obraz} alt="img-oferta" />
+                                                <Card.Body>
+                                                    <Card.Title>
+                                                        <Link to='/messages'>
+                                                            <Button variant="primary" size="sm">WIADOMOŚCI <BsArrowRightShort /></Button>
+                                                        </Link>
+                                                    </Card.Title>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
+                                        <Col>
+                                            <Card>
+                                                <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
+                                                <Card.Body>
+                                                    <Card.Title>
+                                                        <Link to='/offer'>
+                                                            <Button variant="primary" size="sm">OFERTA <BsArrowRightShort /></Button>
+                                                        </Link>
+                                                    </Card.Title>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            <Card>
+                                                <Card.Img variant="top" src={obraz} alt="img-terminy" />
+                                                <Card.Body>
+                                                    <Card.Title>
+                                                        <Link to='/employee-users-accounts'>
+                                                            <Button variant="primary" size="sm">KONTA UŻYTKOWNIKÓW <BsArrowRightShort /></Button>
+                                                        </Link>
+                                                    </Card.Title>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
+                                        <Col>
+                                            <Card>
+                                                <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
+                                                <Card.Body>
+                                                    <Card.Title>
+                                                        <Link to='/owner-financial-overview'>
+                                                            <Button variant="primary" size="sm">PODSUMOWANIE FINANSOWE <BsArrowRightShort /></Button>
+                                                        </Link>
+                                                    </Card.Title>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
+                                    </Row>
                                 </CardGroup>
                             </Container></>
                     )}

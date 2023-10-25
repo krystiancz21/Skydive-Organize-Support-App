@@ -1,7 +1,7 @@
 import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, CardGroup, Image } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
-import { BsArrowLeft, BsPersonCircle, BsArrowRight } from 'react-icons/bs';
+import { BsArrowLeft, BsPersonCircle, BsArrowRight, BsFillTrashFill, BsPencilSquare, BsUnlockFill, BsLockFill } from 'react-icons/bs';
 import styles from "./style.css"
 import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -102,6 +102,42 @@ const EmployeeEditAccount = () => {
             setEditUserSuccess(false);
         }
     };
+
+    // Usuniecie konta
+    const handleDeleteAccount = () => {
+        if (window.confirm("Czy na pewno chcesz usunąć konto?")) {
+            axios.delete(`http://localhost:3001/api/user/deleteAccountByAdmin/?email=${data.email}`)
+                .then(res => {
+                    // Przekierowanie na stronę główną po usunięciu konta
+                    window.location.href = "http://localhost:3000/employee-users-accounts";
+                })
+                .catch(err => console.log(err));
+        }
+    }
+
+    // Zablokowanie konta
+    const handleBlockAccount = () => {
+        if (window.confirm("Czy na pewno chcesz zablokować konto?")) {
+            axios.post(`http://localhost:3001/api/user/blockAccount/?email=${data.email}`)
+                .then(res => {
+                    // Przekierowanie na stronę wstecz po zablokowaniu konta
+                    window.location.href = "http://localhost:3000/employee-users-accounts";
+                })
+                .catch(err => console.log(err));
+        }
+    }
+
+    // Odblokowanie konta
+    const handleUnblockAccount = () =>{
+        if (window.confirm("Czy na pewno chcesz odblokować konto?")) {
+            axios.post(`http://localhost:3001/api/user/unblockAccount/?email=${data.email}`)
+                .then(res => {
+                    // Przekierowanie na stronę wstecz po odblokowaniu konta
+                    window.location.href = "http://localhost:3000/employee-users-accounts";
+                })
+                .catch(err => console.log(err));
+        }
+    }
 
     // Dodanie licencji
     const uploadFile = async () => {
@@ -248,7 +284,124 @@ const EmployeeEditAccount = () => {
                                     {editUserSuccess && <div className="alert alert-success">Pomyślnie udało zmienić dane użytkownika!</div>}
                                     {updateFile && <div className="alert alert-success">Pomyślnie dodano załącznik!</div>}
                                     {error && <div className="alert alert-danger">{error}</div>}
-                                    <Button variant="success" type="submit">EDYTUJ KONTO</Button>
+                                    <Button variant="success" type="submit"><BsPencilSquare /> EDYTUJ KONTO</Button>
+                                </Form>
+                            </Container></>
+                    )}
+                    {userRole === 'admin' && (
+                        <>
+                            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                                <Container>
+                                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                                    <Navbar.Collapse id="responsive-navbar-nav">
+                                        <Nav className="me-auto">
+                                            <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                            <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                            <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                            <Nav.Link href="/employeemanagejumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                            <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
+                                        </Nav>
+                                        <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
+                                        <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                                    </Navbar.Collapse>
+                                </Container>
+                            </Navbar> <Container className={styles.content}>
+                                <h1 className="text-center">EDYCJA KONTA UŻYTKOWNIKA</h1>
+                                <Form onSubmit={handleSubmit} className="text-center">
+                                    <div className='max-width-form'>
+                                        <Form.Group as={Row} controlId="formOwnerEditAccountName" className="mb-3">
+                                            <Form.Label column sm={2}>
+                                                Imię
+                                            </Form.Label>
+                                            <Col sm={10}>
+                                                <FormControl
+                                                    type="name"
+                                                    placeholder="Jan"
+                                                    name="firstName"
+                                                    onChange={handleChange}
+                                                    value={data.firstName}
+                                                    required
+                                                />
+                                            </Col>
+                                        </Form.Group>
+                                        <Form.Group as={Row} controlId="formOwnerEditAccountLastName" className="mb-3">
+                                            <Form.Label column sm={2}>
+                                                Nazwisko
+                                            </Form.Label>
+                                            <Col sm={10}>
+                                                <FormControl
+                                                    type="surname"
+                                                    placeholder="Kowalski"
+                                                    name="lastName"
+                                                    onChange={handleChange}
+                                                    value={data.lastName}
+                                                    required
+                                                />
+                                            </Col>
+                                        </Form.Group>
+                                        <Form.Group as={Row} controlId="formOwnerEditAccountEmail" className="mb-3">
+                                            <Form.Label column sm={2}>
+                                                E-mail
+                                            </Form.Label>
+                                            <Col sm={10}>
+                                                <FormControl
+                                                    type="email"
+                                                    placeholder="jankowalski@email.com"
+                                                    name="email"
+                                                    onChange={handleChange}
+                                                    value={data.email}
+                                                    required
+                                                />
+                                            </Col>
+                                        </Form.Group>
+                                        <Form.Group as={Row} controlId="formOwnerEditAccountPhone" className="mb-3">
+                                            <Form.Label column sm={2}>
+                                                Telefon
+                                            </Form.Label>
+                                            <Col sm={10}>
+                                                <FormControl
+                                                    type="phone"
+                                                    placeholder="666777888"
+                                                    name="phoneNumber"
+                                                    onChange={handleChange}
+                                                    value={data.phoneNumber}
+                                                    required
+                                                />
+                                            </Col>
+                                        </Form.Group>
+                                        <Form.Group as={Row} controlId="formEditUserFile" className="mb-3">
+                                            <Form.Label column sm={2}>
+                                                Licencja
+                                            </Form.Label>
+                                            <Col sm={10}>
+                                                <div className="d-flex flex-column">
+                                                    <Form.Control
+                                                        type="file"
+                                                        accept=".jpg, .jpeg, .png, .pdf"
+                                                        onChange={(e) => setFile(e.target.files[0])}
+                                                    />
+                                                    <Button variant="secondary" onClick={uploadFile} className="mt-2" style={{ width: '100px' }}>
+                                                        Dodaj plik
+                                                    </Button>
+                                                </div>
+                                            </Col>
+                                        </Form.Group>
+                                    </div>
+                                    {editUserSuccess && <div className="alert alert-success">Pomyślnie udało zmienić dane użytkownika!</div>}
+                                    {updateFile && <div className="alert alert-success">Pomyślnie dodano załącznik!</div>}
+                                    {error && <div className="alert alert-danger">{error}</div>}
+                                    <Row>
+                                        <Col>
+                                            <Button variant="success" type="submit"><BsPencilSquare /> EDYTUJ KONTO</Button>
+                                            <Button variant="danger" className="mt-3" id="przycisk2" onClick={handleDeleteAccount}><BsFillTrashFill /> USUŃ KONTO</Button>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            <Button variant="info" type="submit" onClick={handleUnblockAccount}><BsUnlockFill/> ODBLOKUJ KONTO</Button>
+                                            <Button variant="warning" type="submit" className="mt-3" id="przycisk4" onClick={handleBlockAccount}><BsLockFill /> ZABLOKUJ KONTO</Button>
+                                        </Col>
+                                    </Row>
                                 </Form>
                             </Container></>
                     )}
