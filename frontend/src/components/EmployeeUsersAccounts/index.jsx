@@ -110,6 +110,14 @@ const EmployeeUsersAccounts = () => {
                                         </>
                                     )}
                                 </Row>
+                                <Row className="mt-3">
+                                    <Col className="text-center">
+                                        <h3>Dodaj nowego użytkownika</h3>
+                                        <Link to={`/employee-create-account`}>
+                                            <Button variant="success" className="mt-3">UTWÓRZ KONTO</Button>
+                                        </Link>
+                                    </Col>
+                                </Row>
                             </Container>
                         </>
                     )}
@@ -174,6 +182,14 @@ const EmployeeUsersAccounts = () => {
                                             ))}
                                         </>
                                     )}
+                                </Row>
+                                <Row className="mt-3">
+                                    <Col className="text-center">
+                                        <h3>Dodaj nowego użytkownika</h3>
+                                        <Link to={`/employee-create-account`}>
+                                            <Button variant="success" className="mt-3">UTWÓRZ KONTO</Button>
+                                        </Link>
+                                    </Col>
                                 </Row>
                             </Container>
                         </>
