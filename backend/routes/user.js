@@ -237,11 +237,29 @@ router.post("/updateLicenseData", async (req, res) => {
     }
 });
 
+// konta klientów
 router.get("/showUserAccounts", async (req, res) => {
     // Wyszukanie kont klientów, rola == 1
     const sql = 'SELECT u.user_id, imie, nazwisko, mail FROM `user` u ' +
         'JOIN rola_user ru ON ru.user_id = u.user_id ' +
         'WHERE ru.rola_rola_id = 1';
+
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Błąd zapytania do bazy danych: ' + err.message);
+            res.status(500).json({ error: 'Błąd zapytania do bazy danych' });
+        } else {
+            res.status(200).json(results);
+        }
+    });
+});
+
+// konta pracowników
+router.get("/showEmployeeAccounts", async (req, res) => {
+    // Wyszukanie kont pracowników, rola == 2
+    const sql = 'SELECT u.user_id, imie, nazwisko, mail FROM `user` u ' +
+        'JOIN rola_user ru ON ru.user_id = u.user_id ' +
+        'WHERE ru.rola_rola_id = 2';
 
     db.query(sql, (err, results) => {
         if (err) {
