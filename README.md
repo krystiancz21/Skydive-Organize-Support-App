@@ -37,9 +37,9 @@ Uruchomienie:
 
 
 4. Funkcjonalności administratora:
-- [ ] możliwość przeglądu kont pracowników,
+- [X] możliwość przeglądu kont pracowników,
 - [ ] możliwość podglądu podsumowania finansowego, 
-- [ ] możliwość tworzenia kont użytkowników,
+- [X] możliwość tworzenia kont użytkowników,
 - [ ] możliwość zarządzania rolami użytkowników,
 - [X] możliwość edycji kont użytkowników,
 - [X] możliwość usuwania kont użytkowników,
