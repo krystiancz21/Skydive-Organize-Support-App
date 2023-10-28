@@ -2,9 +2,51 @@ import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, Card
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
 import { BsArrowLeft, BsFillTrashFill, BsPencilSquare } from 'react-icons/bs';
-import styles from "./style.css"
+import styles from "./style.css";
+import axios from "axios";
+import { useEffect, useState } from 'react';
 
 const MyJumps = () => {
+    const [error, setError] = useState("")
+    const [isAuth, setIsAuth] = useState(false);
+    const [message, setMessage] = useState('');
+    const [mail, setMail] = useState('');
+    const [userRole, setUserRole] = useState('');
+
+    //sprawdzamy autoryzacje
+    axios.defaults.withCredentials = true;
+    useEffect(() => {
+        axios.get('http://localhost:3001/api/auth/userprofile')
+            .then(res => {
+                if (res.data.Status === "Success") {
+                    setIsAuth(true);
+                    setMail(res.data.mail); //email
+                    setUserRole(res.data.userRole); // Ustaw rolę użytkownika
+                } else {
+                    setIsAuth(false);
+                    setMessage(res.data.Error);
+                }
+            })
+            .catch(err => console.log(err));
+    }, []);
+
+    const handleLogout = () => {
+        axios.get('http://localhost:3001/api/auth/logout')
+            .then(res => {
+                // Przekierowanie na stronę główną po wylogowaniu
+                window.location.href = "/main";
+                //window.location.reload(true);
+            }).catch(err => console.log(err));
+    }
+
+    useEffect(() => {
+        axios.post('http://localhost:3001/api/jumps/showAllMyJumps')
+            .then(res => {
+                
+            })
+            .catch(err => console.log(err));
+    }, []);
+
     return (
         <>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -17,12 +59,11 @@ const MyJumps = () => {
                             <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>
                             <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                         </Nav>
-                        <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  PROFIL UŻYTKOWNIKA</Navbar.Brand></Nav.Link>
-                        <Button variant="danger" href="/logout">WYLOGUJ</Button>
+                        <Nav.Link href="#"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
+                        <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <div className='powrot'><BsArrowLeft /></div>
             <h1 className="text-center">MOJE SKOKI</h1>
             <Container className="form-container">
                 <Row>
@@ -70,7 +111,7 @@ const MyJumps = () => {
                                 type="date"
                                 name="date"
                                 disabled
-                                
+
                             />
                         </Form.Group>
                     </Col>
@@ -81,7 +122,7 @@ const MyJumps = () => {
                             <FormControl
                                 type="text"
                                 disabled
-                                
+
                             />
                         </Form.Group>
                     </Col>
@@ -115,7 +156,7 @@ const MyJumps = () => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col  md={{ span: 3, offset: 9 }}>
+                    <Col md={{ span: 3, offset: 9 }}>
                         <Form.Group className="mb-2">
                             <Row>
                                 <Col className="align-self-center text-end">

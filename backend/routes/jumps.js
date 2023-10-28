@@ -215,4 +215,24 @@ router.post("/reserveJump", async (req, res) => {
   }
 });
 
+// myjumps - wyświetlenie rezerwacji
+router.post("/showAllMyJumps", async (req, res) => {
+  const sql = `SELECT rt.rezerwacje_id, u.imie, u.nazwisko, pt.nazwa, pt.data_czas, pt.miejsce_startu, pt.liczba_miejsc_w_samolocie, p.sposob_platnosci_id, rt.cena 
+  FROM rezerwacje_terminow rt
+  JOIN user u ON u.user_id = rt.user_id
+  JOIN planowane_terminy pt ON pt.terminy_id = rt.planowane_terminy_id
+  JOIN platnosc p ON p.platnosc_id = rt.planowane_terminy_id
+  `;
+  //WHERE u.mail = ?
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Błąd drugiego zapytania do bazy danych (/showAllMyJumps): ' + err.message);
+      res.status(500).json({ error: 'Błąd drugiego zapytania do bazy danych (/showAllMyJumps).' });
+    } else {
+      res.status(200).json(results);
+      console.log(results);
+    }
+  });
+});
 module.exports = router;

@@ -131,36 +131,44 @@ const Main = () => {
                             <Container className={styles.content}>
                                 <h1 className="text-center my-4">STRONA GŁÓWNA</h1>
                                 <CardGroup>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-oferta" />
-                                        <Card.Body>
-                                            <Card.Title>
-                                                <Link to='/offer'>
-                                                    <Button variant="primary" size="sm">OFERTA <BsArrowRightShort /></Button>
-                                                </Link>
-                                            </Card.Title>
-                                        </Card.Body>
-                                    </Card>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-terminy" />
-                                        <Card.Body>
-                                            <Card.Title>
-                                                <Link to='/jump-dates'>
-                                                    <Button variant="primary" size="sm">TERMINY SKOKÓW <BsArrowRightShort /></Button>
-                                                </Link>
-                                            </Card.Title>
-                                        </Card.Body>
-                                    </Card>
-                                    <Card>
-                                        <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
-                                        <Card.Body>
-                                            <Card.Title>
-                                                <Link to='/messages'>
-                                                    <Button variant="primary" size="sm">WIADOMOŚCI <BsArrowRightShort /></Button>
-                                                </Link>
-                                            </Card.Title>
-                                        </Card.Body>
-                                    </Card>
+                                    <Row>
+                                        <Col>
+                                            <Card>
+                                                <Card.Img variant="top" src={obraz} alt="img-oferta" />
+                                                <Card.Body>
+                                                    <Card.Title>
+                                                        <Link to='/offer'>
+                                                            <Button variant="primary" size="sm">OFERTA <BsArrowRightShort /></Button>
+                                                        </Link>
+                                                    </Card.Title>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
+                                        <Col>
+                                            <Card>
+                                                <Card.Img variant="top" src={obraz} alt="img-terminy" />
+                                                <Card.Body>
+                                                    <Card.Title>
+                                                        <Link to='/jump-dates'>
+                                                            <Button variant="primary" size="sm">TERMINY SKOKÓW <BsArrowRightShort /></Button>
+                                                        </Link>
+                                                    </Card.Title>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
+                                        <Col>
+                                            <Card>
+                                                <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
+                                                <Card.Body>
+                                                    <Card.Title>
+                                                        <Link to='/messages'>
+                                                            <Button variant="primary" size="sm">WIADOMOŚCI <BsArrowRightShort /></Button>
+                                                        </Link>
+                                                    </Card.Title>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
+                                    </Row>
                                 </CardGroup>
                             </Container>
                         </>
