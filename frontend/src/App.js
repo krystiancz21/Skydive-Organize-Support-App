@@ -11,6 +11,7 @@ import UserProfile from './components/UserProfile';
 import Reservation from './components/Reservation';
 import Messages from './components/Messages';
 import JumpCalendar from './components/JumpCalendar';
+import JumpDates from './components/JumpDates';
 
 import OwnerEmployeeAccounts from './components/OwnerEmployeeAccounts';
 import OwnerCreateAccount from './components/OwnerCreateAccount';
@@ -44,7 +45,8 @@ function App() {
     <Routes>
       <Route path='/' element={<Navigate replace to="/main" />} />
       <Route path="/edit-user-data" element={<EditUserData />} />
-      <Route path="/jump-calendar/:type?" element={<JumpCalendar />} />
+      <Route path="/jump-calendar/:type" element={<JumpCalendar />} />
+      <Route path="/jump-dates" element={<JumpDates />} />
       <Route path="/reservation/:jumpId" element={<Reservation />} />
       <Route path="/employeemain" element={<EmployeeMain />} />
       <Route path="/login" element={<Login />} />

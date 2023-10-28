@@ -282,6 +282,16 @@ INSERT INTO `planowane_terminy` (`nazwa`, `data_czas`, `liczba_miejsc_w_samoloci
 ('Skok w tandemie z kamerzystą', '2023-12-12 10:00:00', 2, 'Lublin', 1),
 ('Skok w tandemie z kamerzystą', '2023-12-19 08:00:00', 8, 'Lublin', 1);
 
+
+INSERT INTO `planowane_terminy` (`nazwa`, `data_czas`, `liczba_miejsc_w_samolocie`, `miejsce_startu`, `status_terminu_id`) VALUES
+('Skok samodzielny z licencją', '2023-12-14 10:00:00', 2, 'Lublin', 1),
+('Skok w tandemie', '2023-12-14 10:00:00', 2, 'Lublin', 1),
+('Skok w tandemie z kamerzystą', '2023-12-14 10:00:00', 7, 'Lublin', 1),
+('Skok samodzielny z licencją', '2023-12-14 18:00:00', 2, 'Lublin', 1),
+('Skok w tandemie', '2023-12-14 18:00:00', 2, 'Lublin', 1),
+('Skok w tandemie z kamerzystą', '2023-12-14 18:00:00', 7, 'Lublin', 1);
+
+
 -- -----------------------------------------------------
 -- TRIGGER dla Tabel
 -- -----------------------------------------------------

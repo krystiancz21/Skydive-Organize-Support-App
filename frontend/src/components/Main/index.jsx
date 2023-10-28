@@ -347,7 +347,7 @@ const Main = () => {
                                     <Card.Img variant="top" src={terminy} alt="img-terminy" />
                                     <Card.Body>
                                         <Card.Title>
-                                            <Link to='/jump-calendar'>
+                                            <Link to='/jump-dates'>
                                                 <Button variant="primary" size="sm">TERMINY SKOKÓW <BsArrowRightShort /></Button>
                                             </Link>
                                         </Card.Title>
