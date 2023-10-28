@@ -171,6 +171,14 @@ router.get("/edit-user-data", verifyUser, (req, res) => {
   }
 });
 
+router.get("/myjumps", verifyUser, (req, res) => {
+  if (req.userRole === "admin" || req.userRole === "pracownik" || req.userRole === "klient") {
+    return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
+  } else {
+    return res.json({ Status: "Error" });
+  }
+});
+
 router.get("/offer", verifyUser, (req, res) => {
   if (req.userRole === "admin" || req.userRole === "pracownik" || req.userRole === "klient") {
     return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
