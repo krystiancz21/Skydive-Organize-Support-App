@@ -14,8 +14,15 @@ const EmployeeEditAccount = () => {
         email: "",
         phoneNumber: "",
     });
+    const [roleData, setRoleData] = useState({
+        role: "",
+    })
+
+    const [availableRoles, setAvailableRoles] = useState([]);
+
     const [isAuth, setIsAuth] = useState(false);
     const [editUserSuccess, setEditUserSuccess] = useState(false);
+    const [editUserRoleSuccess, setUserRoleSuccess] = useState(false);
 
     const [updateSuccess, setUpdateSuccess] = useState(false);
     const [updateFile, setUpdateFile] = useState(false);
@@ -30,8 +37,15 @@ const EmployeeEditAccount = () => {
 
     const handleChange = ({ currentTarget: input }) => {
         setData({ ...data, [input.name]: input.value })
-        //console.log(data); // Wyświetlanie w przeglądarce zmian w polach formularza, przechwycinych przez handleChange
     }
+
+    // const handleChangeRole = ({ currentTarget: input }) => {
+    //     setRoleData({ ...roleData, [input.name]: input.value });
+    // }
+
+    const handleChangeRole = ({ currentTarget: input }) => {
+        setRoleData({ ...roleData, [input.name]: parseInt(input.value, 10) });
+    };
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -57,6 +71,18 @@ const EmployeeEditAccount = () => {
             }).catch(err => console.log(err));
     }
 
+    // Informacja o dostępnych rolach
+    useEffect(() => {
+        if (isAuth) {
+            axios.get('http://localhost:3001/api/user/availableRoles')
+                .then(res => {
+                    setAvailableRoles(res.data);
+                    console.log(res.data);
+                })
+                .catch(err => console.log(err));
+        }
+    }, [isAuth]);
+
     useEffect(() => {
         if (isAuth) {
             axios.post(`http://localhost:3001/api/user/getUserDataById`, { clientId: clientId })
@@ -69,17 +95,49 @@ const EmployeeEditAccount = () => {
                             phoneNumber: res.data[0].telefon,
                         });
                     } else {
-                        // Sytuacja, gdy nie znaleziono rekordu
                         console.log('Nie znaleziono rekordu.');
                         setData(null);
-                        // Możesz również ustawić stan lub wyświetlić odpowiednią wiadomość na stronie
-                        // np.  lub setMessage("Nie znaleziono rekordu.")
                     }
                 })
                 .catch(err => console.error(err));
         }
     }, [clientId, isAuth]);
 
+    useEffect(() => {
+        if (isAuth) {
+            axios.post(`http://localhost:3001/api/user/getUserRole`, { clientId: clientId })
+                .then(res => {
+                    if (Array.isArray(res.data) && res.data.length > 0) {
+                        setRoleData({
+                            role: res.data[0].rola_rola_id
+                        });
+                    } else {
+                        console.log('Nie znaleziono rekordu.');
+                        setRoleData(null);
+                    }
+                })
+                .catch(err => console.error(err));
+        }
+    }, [clientId, isAuth]);
+
+    let roleName = '';
+
+    switch (roleData.role) {
+        case 1:
+            roleName = 'klient';
+            break;
+        case 2:
+            roleName = 'pracownik';
+            break;
+        case 3:
+            roleName = 'admin';
+            break;
+        default:
+            roleName = ''; // Obsługa innych przypadków
+    }
+    //console.log(roleName);
+
+    // Edycja danych 
     const handleSubmit = async (e) => {
         e.preventDefault(); // Zapobiega przeładowaniu strony
 
@@ -102,6 +160,31 @@ const EmployeeEditAccount = () => {
             setEditUserSuccess(false);
         }
     };
+
+    // Edycja roli
+    const handleSubmitRole = async (e) => {
+        e.preventDefault(); // Zapobiega przeładowaniu strony
+
+        try {
+            const response = await axios.post('http://localhost:3001/api/user/updateClientRoleById', {
+                role: roleData.role,
+                clientId: clientId
+            });
+
+            if (response.data.Status === 'Success') {
+                setUserRoleSuccess(true);
+                setError('');
+            } else {
+                setError(response.data.error);
+                setUserRoleSuccess(false);
+            }
+        } catch (error) {
+            console.error(error);
+            setError('Wystąpił błąd podczas aktualizacji danych użytkownika');
+            setUserRoleSuccess(false);
+        }
+    };
+
 
     // Usuniecie konta
     const handleDeleteAccount = () => {
@@ -128,7 +211,7 @@ const EmployeeEditAccount = () => {
     }
 
     // Odblokowanie konta
-    const handleUnblockAccount = () =>{
+    const handleUnblockAccount = () => {
         if (window.confirm("Czy na pewno chcesz odblokować konto?")) {
             axios.post(`http://localhost:3001/api/user/unblockAccount/?email=${data.email}`)
                 .then(res => {
@@ -386,19 +469,39 @@ const EmployeeEditAccount = () => {
                                                 </div>
                                             </Col>
                                         </Form.Group>
+                                        <Form.Group as={Row} controlId="formOwnerEditAccountRole" className="mb-3">
+                                            <Form.Label column sm={2}>
+                                                Rola
+                                            </Form.Label>
+                                            <Col sm={10}>
+                                                <FormControl
+                                                    as="select"
+                                                    name="role"
+                                                    onChange={handleChangeRole}
+                                                    value={roleData.role}
+                                                    required
+                                                >
+                                                    {availableRoles.map(role => (
+                                                        <option key={role.rola_id} value={role.rola_id}>{role.nazwa}</option>
+                                                    ))}
+                                                </FormControl>
+                                            </Col>
+                                        </Form.Group>
                                     </div>
                                     {editUserSuccess && <div className="alert alert-success">Pomyślnie udało zmienić dane użytkownika!</div>}
+                                    {editUserRoleSuccess && <div className="alert alert-success">Pomyślnie udało zmienić rolę użytkownika!</div>}
                                     {updateFile && <div className="alert alert-success">Pomyślnie dodano załącznik!</div>}
                                     {error && <div className="alert alert-danger">{error}</div>}
                                     <Row>
                                         <Col>
                                             <Button variant="success" type="submit"><BsPencilSquare /> EDYTUJ KONTO</Button>
+                                            <Button variant="primary" type="submit" id="przycisk3" onClick={handleSubmitRole}><BsPencilSquare /> ZMIEŃ ROLE</Button>
                                             <Button variant="danger" className="mt-3" id="przycisk2" onClick={handleDeleteAccount}><BsFillTrashFill /> USUŃ KONTO</Button>
                                         </Col>
                                     </Row>
                                     <Row>
                                         <Col>
-                                            <Button variant="info" type="submit" onClick={handleUnblockAccount}><BsUnlockFill/> ODBLOKUJ KONTO</Button>
+                                            <Button variant="info" type="submit" onClick={handleUnblockAccount}><BsUnlockFill /> ODBLOKUJ KONTO</Button>
                                             <Button variant="warning" type="submit" className="mt-3" id="przycisk4" onClick={handleBlockAccount}><BsLockFill /> ZABLOKUJ KONTO</Button>
                                         </Col>
                                     </Row>

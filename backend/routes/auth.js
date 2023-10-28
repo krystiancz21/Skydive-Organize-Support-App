@@ -64,7 +64,7 @@ router.post("/register", async (req, res) => {
             const insertUserRoleQuery = "INSERT INTO rola_user (rola_od, rola_do, user_id, rola_rola_id) VALUES (?, ?, ?, ?)";
             const roleValues = [currentDate, formattedFutureDate, result.insertId, 1]; // 1 to ID roli "user"
 
-            db.query(insertUserRoleQuery, roleValues, (err, roleResult) => {
+            db.query(insertUserRoleQuery, roleValues, (err, res) => {
               if (err) {
                 console.error("Błąd podczas dodawania roli dla użytkownika:", err);
                 return res.json({ Error: "Adding role error in server" });
@@ -87,12 +87,6 @@ router.post("/login", (req, res) => {
   db.query(sql, [req.body.email], (err, data) => {
     if (err) return res.json({ Error: "Login error in server" });
     if (data.length > 0) {
-      // if (data[0].usuniete_konto === 1) {
-      //   return res.json({ Error: "DeletedAccount" });
-      // }
-      // if (data[0].zablokowane_do && data[0].zablokowane_do > new Date()) {
-      //   return res.json({ Error: "BlockedAccount", blockedUntil: data[0].zablokowane_do });
-      // }
       bcrypt.compare(req.body.password.toString(), data[0].haslo, (err, response) => {
         if (err) {
           console.error("Błąd podczas logowania:", err);

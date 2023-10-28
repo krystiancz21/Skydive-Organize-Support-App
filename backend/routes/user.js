@@ -271,4 +271,56 @@ router.get("/showEmployeeAccounts", async (req, res) => {
     });
 });
 
+// Pobieranie roli użytkownika
+router.post("/getUserRole", async (req, res) => {
+    const clientId = req.body.clientId;
+    const sql = "SELECT * FROM rola_user WHERE user_id = ?";
+
+    db.query(sql, [clientId], (err, data) => {
+        if (err) {
+            res.status(500).send({ error: 'Wystąpił błąd podczas pobierania roli użytkownika' });
+        } else {
+            res.send(data);
+            //console.log(data);
+        }
+    })
+});
+
+// Zmiana roli
+router.post("/updateClientRoleById", async (req, res) => {
+    try {
+        const values = [
+            req.body.role,
+            req.body.clientId,
+        ];
+
+        const sql = "UPDATE `rola_user` SET `rola_rola_id` = ? WHERE `user_id` = ?";
+        db.query(sql, values, (err, result) => {
+            if (err) {
+                res.status(500).send({ error: 'Wystąpił błąd podczas aktualizacji roli użytkownika' });
+            } else {
+                res.send({ Status: 'Success' });
+            }
+        });
+    } catch (error) {
+        console.error("Błąd podczas aktualizacji danych: " + error.message);
+        return res.status(500).json({ error: "Błąd podczas aktualizacji danych" });
+    }
+});
+
+// Dostępne role w baize
+router.get('/availableRoles', (req, res) => {
+    const sql = 'SELECT * FROM rola';
+
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Błąd zapytania do bazy danych: ' + err.message);
+            res.status(500).send({ error: 'Błąd podczas pobierania ról' });
+        } else {
+            res.status(200).json(results);
+            //res.send(data);
+        }
+    });
+});
+
 module.exports = router;
