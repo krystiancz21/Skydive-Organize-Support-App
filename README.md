@@ -13,7 +13,7 @@ Uruchomienie:
 1. Funkcjonalności niezalogowanego użytkownika:
 - [X] możliwość rejestracji,
 - [X] możliwość sprawdzenia aktualnej oferty firmy,
-- [ ] możliwość sprawdzenia wolnych terminów na skoki spadochronowe,
+- [X] możliwość sprawdzenia wolnych terminów na skoki spadochronowe,
 - [X] możliwość zalogowania.
 
 

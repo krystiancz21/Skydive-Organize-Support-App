@@ -60,7 +60,7 @@ const Stopka = () => (
                         <ul className="list-unstyled">
                             <li><a href="/main">Strona główna</a></li>
                             <li><a href="/offer">Oferta</a></li>
-                            <li><a href="/reservation">Terminy skoków</a></li>
+                            <li><a href="/jump-dates">Terminy skoków</a></li>
                             <li><a href="/messages">Wiadomości</a></li>
                         </ul>
                     </div>
@@ -145,7 +145,7 @@ const Main = () => {
                                         <Card.Img variant="top" src={obraz} alt="img-terminy" />
                                         <Card.Body>
                                             <Card.Title>
-                                                <Link to='/reservation'>
+                                                <Link to='/jump-dates'>
                                                     <Button variant="primary" size="sm">TERMINY SKOKÓW <BsArrowRightShort /></Button>
                                                 </Link>
                                             </Card.Title>

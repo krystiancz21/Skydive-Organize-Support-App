@@ -104,11 +104,9 @@ const JumpDates = () => {
                         </Container>
                     </Navbar>
                     <Container>
-                        <h2>zalogowany -terminy skokow</h2>
-                        {/* <Row className='mt-5'>
+                        <Row className='mt-5'>
                             <Col>
-                                <h2>Wybierz termin i zarezerwuj skok</h2>
-                                <h5>Rodzaj skoku: <b>{jumpName}</b></h5>
+                                <h2>Wolne terminy skoków</h2>
                                 <div className="my-3">
                                     <p>
                                         <span className="text-success">Kolor zielony</span> - oznacza wolne terminy
@@ -124,18 +122,17 @@ const JumpDates = () => {
                                 </div>
                             </Col>
                             <Col className="text-center">
-                                <h2>Dostępne skoki w wybranym terminie</h2>
+                                <h2>Wolne terminy na skoki</h2>
+
                                 {availableJumps.length > 0 ? (
                                     <>
                                         <ul className="list-unstyled w-50 mx-auto">
                                             {availableJumps.map((jump, index) => (
                                                 <li key={index} className="accounts-container">
+                                                    <h5 className="mb-1">{jump.nazwa}</h5>
                                                     <p className="mb-1">Data: {moment(jump.data_czas).format('DD.MM.YYYY')}</p>
                                                     <p className="mb-1">Godzina: {moment(jump.data_czas).format('HH:mm')}</p>
                                                     <p className="mb-1">Liczba wolnych miejsc: {jump.liczba_miejsc_w_samolocie}</p>
-                                                    <Link to={`/reservation/${jump.terminy_id}`}>
-                                                        <Button variant="primary" className="mt-2">Zarezerwuj</Button>
-                                                    </Link>
                                                 </li>
                                             ))}
                                         </ul>
@@ -145,8 +142,10 @@ const JumpDates = () => {
                                         <p>W tym dniu nie ma zaplanowanych skoków. Wybierz inną datę.</p>
                                     </>
                                 )}
+
                             </Col>
-                        </Row> */}
+
+                        </Row>
                     </Container>
                 </>
             ) : (
