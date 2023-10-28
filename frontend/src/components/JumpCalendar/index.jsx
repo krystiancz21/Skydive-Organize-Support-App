@@ -113,9 +113,9 @@ const JumpCalendar = () => {
                     </Navbar>
                     <Container>
                         <Row className='mt-5'>
-                            <Col >
+                            <Col>
                                 <h2>Wybierz termin i zarezerwuj skok</h2>
-                                <h5>Rodzaj skoku: <b>{ jumpName }</b></h5>
+                                <h5>Rodzaj skoku: <b>{jumpName}</b></h5>
                                 <div className="my-3">
                                     <p>
                                         <span className="text-success">Kolor zielony</span> - oznacza wolne terminy
@@ -157,7 +157,43 @@ const JumpCalendar = () => {
                     </Container>
                 </>
             ) : (
-                <></> // User niezalogowany
+                <>
+                    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                        <Container>
+                            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                            <Navbar.Collapse id="responsive-navbar-nav">
+                                <Nav className="me-auto">
+                                    <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                </Nav>
+                                <Link to="/login">
+                                    <Button variant="success">ZALOGUJ</Button>
+                                </Link>
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
+                    <Container>
+                        <Row className='mt-5'>
+                            <Col>
+                                <h2>Wolne terminy skoków</h2>
+                                <div className="my-3">
+                                    <p>
+                                        <span className="text-success">Kolor zielony</span> - oznacza wolne terminy
+                                    </p>
+                                </div>
+                                <div className="my-3">
+                                    <Calendar
+                                        value={date}
+                                        onChange={handleDateChange}
+                                        minDate={new Date()}
+                                        tileContent={tileContent}
+                                    />
+                                </div>
+                            </Col>
+
+
+                        </Row>
+                    </Container>
+                </> // User niezalogowany
             )}
         </>
 

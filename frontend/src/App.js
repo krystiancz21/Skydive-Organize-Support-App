@@ -44,7 +44,7 @@ function App() {
     <Routes>
       <Route path='/' element={<Navigate replace to="/main" />} />
       <Route path="/edit-user-data" element={<EditUserData />} />
-      <Route path="/jump-calendar/:type" element={<JumpCalendar />} />
+      <Route path="/jump-calendar/:type?" element={<JumpCalendar />} />
       <Route path="/reservation/:jumpId" element={<Reservation />} />
       <Route path="/employeemain" element={<EmployeeMain />} />
       <Route path="/login" element={<Login />} />
