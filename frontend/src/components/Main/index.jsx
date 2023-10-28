@@ -298,7 +298,6 @@ const Main = () => {
                         <Row>
                             <Col lg={6} className="justify-content-center">
                                 <Card className='w-50 mx-auto'>
-
                                     <Card.Img variant="top" src={offer} alt="img-oferta" />
                                     <Card.Body>
                                         <Card.Title>
@@ -311,7 +310,6 @@ const Main = () => {
                             </Col>
                             <Col lg={6} className="justify-content-center">
                                 <Card className='w-50 mx-auto'>
-
                                     <Card.Img variant="top" src={terminy} alt="img-terminy" />
                                     <Card.Body>
                                         <Card.Title>
