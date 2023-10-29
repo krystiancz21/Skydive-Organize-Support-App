@@ -12,6 +12,7 @@ import Reservation from './components/Reservation';
 import Messages from './components/Messages';
 import JumpCalendar from './components/JumpCalendar';
 import JumpDates from './components/JumpDates';
+import JumpDetails from './components/JumpDetails';
 
 import OwnerEmployeeAccounts from './components/OwnerEmployeeAccounts';
 import OwnerCreateAccount from './components/OwnerCreateAccount';
@@ -48,6 +49,7 @@ function App() {
       <Route path="/jump-calendar/:type" element={<JumpCalendar />} />
       <Route path="/jump-dates" element={<JumpDates />} />
       <Route path="/reservation/:jumpId" element={<Reservation />} />
+      <Route path="/jump-details/:jumpId" element={<JumpDetails />} />
       <Route path="/employeemain" element={<EmployeeMain />} />
       <Route path="/login" element={<Login />} />
       <Route path="/main" element={<Main />} />

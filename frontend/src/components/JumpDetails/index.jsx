@@ -1,26 +1,20 @@
 import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, CardGroup, Image } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
-import { BiHomeAlt } from 'react-icons/bi'
-import styles from "./style.css";
+import { BiHomeAlt } from 'react-icons/bi';
 import axios from "axios";
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { Link } from "react-router-dom";
+import { useParams, Link } from 'react-router-dom';
 
-const MyJumps = () => {
+const JumpDetails = () => {
+    const [error, setError] = useState("")
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
 
-    // const [myJumps, setMyJumps] = useState([]);
-    const [currentJumps, setCurrentJumps] = useState([]);
-    const [archivalJumps, setArchivalJumps] = useState([]);
-    const [isChecked, setIsChecked] = useState(true);
-
-    const handleSwitchChange = () => {
-        setIsChecked(!isChecked);
-    };
+    const [jumpData, setJumpData] = useState([]);
+    const { jumpId } = useParams();
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -49,19 +43,26 @@ const MyJumps = () => {
     }
 
     useEffect(() => {
-        axios.post('http://localhost:3001/api/jumps/showCurrentMyJumpsByMail', { mail: mail })
+        axios.post('http://localhost:3001/api/jumps/showJumpsById', { jumpId: jumpId })
             .then(res => {
-                setCurrentJumps(res.data);
+                setJumpData(res.data[0]);
+                console.log(res.data[0]);
             })
             .catch(err => console.log(err));
+    }, [jumpId]);
 
-        axios.post('http://localhost:3001/api/jumps/showArchivalMyJumpsByMail', { mail: mail })
+    const handleResign = () => {
+        const rezerwacjaId = jumpData.rezerwacje_id;
+    
+        // Wywołanie zapytania do usunięcia rezerwacji
+        axios.post('http://localhost:3001/api/jumps/resignJump', { rezerwacjaId: rezerwacjaId })
             .then(res => {
-                setArchivalJumps(res.data);
+                // komunikat czy na prewno usunąć?
+                console.log(res.data); // KOMUNIKAT NA FONT ZE POPRAWNIE ZREZYGNOWANO I PRZEKIEROWANIE
+                window.location.href = "/myjumps";
             })
             .catch(err => console.log(err));
-    }, [mail]);
-
+    };
 
     return (
         <>
@@ -83,90 +84,16 @@ const MyJumps = () => {
                             </Navbar.Collapse>
                         </Container>
                     </Navbar>
-                    <h1 className="text-center">MOJE SKOKI</h1>
-                    <Container>
-                        <Row className='mb-3'>
-                            <Col className="d-flex justify-content-center align-items-center">
-                                <Form.Check
-                                    type="switch"
-                                    id="custom-switch"
-                                    label={isChecked ? 'Aktualne' : 'Archiwalne'}
-                                    checked={isChecked}
-                                    onChange={handleSwitchChange}
-                                />
-                            </Col>
-                        </Row>
-                        {/* {myJumps.length > 0 ? (
-                            <>
-                                {myJumps.map((item, index) => (
-                                    <Row key={index} className="accounts-container mx-auto text-center mb-3">
-                                        <Col md={4} className='mt-2'>{item.nazwa}</Col>
-                                        <Col md={4} className='mt-2'>{moment(item.data_czas).format('DD.MM.YYYY HH:mm')}</Col>
-                                        <Col md={4}>
-                                            <Link to={`/jump-details/${item.rezerwacje_id}`}>
-                                                <Button variant="success">Szczegóły</Button>
-                                            </Link>
-                                        </Col>
-                                    </Row>
-                                ))}
-                            </>
-                        ) : (
-                            <>
-                                <p className="text-center">
-                                    Tutaj nic nie ma...
-                                </p>
-                            </>
-                        )} */}
-                        {isChecked ? (
-                        currentJumps.length > 0 ? (
-                            <>
-                                {currentJumps.map((item, index) => (
-                                    // Mapowanie skoków aktualnych
-                                    <Row key={index} className="accounts-container mx-auto text-center mb-3">
-                                        <Col md={4} className='mt-2'>{item.nazwa}</Col>
-                                        <Col md={4} className='mt-2'>{moment(item.data_czas).format('DD.MM.YYYY HH:mm')}</Col>
-                                        <Col md={4}>
-                                            <Link to={`/jump-details/${item.rezerwacje_id}`}>
-                                                <Button variant="success">Szczegóły</Button>
-                                            </Link>
-                                        </Col>
-                                    </Row>
-                                ))}
-                            </>
-                        ) : (
-                            <p className="text-center">Tutaj nic nie ma...</p>
-                        )
-                    ) : (
-                        archivalJumps.length > 0 ? (
-                            <>
-                                {archivalJumps.map((item, index) => (
-                                    // Mapowanie skoków archiwalnych
-                                    <Row key={index} className="accounts-container mx-auto text-center mb-3">
-                                        <Col md={4} className='mt-2'>{item.nazwa}</Col>
-                                        <Col md={4} className='mt-2'>{moment(item.data_czas).format('DD.MM.YYYY HH:mm')}</Col>
-                                        <Col md={4}>
-                                            <Link to={`/jump-details/${item.rezerwacje_id}`}>
-                                                <Button variant="success">Szczegóły</Button>
-                                            </Link>
-                                        </Col>
-                                    </Row>
-                                ))}
-                            </>
-                        ) : (
-                            <p className="text-center">Tutaj nic nie ma...</p>
-                        )
-                    )}
-                    </Container>
-
-
-                    {/* <Container className="form-container">
+                    <h1 className="text-center">SZCZEGÓŁY SKOKU</h1>
+                    <Container className="form-container">
                         <Row>
                             <Col md={4}>
                                 <Form.Group className="mb-2">
                                     <Form.Label>Imię</Form.Label>
                                     <FormControl
                                         type="text"
-                                        name="name"
+                                        name="imie"
+                                        value={jumpData.imie}
                                         disabled
                                     />
                                 </Form.Group>
@@ -176,17 +103,19 @@ const MyJumps = () => {
                                     <Form.Label>Nazwisko</Form.Label>
                                     <FormControl
                                         type="text"
-                                        name="surname"
+                                        name="nazwisko"
+                                        value={jumpData.nazwisko}
                                         disabled
                                     />
                                 </Form.Group>
                             </Col>
                             <Col md={4}>
                                 <Form.Group className="mb-2">
-                                    <Form.Label for="rodzajskoku">Rodzaj skoku</Form.Label>
+                                    <Form.Label>Rodzaj skoku</Form.Label>
                                     <FormControl
                                         type="text"
-                                        name="type"
+                                        name="nazwa"
+                                        value={jumpData.nazwa}
                                         disabled
                                     />
                                 </Form.Group>
@@ -197,8 +126,9 @@ const MyJumps = () => {
                                 <Form.Group className="mb-2">
                                     <Form.Label>Data skoku</Form.Label>
                                     <FormControl
-                                        type="date"
-                                        name="date"
+                                        type="text"
+                                        name="data"
+                                        value={moment(jumpData.data_czas).format('DD.MM.YYYY')}
                                         disabled
 
                                     />
@@ -210,6 +140,8 @@ const MyJumps = () => {
                                     <Form.Label>Godzina</Form.Label>
                                     <FormControl
                                         type="text"
+                                        name="godzina"
+                                        value={moment(jumpData.data_czas).format('HH:mm')}
                                         disabled
 
                                     />
@@ -220,7 +152,8 @@ const MyJumps = () => {
                                     <Form.Label>Miejsce skoku</Form.Label>
                                     <FormControl
                                         type="text"
-                                        placeholder="Lublin"
+                                        name="miejsce_startu"
+                                        value={jumpData.miejsce_startu}
                                         disabled
                                     />
                                 </Form.Group>
@@ -230,6 +163,7 @@ const MyJumps = () => {
                                     <Form.Label>Liczba osób w samolocie</Form.Label>
                                     <FormControl
                                         type="number"
+                                        value={jumpData.liczba_miejsc_w_samolocie}
                                         disabled
                                     />
                                 </Form.Group>
@@ -239,6 +173,7 @@ const MyJumps = () => {
                                     <Form.Label>Sposób zapłaty</Form.Label>
                                     <FormControl
                                         type="text"
+                                        value={jumpData.nazwa}
                                         disabled
                                     />
                                 </Form.Group>
@@ -254,6 +189,8 @@ const MyJumps = () => {
                                         <Col>
                                             <FormControl
                                                 type="text"
+                                                name="cena"
+                                                value={`${jumpData.cena} PLN`}
                                                 disabled
                                             />
                                         </Col>
@@ -263,13 +200,19 @@ const MyJumps = () => {
                         </Row>
                         <Row>
                             <Col md={12}>
-                                <Button variant="danger" className="mt-3" id="przycisk">REZYGNUJE</Button>
-                                <Button variant="warning" className='mt-3' id="przycisk">EDYTUJ</Button>
-                                <Button variant="success" className="mt-3" id="przycisk">POTWIERDŹ SKOK</Button>
+                                {jumpData.status_skoku_id === 1 ? (
+                                    <>
+                                        <Button variant="danger" className="mt-3" id="przycisk" onClick={handleResign}>
+                                            REZYGNUJE
+                                        </Button>
+                                        <Button variant="warning" className='mt-3' id="przycisk">EDYTUJ</Button>
+                                    </>
+                                ) : (
+                                    <></>
+                                )}
                             </Col>
                         </Row>
-                    </Container>*/}
-                </>
+                    </Container></>
             ) : (
                 <></> // User niezalogowany
             )}
@@ -277,4 +220,4 @@ const MyJumps = () => {
     );
 }
 
-export default MyJumps
+export default JumpDetails

@@ -215,25 +215,87 @@ router.post("/reserveJump", async (req, res) => {
   }
 });
 
-// myjumps - wyświetlenie rezerwacji
-router.post("/showAllMyJumps", async (req, res) => {
-  const email = req.body.mail;
+// wyświetlnie szczegółów dot. skoku na pods. ID
+router.post("/showJumpsById", async (req, res) => {
+  const jumpId = req.body.jumpId;
 
-  const sql = `SELECT rt.rezerwacje_id, u.imie, u.nazwisko, pt.nazwa, pt.data_czas, pt.miejsce_startu, pt.liczba_miejsc_w_samolocie, p.sposob_platnosci_id, rt.cena 
+  const sql = `SELECT rt.rezerwacje_id, rt.status_skoku_id, u.imie, u.nazwisko, pt.nazwa, pt.data_czas, pt.miejsce_startu, pt.liczba_miejsc_w_samolocie, sp.nazwa, rt.cena 
   FROM rezerwacje_terminow rt
   JOIN user u ON u.user_id = rt.user_id
   JOIN planowane_terminy pt ON pt.terminy_id = rt.planowane_terminy_id
   JOIN platnosc p ON p.platnosc_id = rt.planowane_terminy_id
-  WHERE u.mail = ?`;
-  //
-  db.query(sql, [email], (err, results) => {
+  INNER JOIN sposob_platnosci sp ON sp.sposob_platnosci_id = p.sposob_platnosci_id
+  WHERE rt.rezerwacje_id = ?`;
+
+  db.query(sql, [jumpId], (err, results) => {
     if (err) {
-      console.error('Błąd drugiego zapytania do bazy danych (/showAllMyJumps): ' + err.message);
-      res.status(500).json({ error: 'Błąd drugiego zapytania do bazy danych (/showAllMyJumps).' });
+      console.error('Błąd zapytania do bazy danych (/showJumpsById): ' + err.message);
+      res.status(500).json({ error: 'Błąd zapytania do bazy danych (/showJumpsById).' });
     } else {
       res.status(200).json(results);
     }
   });
 });
+
+// myjumps - wyświetlenie rezerwacji
+router.post("/showCurrentMyJumpsByMail", async (req, res) => {
+  const email = req.body.mail;
+
+  const sql = `SELECT rt.rezerwacje_id, pt.nazwa, pt.data_czas, rt.status_skoku_id
+            FROM rezerwacje_terminow rt
+            JOIN planowane_terminy pt ON pt.terminy_id = rt.planowane_terminy_id
+            JOIN user u ON u.user_id = rt.user_id
+            WHERE u.mail = ?
+            AND rt.status_skoku_id = 1
+            ORDER BY pt.data_czas ASC`;
+
+  db.query(sql, [email], (err, results) => {
+    if (err) {
+      console.error('Błąd zapytania do bazy danych (/showCurrentMyJumpsByMail): ' + err.message);
+      res.status(500).json({ error: 'Błąd zapytania do bazy danych (/showCurrentMyJumpsByMail).' });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
+// myjumps - wyświetlenie rezerwacji archiwalych
+router.post("/showArchivalMyJumpsByMail", async (req, res) => {
+  const email = req.body.mail;
+
+  const sql = `SELECT rt.rezerwacje_id, pt.nazwa, pt.data_czas, rt.status_skoku_id
+            FROM rezerwacje_terminow rt
+            JOIN planowane_terminy pt ON pt.terminy_id = rt.planowane_terminy_id
+            JOIN user u ON u.user_id = rt.user_id
+            WHERE u.mail = ?
+            AND rt.status_skoku_id = 2
+            ORDER BY pt.data_czas DESC`;
+
+  db.query(sql, [email], (err, results) => {
+    if (err) {
+      console.error('Błąd zapytania do bazy danych (/showArchivalMyJumpsByMail): ' + err.message);
+      res.status(500).json({ error: 'Błąd zapytania do bazy danych (/showArchivalMyJumpsByMail).' });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
+router.post("/resignJump", async (req, res) => {
+  const rezerwacjaId = req.body.rezerwacjaId;
+  
+  const sql = `DELETE FROM rezerwacje_terminow WHERE rezerwacje_id = ?`;
+
+  db.query(sql, [rezerwacjaId], (err, results) => {
+    if (err) {
+      console.error('Błąd zapytania do bazy danych (/resignJump): ' + err.message);
+      res.status(500).json({ error: 'Błąd zapytania do bazy danych (/resignJump).' });
+    } else {
+      res.status(200).json(results);
+      // tutaj UPDATE liczby wolnych miejsc w planowane terminy - jeszcze  trzeba to dokończyć!! 
+    }
+  });
+});
+
 
 module.exports = router;
