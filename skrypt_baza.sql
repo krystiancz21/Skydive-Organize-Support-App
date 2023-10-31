@@ -326,6 +326,29 @@ END;
 //
 DELIMITER ;
 
+-- Trigger do rezygnacji ze skoków
+USE skydive;
+
+DELIMITER //
+CREATE TRIGGER AfterDeleteReservation
+AFTER DELETE ON rezerwacje_terminow 
+FOR EACH ROW
+BEGIN
+    DECLARE seats_to_increase INT;
+    
+	  -- pobierz ile miejsc ma dany typ skoku
+    SET seats_to_increase = (SELECT liczba_miejsc_w_samolocie FROM rodzaj_skoku WHERE skok_id = OLD.rodzaj_skoku_id);
+
+    -- Zaktualizuj ilość dostępnych miejsc w terminie skoku
+    UPDATE planowane_terminy
+    SET liczba_miejsc_w_samolocie = liczba_miejsc_w_samolocie + seats_to_increase
+    WHERE terminy_id = OLD.planowane_terminy_id;
+END;
+//
+DELIMITER ;
+
+
+
 -- W razie jakby trzeba było usunąć trigger:
 -- USE skydive;
 -- DROP TRIGGER IF EXISTS decrease_seats;

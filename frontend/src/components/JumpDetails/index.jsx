@@ -5,16 +5,32 @@ import axios from "axios";
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const JumpDetails = () => {
+    const navigate = useNavigate();
+
     const [error, setError] = useState("")
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
 
-    const [jumpData, setJumpData] = useState([]);
+    // const [jumpData, setJumpData] = useState([]);
     const { jumpId } = useParams();
+
+    const [jumpData, setJumpData] = useState({
+        imie: "",
+        nazwisko: "",
+        nazwa: "",
+        data: "",
+        godzina: "",
+        miejsce_startu: "",
+        liczba_osob: "",
+        sposob_zaplaty: "",
+        cena: "",
+        status_skoku: "",
+    });
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -45,8 +61,21 @@ const JumpDetails = () => {
     useEffect(() => {
         axios.post('http://localhost:3001/api/jumps/showJumpsById', { jumpId: jumpId })
             .then(res => {
-                setJumpData(res.data[0]);
-                console.log(res.data[0]);
+                // setJumpData(res.data[0]);
+                const jumpData = res.data[0];
+                setJumpData({
+                    imie: res.data[0].imie,
+                    nazwisko: res.data[0].nazwisko,
+                    nazwa: res.data[0].nazwa_skoku,
+                    data: moment(res.data[0].data_czas).format('DD.MM.YYYY'),
+                    godzina: moment(res.data[0].data_czas).format('HH:mm'),
+                    miejsce_startu: res.data[0].miejsce_startu,
+                    liczba_osob: res.data[0].liczba_miejsc_w_samolocie,
+                    sposob_zaplaty: res.data[0].nazwa,
+                    cena: `${res.data[0].cena} PLN`,
+                    status_skoku: res.data[0].status_skoku_id,
+
+                });
             })
             .catch(err => console.log(err));
     }, [jumpId]);
@@ -55,13 +84,14 @@ const JumpDetails = () => {
         const rezerwacjaId = jumpData.rezerwacje_id;
     
         // Wywołanie zapytania do usunięcia rezerwacji
-        axios.post('http://localhost:3001/api/jumps/resignJump', { rezerwacjaId: rezerwacjaId })
-            .then(res => {
-                // komunikat czy na prewno usunąć?
-                console.log(res.data); // KOMUNIKAT NA FONT ZE POPRAWNIE ZREZYGNOWANO I PRZEKIEROWANIE
-                window.location.href = "/myjumps";
-            })
-            .catch(err => console.log(err));
+        if (window.confirm("Czy na pewno chcesz zrezygnować?")) {
+            axios.post('http://localhost:3001/api/jumps/resignJump', { rezerwacjaId: rezerwacjaId })
+                .then(res => {
+                    // KOMUNIKAT NA FONT ZE POPRAWNIE ZREZYGNOWANO I PRZEKIEROWANIE
+                    navigate("/myjumps");
+                })
+                .catch(err => console.log(err));
+        }
     };
 
     return (
@@ -79,7 +109,7 @@ const JumpDetails = () => {
                                     <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>
                                     <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                 </Nav>
-                                <Nav.Link href="#"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
+                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
                                 <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                             </Navbar.Collapse>
                         </Container>
@@ -128,22 +158,22 @@ const JumpDetails = () => {
                                     <FormControl
                                         type="text"
                                         name="data"
-                                        value={moment(jumpData.data_czas).format('DD.MM.YYYY')}
+                                        value={jumpData.data}
+                                        // value={moment(jumpData.data_czas).format('DD.MM.YYYY')}
                                         disabled
 
                                     />
                                 </Form.Group>
                             </Col>
-
                             <Col md={4}>
                                 <Form.Group className="mb-2">
                                     <Form.Label>Godzina</Form.Label>
                                     <FormControl
                                         type="text"
                                         name="godzina"
-                                        value={moment(jumpData.data_czas).format('HH:mm')}
+                                        value={jumpData.godzina}
+                                        // value={moment(jumpData.data_czas).format('HH:mm')}
                                         disabled
-
                                     />
                                 </Form.Group>
                             </Col>
@@ -158,12 +188,15 @@ const JumpDetails = () => {
                                     />
                                 </Form.Group>
                             </Col>
+                        </Row>
+                        <Row>
                             <Col md={4}>
                                 <Form.Group className="mb-2">
                                     <Form.Label>Liczba osób w samolocie</Form.Label>
                                     <FormControl
-                                        type="number"
-                                        value={jumpData.liczba_miejsc_w_samolocie}
+                                        type="text"
+                                        name="liczba_osob"
+                                        value={jumpData.liczba_osob}
                                         disabled
                                     />
                                 </Form.Group>
@@ -173,7 +206,7 @@ const JumpDetails = () => {
                                     <Form.Label>Sposób zapłaty</Form.Label>
                                     <FormControl
                                         type="text"
-                                        value={jumpData.nazwa}
+                                        value={jumpData.sposob_zaplaty}
                                         disabled
                                     />
                                 </Form.Group>
@@ -190,7 +223,7 @@ const JumpDetails = () => {
                                             <FormControl
                                                 type="text"
                                                 name="cena"
-                                                value={`${jumpData.cena} PLN`}
+                                                value={jumpData.cena}
                                                 disabled
                                             />
                                         </Col>
@@ -200,7 +233,7 @@ const JumpDetails = () => {
                         </Row>
                         <Row>
                             <Col md={12}>
-                                {jumpData.status_skoku_id === 1 ? (
+                                {jumpData.status_skoku === 1 ? (
                                     <>
                                         <Button variant="danger" className="mt-3" id="przycisk" onClick={handleResign}>
                                             REZYGNUJE

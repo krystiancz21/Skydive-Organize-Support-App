@@ -219,11 +219,11 @@ router.post("/reserveJump", async (req, res) => {
 router.post("/showJumpsById", async (req, res) => {
   const jumpId = req.body.jumpId;
 
-  const sql = `SELECT rt.rezerwacje_id, rt.status_skoku_id, u.imie, u.nazwisko, pt.nazwa, pt.data_czas, pt.miejsce_startu, pt.liczba_miejsc_w_samolocie, sp.nazwa, rt.cena 
+  const sql = `SELECT rt.rezerwacje_id, rt.status_skoku_id, u.imie, u.nazwisko, pt.nazwa AS nazwa_skoku, pt.data_czas, pt.miejsce_startu, pt.liczba_miejsc_w_samolocie, sp.nazwa, rt.cena 
   FROM rezerwacje_terminow rt
   JOIN user u ON u.user_id = rt.user_id
   JOIN planowane_terminy pt ON pt.terminy_id = rt.planowane_terminy_id
-  JOIN platnosc p ON p.platnosc_id = rt.planowane_terminy_id
+  JOIN platnosc p ON p.platnosc_id = rt.platnosc_id
   INNER JOIN sposob_platnosci sp ON sp.sposob_platnosci_id = p.sposob_platnosci_id
   WHERE rt.rezerwacje_id = ?`;
 
