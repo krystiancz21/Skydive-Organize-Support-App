@@ -292,10 +292,26 @@ router.post("/resignJump", async (req, res) => {
       res.status(500).json({ error: 'Błąd zapytania do bazy danych (/resignJump).' });
     } else {
       res.status(200).json(results);
-      // tutaj UPDATE liczby wolnych miejsc w planowane terminy - jeszcze  trzeba to dokończyć!! 
+      // tutaj UPDATE liczby wolnych miejsc w planowane terminy - zrobiłem Trigger
     }
   });
 });
 
+// odwoływanie skoków
+router.post("/cancelPlannedJump", async (req, res) => {
+  const jumpId = req.body.jumpId;
+  const sql = `DELETE FROM planowane_terminy WHERE terminy_id = ?`;
+
+  db.query(sql, [jumpId], (err, results) => {
+    if (err) {
+      console.error('Błąd zapytania do bazy danych (/cancelPlannedJump): ' + err.message);
+      res.status(500).json({ error: 'Błąd zapytania do bazy danych (/cancelPlannedJump).' });
+    } else {
+      res.status(200).json(results);
+      // nie działa w wypadku gdy mamy rezerwację na dany skok - trzeba coś wymyśleć
+      // być może od razu roześle się info klientom o usunięciu planowanego terminu
+    }
+  });
+});
 
 module.exports = router;
