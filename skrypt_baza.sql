@@ -257,22 +257,22 @@ INSERT INTO `rodzaj_skoku`(`skok_id`, `nazwa`, `cena`, `liczba_miejsc_w_samoloci
 INSERT INTO `rodzaj_skoku`(`skok_id`, `nazwa`, `cena`, `liczba_miejsc_w_samolocie`, `wymagana_licencja`, `max_masa`) VALUES ('2','Skok w tandemie','900.00','2','0','120');
 INSERT INTO `rodzaj_skoku`(`skok_id`, `nazwa`, `cena`, `liczba_miejsc_w_samolocie`, `wymagana_licencja`, `max_masa`) VALUES ('3','Skok w tandemie z kamerzystą','1100.00','3','0','120');
 
-INSERT INTO `user` (`user_id`, `imie`, `nazwisko`, `mail`, `haslo`, `telefon`, `masa`, `usuniete_konto`, `zablokowane_do`) VALUES
+INSERT INTO `skydive`.`user` (`user_id`, `imie`, `nazwisko`, `mail`, `haslo`, `telefon`, `masa`, `usuniete_konto`, `zablokowane_do`) VALUES
 (1, 'klient', 'klient', 'klient@gmail.com', '$2b$10$U/ic/ja1nStvJwZ1IHoByOjj.9rRfbL8IJOdUc5zEdFlQg9H3lqTS', '123123123', 0, 0, NULL),
 (2, 'pracownik', 'pracownik', 'pracownik@gmail.com', '$2b$10$/zW4PqduzBUmIIpCrn9nduqN34gx.eX032xCb8io.QkuBdN2LeVoK', '321321321', 0, 0, NULL),
 (3, 'admin', 'admin', 'admin@gmail.com', '$2b$10$usCT49C8dQ8WcZ5.Vea89.BVcjMTzljeccgjwskOngmrvELwW5E2y', '222333444', 0, 0, NULL);
 
-INSERT INTO `rola_user` (`rola_od`, `rola_do`, `user_id`, `rola_rola_id`) VALUES
+INSERT INTO `skydive`.`rola_user` (`rola_od`, `rola_do`, `user_id`, `rola_rola_id`) VALUES
 ('2023-10-15 12:00:00', '2024-10-15 12:00:00', 1, 1),
 ('2023-10-15 12:00:00', '2024-10-15 12:00:00', 2, 2),
 ('2023-10-15 12:00:00', '2024-10-15 12:00:00', 3, 3);
 
-INSERT INTO rodzaj_skoku (skok_id, nazwa, cena, liczba_miejsc_w_samolocie, wymagana_licencja, max_masa) VALUES 
-('1','Skok samodzielny z licencją','600.00','1','1','120'),
-('2','Skok w tandemie','900.00','2','0','120'),
-('3','Skok w tandemie z kamerzystą','1100.00','3','0','120');
+INSERT INTO `skydive`.`rodzaj_skoku` (nazwa, cena, liczba_miejsc_w_samolocie, wymagana_licencja, max_masa) VALUES 
+('Skok samodzielny z licencją','600.00','1','1','120'),
+('Skok w tandemie','900.00','2','0','120'),
+('Skok w tandemie z kamerzystą','1100.00','3','0','120');
 
-INSERT INTO `planowane_terminy` (`nazwa`, `data_czas`, `liczba_miejsc_w_samolocie`, `miejsce_startu`, `status_terminu_id`) VALUES
+INSERT INTO `skydive`.`planowane_terminy` (`nazwa`, `data_czas`, `liczba_miejsc_w_samolocie`, `miejsce_startu`, `status_terminu_id`) VALUES
 ('Skok samodzielny z licencją', '2023-11-20 10:00:00', 2, 'Lublin', 1),
 ('Skok samodzielny z licencją', '2023-11-24 18:00:00', 2, 'Lublin', 1),
 ('Skok samodzielny z licencją', '2023-11-24 08:00:00', 7, 'Lublin', 1),
@@ -283,7 +283,7 @@ INSERT INTO `planowane_terminy` (`nazwa`, `data_czas`, `liczba_miejsc_w_samoloci
 ('Skok w tandemie z kamerzystą', '2023-12-19 08:00:00', 8, 'Lublin', 1);
 
 
-INSERT INTO `planowane_terminy` (`nazwa`, `data_czas`, `liczba_miejsc_w_samolocie`, `miejsce_startu`, `status_terminu_id`) VALUES
+INSERT INTO `skydive`.`planowane_terminy` (`nazwa`, `data_czas`, `liczba_miejsc_w_samolocie`, `miejsce_startu`, `status_terminu_id`) VALUES
 ('Skok samodzielny z licencją', '2023-12-14 10:00:00', 2, 'Lublin', 1),
 ('Skok w tandemie', '2023-12-14 10:00:00', 2, 'Lublin', 1),
 ('Skok w tandemie z kamerzystą', '2023-12-14 10:00:00', 7, 'Lublin', 1),
@@ -304,16 +304,8 @@ FOR EACH ROW
 BEGIN
 	DECLARE seats_to_decrease INT;
 	DECLARE available_seats INT;
-
-   IF NEW.rodzaj_skoku_id = 1 THEN
-      SET seats_to_decrease = 1;
-   ELSEIF NEW.rodzaj_skoku_id = 2 THEN
-      SET seats_to_decrease = 2;
-   ELSE
-      SET seats_to_decrease = 3;
-   END IF;
    
-
+   SET seats_to_decrease = (SELECT liczba_miejsc_w_samolocie FROM rodzaj_skoku WHERE skok_id = NEW.rodzaj_skoku_id);
    SET available_seats = (SELECT liczba_miejsc_w_samolocie FROM planowane_terminy WHERE terminy_id = NEW.planowane_terminy_id);
    
    -- Jeśli dostępna liczba miejsc jest wystarczająca, zaktualizuj ją
