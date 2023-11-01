@@ -283,6 +283,7 @@ router.post("/showArchivalMyJumpsByMail", async (req, res) => {
 
 router.post("/resignJump", async (req, res) => {
   const rezerwacjaId = req.body.rezerwacjaId;
+  console.log(rezerwacjaId);
   
   const sql = `DELETE FROM rezerwacje_terminow WHERE rezerwacje_id = ?`;
 
@@ -300,18 +301,55 @@ router.post("/resignJump", async (req, res) => {
 // odwoływanie skoków
 router.post("/cancelPlannedJump", async (req, res) => {
   const jumpId = req.body.jumpId;
-  const sql = `DELETE FROM planowane_terminy WHERE terminy_id = ?`;
+  const sql = `DELETE FROM rezerwacje_terminow WHERE planowane_terminy_id = ?`;
 
   db.query(sql, [jumpId], (err, results) => {
     if (err) {
       console.error('Błąd zapytania do bazy danych (/cancelPlannedJump): ' + err.message);
       res.status(500).json({ error: 'Błąd zapytania do bazy danych (/cancelPlannedJump).' });
     } else {
-      res.status(200).json(results);
+      // res.status(200).json(results);
       // nie działa w wypadku gdy mamy rezerwację na dany skok - trzeba coś wymyśleć
       // być może od razu roześle się info klientom o usunięciu planowanego terminu
+      // może dołożyć nowy status skoku - usunięty i taki skok będzie nieaktywny 
+
+      // wstępnie rozwiązuje to tak:
+      const sql = `DELETE FROM planowane_terminy WHERE terminy_id = ?`;
+
+      db.query(sql, [jumpId], (err, results) => {
+        if (err) {
+          console.error('Błąd zapytania do bazy danych 2 (/cancelPlannedJump): ' + err.message);
+          res.status(500).json({ error: 'Błąd zapytania do bazy danych 2 (/cancelPlannedJump).' });
+        } else {
+          res.status(200).json(results); // TYLKO NWM CZY TO JEST OK ?? 
+        }
+      });
     }
   });
+});
+
+// Dodanie nowego planowanego terminu skoku przez pracownika
+router.post("/addNewPlannedDate", async (req, res) => {
+  // Walidacja moze  bd potrzebna
+
+  const values = [
+    req.body.jumpType,
+    req.body.jumpDateTime,
+    req.body.jumpFreeSlots,
+    req.body.jumpStartPlace,
+  ];
+  
+  const sql = 'INSERT INTO planowane_terminy (`nazwa`, `data_czas`, `liczba_miejsc_w_samolocie`, `miejsce_startu`) VALUES (?, ?, ?, ?)';
+
+  db.query(sql, values, (err, results) => {
+    if (err) {
+      console.error('Błąd zapytania do bazy danych (/addNewPlannedDate): ' + err.message);
+      res.status(500).json({ error: 'Błąd zapytania do bazy danych (/addNewPlannedDate).' });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+
 });
 
 module.exports = router;

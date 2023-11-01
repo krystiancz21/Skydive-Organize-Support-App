@@ -20,6 +20,7 @@ const JumpDetails = () => {
     const { jumpId } = useParams();
 
     const [jumpData, setJumpData] = useState({
+        rezerwacje_id: "",
         imie: "",
         nazwisko: "",
         nazwa: "",
@@ -61,9 +62,8 @@ const JumpDetails = () => {
     useEffect(() => {
         axios.post('http://localhost:3001/api/jumps/showJumpsById', { jumpId: jumpId })
             .then(res => {
-                // setJumpData(res.data[0]);
-                const jumpData = res.data[0];
                 setJumpData({
+                    rezerwacje_id: res.data[0].rezerwacje_id,
                     imie: res.data[0].imie,
                     nazwisko: res.data[0].nazwisko,
                     nazwa: res.data[0].nazwa_skoku,
@@ -82,7 +82,7 @@ const JumpDetails = () => {
 
     const handleResign = () => {
         const rezerwacjaId = jumpData.rezerwacje_id;
-    
+
         // Wywołanie zapytania do usunięcia rezerwacji
         if (window.confirm("Czy na pewno chcesz zrezygnować?")) {
             axios.post('http://localhost:3001/api/jumps/resignJump', { rezerwacjaId: rezerwacjaId })

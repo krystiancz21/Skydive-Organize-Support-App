@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `skydive`.`planowane_terminy` (
   `data_czas` DATETIME NOT NULL,
   `liczba_miejsc_w_samolocie` INT NOT NULL,
   `miejsce_startu` VARCHAR(45) NOT NULL,
-  `status_terminu_id` INT NOT NULL,
+  `status_terminu_id` INT DEFAULT 1,
   PRIMARY KEY (`terminy_id`),
   INDEX `fk_planowane_terminy_status_terminu1_idx` (`status_terminu_id`),
   CONSTRAINT `fk_planowane_terminy_status_terminu1`
@@ -253,9 +253,6 @@ INSERT INTO `skydive`.`status_platnosci` (`nazwa`) VALUES ('Niezapłacone'), ('W
 INSERT INTO `skydive`.`rola` (`nazwa`) VALUES ('klient'), ('pracownik'), ('admin');
 INSERT INTO `skydive`.`status_skoku` (`nazwa`) VALUES ('Niezrealizowany'), ('Zrealizowany');
 INSERT INTO `skydive`.`status_terminu` (`nazwa`) VALUES ('Wolne'), ('Zajęte');
-INSERT INTO `rodzaj_skoku`(`skok_id`, `nazwa`, `cena`, `liczba_miejsc_w_samolocie`, `wymagana_licencja`, `max_masa`) VALUES ('1','Skok samodzielny z licencją','600.00','1','1','120');
-INSERT INTO `rodzaj_skoku`(`skok_id`, `nazwa`, `cena`, `liczba_miejsc_w_samolocie`, `wymagana_licencja`, `max_masa`) VALUES ('2','Skok w tandemie','900.00','2','0','120');
-INSERT INTO `rodzaj_skoku`(`skok_id`, `nazwa`, `cena`, `liczba_miejsc_w_samolocie`, `wymagana_licencja`, `max_masa`) VALUES ('3','Skok w tandemie z kamerzystą','1100.00','3','0','120');
 
 INSERT INTO `skydive`.`user` (`user_id`, `imie`, `nazwisko`, `mail`, `haslo`, `telefon`, `masa`, `usuniete_konto`, `zablokowane_do`) VALUES
 (1, 'klient', 'klient', 'klient@gmail.com', '$2b$10$U/ic/ja1nStvJwZ1IHoByOjj.9rRfbL8IJOdUc5zEdFlQg9H3lqTS', '123123123', 0, 0, NULL),
@@ -267,7 +264,7 @@ INSERT INTO `skydive`.`rola_user` (`rola_od`, `rola_do`, `user_id`, `rola_rola_i
 ('2023-10-15 12:00:00', '2024-10-15 12:00:00', 2, 2),
 ('2023-10-15 12:00:00', '2024-10-15 12:00:00', 3, 3);
 
-INSERT INTO `skydive`.`rodzaj_skoku` (nazwa, cena, liczba_miejsc_w_samolocie, wymagana_licencja, max_masa) VALUES 
+INSERT INTO `skydive`.`rodzaj_skoku` (`nazwa`, `cena`, `liczba_miejsc_w_samolocie`, `wymagana_licencja`, `max_masa`) VALUES 
 ('Skok samodzielny z licencją','600.00','1','1','120'),
 ('Skok w tandemie','900.00','2','0','120'),
 ('Skok w tandemie z kamerzystą','1100.00','3','0','120');

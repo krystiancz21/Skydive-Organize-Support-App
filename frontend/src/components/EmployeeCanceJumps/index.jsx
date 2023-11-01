@@ -159,43 +159,6 @@ const EmployeeCancelJumps = () => {
 
                                 </Row>
                             </Container>
-
-                            {/* <Container className={styles.content}>
-                                <h1 className="text-center">ODWOŁAJ SKOKI</h1>
-                                <Form className="text-center">
-                                    <div className='max-width-form'>
-
-                                        <Form.Group as={Row} controlId="formOwnerCreateAccountName" className="mb-3">
-                                            <Form.Label column sm={2}>
-                                                Wybierz date
-                                            </Form.Label>
-                                            <Col sm={10}>
-                                                <FormControl
-                                                    type="date"
-                                                    name="data"
-                                                    required
-                                                />
-                                            </Col>
-                                        </Form.Group>
-
-                                        <Form.Group as={Row} controlId="formOwnerCreateAccountEmail" className="mb-3">
-                                            <Form.Label column sm={2}>
-                                                Wybierz godzine
-                                            </Form.Label>
-                                            <Col sm={10}>
-                                                <FormControl
-                                                    type="text"
-                                                    placeholder="11:00"
-                                                    name="godzina"
-                                                    required
-                                                />
-                                            </Col>
-                                        </Form.Group>
-
-                                    </div>
-                                    <Button variant="danger" type="submit">ODWOŁAJ SKOKI</Button>
-                                </Form>
-                            </Container> */}
                         </>
                     )}
                     {userRole === 'admin' && (

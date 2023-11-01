@@ -12,8 +12,17 @@ const EmployeePlanJumps = () => {
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
+    const [addSuccess, setAddSuccess] = useState(false);
 
-    
+    const [jumpTypes, setJumpTypes] = useState([]);
+
+    const [newJumpData, setNewJumpData] = useState({
+        jumpType: "",
+        jumpDate: "",
+        jumpHour: "",
+        jumpFreeSlots: "",
+        jumpStartPlace: "Lublin",
+    });
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -30,13 +39,45 @@ const EmployeePlanJumps = () => {
                 }
             })
             .catch(err => console.log(err));
+
+        axios.get("http://localhost:3001/api/offer/showAllOffers")
+            .then((response) => {
+                setJumpTypes(response.data.offers); // Ustaw rodzaje skoków
+            })
+            .catch((error) => console.log(error));
     }, []);
+
+    const handleChange = ({ currentTarget: input }) => {
+        setNewJumpData({ ...newJumpData, [input.name]: input.value })
+    }
 
     const handleLogout = () => {
         axios.get('http://localhost:3001/api/auth/logout')
             .then(res => {
                 window.location.href = "/main";
             }).catch(err => console.log(err));
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const submitJumpData = {
+            jumpType: newJumpData.jumpType,
+            jumpDateTime: `${newJumpData.jumpDate} ${newJumpData.jumpHour}`,
+            jumpFreeSlots: newJumpData.jumpFreeSlots,
+            jumpStartPlace: newJumpData.jumpStartPlace,
+        };
+
+        axios.post('http://localhost:3001/api/jumps/addNewPlannedDate', submitJumpData)
+            .then(res => {
+                // Obsługa sukcesu po pomyślnym dodaniu nowego terminu skoku
+                setAddSuccess(true);
+                // walidacja minimalnej ilości osób na dany typ skoku
+            })
+            .catch(err => {
+                console.error('Błąd: Nie udało się dodać nowego terminu skoku');
+                console.error(err);
+            });
     }
 
     return (
@@ -64,19 +105,40 @@ const EmployeePlanJumps = () => {
                                 <h1 className="text-center">ZAPLANUJ SKOKI</h1>
                                 <Form className="text-center">
                                     <div className='max-width-form'>
-                                        <Form.Group as={Row} controlId="formOwnerCreateAccountName" className="mb-3">
+                                        <Form.Group as={Row} controlId="formJumpType" className="mb-3">
+                                            <Form.Label column sm={2}>
+                                                Rodzaj skoku
+                                            </Form.Label>
+                                            <Col sm={10}>
+                                                <Form.Select
+                                                    as="select"
+                                                    onChange={(e) => setNewJumpData({ ...newJumpData, jumpType: e.target.value })}
+                                                    required
+                                                >
+                                                    <option value="">Wybierz typ skoku</option>
+                                                    {jumpTypes.map((type) => (
+                                                        <option key={type.skok_id} value={type.nazwa}>
+                                                            {type.nazwa}
+                                                        </option>
+                                                    ))}
+                                                </Form.Select>
+                                            </Col>
+                                        </Form.Group>
+                                        <Form.Group as={Row} controlId="formJumpData" className="mb-3">
                                             <Form.Label column sm={2}>
                                                 Wybierz date
                                             </Form.Label>
                                             <Col sm={10}>
                                                 <FormControl
                                                     type="date"
-                                                    name="data"
+                                                    name="jumpDate"
+                                                    value={newJumpData.jumpDate}
+                                                    onChange={handleChange}
                                                     required
                                                 />
                                             </Col>
                                         </Form.Group>
-                                        <Form.Group as={Row} controlId="formOwnerCreateAccountEmail" className="mb-3">
+                                        <Form.Group as={Row} controlId="formJumpHour" className="mb-3">
                                             <Form.Label column sm={2}>
                                                 Wybierz godzine
                                             </Form.Label>
@@ -84,12 +146,14 @@ const EmployeePlanJumps = () => {
                                                 <FormControl
                                                     type="text"
                                                     placeholder="11:00"
-                                                    name="godzina"
+                                                    name="jumpHour"
+                                                    value={newJumpData.jumpHour}
+                                                    onChange={handleChange}
                                                     required
                                                 />
                                             </Col>
                                         </Form.Group>
-                                        <Form.Group as={Row} controlId="formOwnerCreateAccountEmail" className="mb-3">
+                                        <Form.Group as={Row} controlId="formJumpFreeSlots" className="mb-3">
                                             <Form.Label column sm={2}>
                                                 Liczba miejsc
                                             </Form.Label>
@@ -97,36 +161,56 @@ const EmployeePlanJumps = () => {
                                                 <FormControl
                                                     type="number"
                                                     placeholder="5"
-                                                    name="miejsca"
+                                                    name="jumpFreeSlots"
+                                                    value={newJumpData.jumpFreeSlots}
+                                                    onChange={handleChange}
                                                     required
                                                 />
                                             </Col>
                                         </Form.Group>
+                                        {/* <Form.Group as={Row} controlId="formJumpStartPlace" className="mb-3">
+                                            <Form.Label column sm={2}>
+                                                Miejsce startu
+                                            </Form.Label>
+                                            <Col sm={10}>
+                                                <FormControl
+                                                    type="text"
+                                                    placeholder=""
+                                                    name="jumpStartPlace"
+                                                    value={newJumpData.jumpStartPlace}
+                                                    onChange={handleChange}
+                                                    required
+                                                />
+                                            </Col>
+                                        </Form.Group> */}
                                     </div>
-                                    <Button variant="success" type="submit">ZAPLANUJ SKOK</Button>
+                                    {addSuccess && <div className="alert alert-success text-center mt-3">
+                                        Pomyślnie udało się dodać termin skoku!
+                                    </div>}
+                                    <Button variant="success" type="submit" onClick={handleSubmit}>ZAPLANUJ SKOK</Button>
                                 </Form>
                             </Container>
                         </>
                     )}
                     {userRole === 'admin' && (
                         <>
-                        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-                            <Container>
-                                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                                <Navbar.Collapse id="responsive-navbar-nav">
-                                    <Nav className="me-auto">
-                                        <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-                                        <Nav.Link href="/offer">OFERTA</Nav.Link>
-                                        <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
-                                        <Nav.Link href="/employeemanagejumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
-                                        <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
-                                    </Nav>
-                                    <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
-                                    <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
-                                </Navbar.Collapse>
-                            </Container>
-                        </Navbar>
-                        potem przekopiuj kontener od pracownika!
+                            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                                <Container>
+                                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                                    <Navbar.Collapse id="responsive-navbar-nav">
+                                        <Nav className="me-auto">
+                                            <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                            <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                            <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                            <Nav.Link href="/employeemanagejumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                            <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
+                                        </Nav>
+                                        <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
+                                        <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                                    </Navbar.Collapse>
+                                </Container>
+                            </Navbar>
+                            potem przekopjować container kontener od pracownika!
                         </>
                     )}
                 </>
