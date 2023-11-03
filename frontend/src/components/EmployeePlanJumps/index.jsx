@@ -13,6 +13,7 @@ const EmployeePlanJumps = () => {
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
     const [addSuccess, setAddSuccess] = useState(false);
+    const [error, setError] = useState('');
 
     const [jumpTypes, setJumpTypes] = useState([]);
 
@@ -61,6 +62,11 @@ const EmployeePlanJumps = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        if (!newJumpData.jumpType || !newJumpData.jumpDate || !newJumpData.jumpHour || !newJumpData.jumpFreeSlots) {
+            setError('Wszystkie pola są wymagane.');
+            return;
+        }
+
         const submitJumpData = {
             jumpType: newJumpData.jumpType,
             jumpDateTime: `${newJumpData.jumpDate} ${newJumpData.jumpHour}`,
@@ -70,13 +76,22 @@ const EmployeePlanJumps = () => {
 
         axios.post('http://localhost:3001/api/jumps/addNewPlannedDate', submitJumpData)
             .then(res => {
-                // Obsługa sukcesu po pomyślnym dodaniu nowego terminu skoku
-                setAddSuccess(true);
-                // walidacja minimalnej ilości osób na dany typ skoku
+                if (res.data.error) {
+                    setError(res.data.error);
+                    setAddSuccess(false);
+                } else {
+                    setAddSuccess(true);
+                    setError('');
+                }
             })
             .catch(err => {
-                console.error('Błąd: Nie udało się dodać nowego terminu skoku');
-                console.error(err);
+                if (err.response.status === 400) {
+                    setAddSuccess(false);
+                    setError(err.response.data.error);
+                } else {
+                    console.error('Błąd: Nie udało się dodać nowego terminu skoku');
+                    console.error(err);
+                }
             });
     }
 
@@ -144,8 +159,7 @@ const EmployeePlanJumps = () => {
                                             </Form.Label>
                                             <Col sm={10}>
                                                 <FormControl
-                                                    type="text"
-                                                    placeholder="11:00"
+                                                    type="time"
                                                     name="jumpHour"
                                                     value={newJumpData.jumpHour}
                                                     onChange={handleChange}
@@ -160,7 +174,6 @@ const EmployeePlanJumps = () => {
                                             <Col sm={10}>
                                                 <FormControl
                                                     type="number"
-                                                    placeholder="5"
                                                     name="jumpFreeSlots"
                                                     value={newJumpData.jumpFreeSlots}
                                                     onChange={handleChange}
@@ -187,6 +200,7 @@ const EmployeePlanJumps = () => {
                                     {addSuccess && <div className="alert alert-success text-center mt-3">
                                         Pomyślnie udało się dodać termin skoku!
                                     </div>}
+                                    {error && <div className="alert alert-danger">{error}</div>}
                                     <Button variant="success" type="submit" onClick={handleSubmit}>ZAPLANUJ SKOK</Button>
                                 </Form>
                             </Container>

@@ -284,7 +284,7 @@ router.post("/showArchivalMyJumpsByMail", async (req, res) => {
 router.post("/resignJump", async (req, res) => {
   const rezerwacjaId = req.body.rezerwacjaId;
   console.log(rezerwacjaId);
-  
+
   const sql = `DELETE FROM rezerwacje_terminow WHERE rezerwacje_id = ?`;
 
   db.query(sql, [rezerwacjaId], (err, results) => {
@@ -308,11 +308,7 @@ router.post("/cancelPlannedJump", async (req, res) => {
       console.error('Błąd zapytania do bazy danych (/cancelPlannedJump): ' + err.message);
       res.status(500).json({ error: 'Błąd zapytania do bazy danych (/cancelPlannedJump).' });
     } else {
-      // res.status(200).json(results);
-      // nie działa w wypadku gdy mamy rezerwację na dany skok - trzeba coś wymyśleć
-      // być może od razu roześle się info klientom o usunięciu planowanego terminu
-      // może dołożyć nowy status skoku - usunięty i taki skok będzie nieaktywny 
-
+      // nie działa w wypadku gdy mamy rezerwację na dany skok - trzeba coś wymyśle 
       // wstępnie rozwiązuje to tak:
       const sql = `DELETE FROM planowane_terminy WHERE terminy_id = ?`;
 
@@ -321,7 +317,8 @@ router.post("/cancelPlannedJump", async (req, res) => {
           console.error('Błąd zapytania do bazy danych 2 (/cancelPlannedJump): ' + err.message);
           res.status(500).json({ error: 'Błąd zapytania do bazy danych 2 (/cancelPlannedJump).' });
         } else {
-          res.status(200).json(results); // TYLKO NWM CZY TO JEST OK ?? 
+          res.status(200).json(results);
+          // PO usunięciu rezerwacji trzeba wysłać wiadomości do klientów!
         }
       });
     }
@@ -330,7 +327,22 @@ router.post("/cancelPlannedJump", async (req, res) => {
 
 // Dodanie nowego planowanego terminu skoku przez pracownika
 router.post("/addNewPlannedDate", async (req, res) => {
-  // Walidacja moze  bd potrzebna
+  const jumpDateTime = new Date(req.body.jumpDateTime);
+  const jumpFreeSlots = req.body.jumpFreeSlots;
+  const currentDate = new Date();
+
+  if (jumpDateTime < currentDate) {
+    res.status(400).json({ error: 'Podaj prawidłową datę.' });
+    return;
+  }
+
+  if (jumpFreeSlots > 10) {
+    res.status(400).json({ error: 'Liczba wolnych miejsc nie może być większa od 10.' });
+    return;
+  } else if (jumpFreeSlots < 1) {
+    res.status(400).json({ error: 'Liczba wolnych miejsc nie może być mniejsza od 1.' });
+    return;
+  }
 
   const values = [
     req.body.jumpType,
@@ -338,7 +350,7 @@ router.post("/addNewPlannedDate", async (req, res) => {
     req.body.jumpFreeSlots,
     req.body.jumpStartPlace,
   ];
-  
+
   const sql = 'INSERT INTO planowane_terminy (`nazwa`, `data_czas`, `liczba_miejsc_w_samolocie`, `miejsce_startu`) VALUES (?, ?, ?, ?)';
 
   db.query(sql, values, (err, results) => {
