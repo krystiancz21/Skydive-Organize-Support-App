@@ -1,6 +1,7 @@
 require('dotenv').config()
 const router = require("express").Router();
 const db = require("../db");
+const { addPaymentMethod } = require("../utils/validation");
 
 router.get('/showPaymentMethod', (req, res) => {
     const sql = 'SELECT * FROM sposob_platnosci';
@@ -37,5 +38,41 @@ router.post("/addPayment", (req, res) => {
         }
     });
 });
+
+router.post("/addNewPaymentMethod", (req, res) => {
+    const paymentName = req.body.paymentName;
+    const { error } = addPaymentMethod.validate(req.body);
+
+    if (error) {
+        return res.json({ error: error.details[0].message });
+    }
+
+    const sql = "INSERT INTO sposob_platnosci (nazwa) VALUES (?)";
+
+    db.query(sql, [paymentName], (err, result) => {
+        if (err) {
+            console.error('Błąd podczas dodawania nowej metody płatności (/addNewPaymentMethod): ' + err.message);
+            res.status(500).send({ error: 'Wystąpił błąd podczas dodawania nowej metody płatności(/addNewPaymentMethod)' });
+        } else {
+            res.status(200).json(result);
+        }
+    });
+});
+
+router.post('/deletePaymentMethod', (req, res) => {
+    const paymentId = req.body.paymentId;
+
+    const sql = "DELETE FROM sposob_platnosci WHERE sposob_platnosci_id = ?";
+
+    db.query(sql, [paymentId], (err, result) => {
+        if (err) {
+            console.error('Błąd podczas usuwania metody płatności (/deletePaymentMethod): ' + err.message);
+            res.status(500).send({ error: 'Wystąpił błąd podczas usuwania metody płatności(/deletePaymentMethod)' });
+        } else {
+            res.status(200).json(result);
+        }
+    });
+});
+
 
 module.exports = router;

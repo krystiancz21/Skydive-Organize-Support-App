@@ -28,6 +28,8 @@ import EmployeeEditAccount from './components/EmployeeEditAccount';
 import EmployeeManageJumps from './components/EmployeeManageJumps';
 import EmployeePlanJumps from './components/EmployeePlanJumps';
 import EmployeeCancelJumps from './components/EmployeeCanceJumps';
+import EmployeePaymentMethod from './components/EmployeePaymentMethod';
+import EmployeeAddNewOffer from './components/EmployeeAddNewOffer';
 
 function App() {
   return (
@@ -73,6 +75,8 @@ function App() {
       <Route path="/employee-manage-jumps" element={<EmployeeManageJumps />} />
       <Route path="/employee-plan-jumps" element={<EmployeePlanJumps />} />
       <Route path="/employee-cancel-jumps" element={<EmployeeCancelJumps />} />
+      <Route path="/employee-payment-method" element={<EmployeePaymentMethod />} />
+      <Route path="/employee-add-new-offer" element={<EmployeeAddNewOffer />} />
     </Routes>
   )
 }

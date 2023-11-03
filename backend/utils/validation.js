@@ -89,11 +89,20 @@ const editUserWeight = Joi.object({
   userWeight: Joi.number().greater(29).less(111).required().label("Masa")
 }).messages(customMessages);
 
+const addPaymentMethod = Joi.object({
+  paymentName: Joi.string()
+  .min(3)
+  .required()
+  .pattern(new RegExp("^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ ]+$"))
+  .label("Metoda płatności"),
+}).messages(customMessages);
+
 module.exports = {
   userSchema,
   editOfferSchema,
   editUserSchema,
   editClientSchema,
   editUserWeight,
+  addPaymentMethod,
   passwordComplexityInstance,
 };

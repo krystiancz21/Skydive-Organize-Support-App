@@ -336,32 +336,43 @@ router.post("/addNewPlannedDate", async (req, res) => {
     return;
   }
 
-  if (jumpFreeSlots > 10) {
-    res.status(400).json({ error: 'Liczba wolnych miejsc nie może być większa od 10.' });
-    return;
-  } else if (jumpFreeSlots < 1) {
-    res.status(400).json({ error: 'Liczba wolnych miejsc nie może być mniejsza od 1.' });
-    return;
-  }
+  const sqlAvaiableSlots = `SELECT liczba_miejsc_w_samolocie FROM rodzaj_skoku WHERE nazwa = ?`;
 
-  const values = [
-    req.body.jumpType,
-    req.body.jumpDateTime,
-    req.body.jumpFreeSlots,
-    req.body.jumpStartPlace,
-  ];
-
-  const sql = 'INSERT INTO planowane_terminy (`nazwa`, `data_czas`, `liczba_miejsc_w_samolocie`, `miejsce_startu`) VALUES (?, ?, ?, ?)';
-
-  db.query(sql, values, (err, results) => {
+  db.query(sqlAvaiableSlots, [req.body.jumpType], (err, results) => {
     if (err) {
       console.error('Błąd zapytania do bazy danych (/addNewPlannedDate): ' + err.message);
       res.status(500).json({ error: 'Błąd zapytania do bazy danych (/addNewPlannedDate).' });
+      return;
     } else {
-      res.status(200).json(results);
+      const minFreeSlots = results[0].liczba_miejsc_w_samolocie;
+
+      if (jumpFreeSlots > 10) {
+        res.status(400).json({ error: 'Liczba wolnych miejsc nie może być większa od 10.' });
+        return;
+      } else if (jumpFreeSlots < minFreeSlots) {
+        res.status(400).json({ error: 'Liczba wolnych miejsc nie może być mniejsza od ' + minFreeSlots + '.' });
+        return;
+      }
+
+      const values = [
+        req.body.jumpType,
+        req.body.jumpDateTime,
+        req.body.jumpFreeSlots,
+        req.body.jumpStartPlace,
+      ];
+
+      const sql = 'INSERT INTO planowane_terminy (`nazwa`, `data_czas`, `liczba_miejsc_w_samolocie`, `miejsce_startu`) VALUES (?, ?, ?, ?)';
+
+      db.query(sql, values, (err, results) => {
+        if (err) {
+          console.error('Błąd zapytania do bazy danych (/addNewPlannedDate): ' + err.message);
+          res.status(500).json({ error: 'Błąd zapytania do bazy danych (/addNewPlannedDate).' });
+        } else {
+          res.status(200).json(results);
+        }
+      });
     }
   });
-
 });
 
 module.exports = router;

@@ -1,12 +1,13 @@
-import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, CardGroup, Image } from 'react-bootstrap';
+import { Container, Nav, Navbar, Button, Row, Col } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
-import { BsFillPersonFill, BsArrowRightShort, BsFillBellFill, BsFillCalendarPlusFill } from 'react-icons/bs';
+import { BsArrowRightShort, BsBagPlusFill, BsFillCalendarPlusFill } from 'react-icons/bs';
 import { ImCancelCircle } from 'react-icons/im';
+import { MdAddCard } from "react-icons/md";
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import styles from "./style.css"
+import styles from "./style.css";
 
 
 const EmployeeManageJumps = () => {
@@ -79,6 +80,24 @@ const EmployeeManageJumps = () => {
                                         <Link to='/employee-cancel-jumps'>
                                             <Button variant="secondary" className="mt-3" id="btn-jumps">
                                                 <ImCancelCircle /> Odwołaj skoki <BsArrowRightShort />
+                                            </Button>
+                                        </Link>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col className="text-center">
+                                        <Link to='/employee-payment-method'>
+                                            <Button variant="secondary" className="mt-3" id="btn-jumps">
+                                                <MdAddCard /> Metody płatności <BsArrowRightShort />
+                                            </Button>
+                                        </Link>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col className="text-center">
+                                        <Link to='/employee-add-new-offer'>
+                                            <Button variant="secondary" className="mt-3" id="btn-jumps">
+                                                <BsBagPlusFill /> Oferta <BsArrowRightShort />
                                             </Button>
                                         </Link>
                                     </Col>

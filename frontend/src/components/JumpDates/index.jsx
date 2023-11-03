@@ -80,9 +80,7 @@ const JumpDates = () => {
             .catch(err => console.log(err));
     }, [date]);
 
-
-
-
+    
     return (
         <>
             {isAuth ? (
