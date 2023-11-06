@@ -83,6 +83,18 @@ const editOfferSchema = Joi.object({
   jumpPrice: Joi.number().required().label("Cena")
 }).messages(customMessages);
 
+const addNewOfferSchema = Joi.object({
+  jumpName: Joi.string()
+    .min(3)
+    .required()
+    .pattern(new RegExp("^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ ]+$"))
+    .label("Nazwa"),
+  jumpPrice: Joi.number().required().label("Cena"),
+  jumpSeats: Joi.number().required().label("Liczba miejsc"),
+  jumpLicense: Joi.number().required().label("Wymagana licencja"), // moze Joi.boolean() ?
+  jumpWeight: Joi.number().required().label("Masa ciala")
+}).messages(customMessages);
+
 const passwordComplexityInstance = passwordComplexity(complexityOptions);
 
 const editUserWeight = Joi.object({
@@ -91,14 +103,15 @@ const editUserWeight = Joi.object({
 
 const addPaymentMethod = Joi.object({
   paymentName: Joi.string()
-  .min(3)
-  .required()
-  .pattern(new RegExp("^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ ]+$"))
-  .label("Metoda płatności"),
+    .min(3)
+    .required()
+    .pattern(new RegExp("^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ ]+$"))
+    .label("Metoda płatności"),
 }).messages(customMessages);
 
 module.exports = {
   userSchema,
+  addNewOfferSchema,
   editOfferSchema,
   editUserSchema,
   editClientSchema,
