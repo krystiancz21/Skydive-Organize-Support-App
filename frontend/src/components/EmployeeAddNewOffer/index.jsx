@@ -7,10 +7,20 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const EmployeeAddNewOffer = () => {
+    const [offerData, setOfferData] = useState({
+        jumpName: "",
+        jumpPrice: "",
+        jumpSeats: "",
+        jumpLicense: "",
+        jumpWeight: ""
+    })
+
+    const [error, setError] = useState('');
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
+    const [newOffer, setNewOffer] = useState('');
 
 
     //sprawdzamy autoryzacje
@@ -30,7 +40,7 @@ const EmployeeAddNewOffer = () => {
             .catch(err => console.log(err));
 
     }, []);
-
+    
     const handleLogout = () => {
         axios.get('http://localhost:3001/api/auth/logout')
             .then(res => {
@@ -38,6 +48,24 @@ const EmployeeAddNewOffer = () => {
             }).catch(err => console.log(err));
     }
 
+    const handleChange = ({ currentTarget: input }) => {
+        setOfferData({ ...offerData, [input.name]: input.value })
+        // console.log(`Nowa wartość pola ${input.name}: ${input.value}`);
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        axios.post('http://localhost:3001/api/offer/addNewOffer', { offerData: offerData })
+            .then(res => {
+                if (res.data.error) {
+                    setError(res.data.error);
+                } else {
+                    window.location.reload();
+                }
+            })
+            .catch(err => console.log(err));
+    }
 
     return (
         <>
@@ -72,7 +100,8 @@ const EmployeeAddNewOffer = () => {
                                                 <FormControl
                                                     type="text"
                                                     name="jumpName"
-                                                    // onChange={(e) => setJumpName(e.target.value)}
+                                                    value={offerData.jumpName}
+                                                    onChange={handleChange}
                                                 />
                                             </Col>
                                         </Form.Group>
@@ -84,53 +113,57 @@ const EmployeeAddNewOffer = () => {
                                                 <FormControl
                                                     type="text"
                                                     name="jumpPrice"
-                                                    // onChange={handleChange}
+                                                    value={offerData.jumpPrice}
+                                                    onChange={handleChange}
 
                                                 />
                                             </Col>
                                         </Form.Group>
-                                        <Form.Group as={Row} controlId="formEditOfferPrice" className="mb-3">
+                                        <Form.Group as={Row} controlId="formEditOfferSeats" className="mb-3">
                                             <Form.Label column sm={2}>
                                                 Liczba miejsc w samolocie
                                             </Form.Label>
                                             <Col sm={10}>
                                                 <FormControl
                                                     type="text"
-                                                    name="jumpPrice"
-                                                    // onChange={handleChange}
+                                                    name="jumpSeats"
+                                                    value={offerData.jumpSeats}
+                                                    onChange={handleChange}
 
                                                 />
                                             </Col>
                                         </Form.Group>
-                                        <Form.Group as={Row} controlId="formEditOfferPrice" className="mb-3">
+                                        <Form.Group as={Row} controlId="formEditOfferLicense" className="mb-3">
                                             <Form.Label column sm={2}>
                                                 Wymagana licencja
                                             </Form.Label>
                                             <Col sm={10}>
                                                 <FormControl
                                                     type="text"
-                                                    name="jumpPrice"
-                                                    // onChange={handleChange}
+                                                    name="jumpLicense"
+                                                    value={offerData.jumpLicense}
+                                                    onChange={handleChange}
 
                                                 />
                                             </Col>
                                         </Form.Group>
-                                        <Form.Group as={Row} controlId="formEditOfferPrice" className="mb-3">
+                                        <Form.Group as={Row} controlId="formEditOfferWeight" className="mb-3">
                                             <Form.Label column sm={2}>
                                                 Maksymalna masa
                                             </Form.Label>
                                             <Col sm={10}>
                                                 <FormControl
                                                     type="text"
-                                                    name="jumpPrice"
-                                                    // onChange={handleChange}
+                                                    name="jumpWeight"
+                                                    value={offerData.jumpWieght}
+                                                    onChange={handleChange}
 
                                                 />
                                             </Col>
                                         </Form.Group>
                                     </div>
                                     <div className='mt-4'>
-                                        <Button variant="success" className="mt-3" id="przycisk2">
+                                        <Button variant="success" className="mt-3" id="przycisk2" onClick={handleSubmit}>
                                             DODAJ
                                         </Button>
                                     </div>
