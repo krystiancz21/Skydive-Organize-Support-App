@@ -65,4 +65,38 @@ router.post("/updateOfferData", async (req, res) => {
   }
 });
 
+router.get("/addNewOffer", async (req, res) => {
+  //const offerName = req.body.offerName;
+  try {
+    const { error } = addNewOfferSchema.validate(req.body);
+
+    if (error) {
+      return res.json({ error: error.details[0].message });
+    }
+
+    const values = [
+      req.body.offerData.jumpName,
+      req.body.offerData.jumpPrice,
+      req.body.offerData.jumpSeats,
+      req.body.offerData.jumpLicense,
+      req.body.offerData.jumpWieght,
+      //req.body.offerId,
+    ];
+
+    const sql = "INSERT INTO rodzaj_skoku (`nazwa`, `cena`, `liczba_miejsc_w_samolocie`, `wymagana_licencja`, `max_masa`) VALUES (?, ?, ?, ?, ?)"
+
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error('Błąd podczas dodawania nowej oferty (/addNewOffer): ' + err.message);
+        res.status(500).send({ error: 'Wystąpił błąd podczas dodawania nowej oferty (/addNewOffer)' });
+      } else {
+        res.status(200).json(result);
+      }
+    });
+  } catch (error) {
+    console.error("Błąd podczas aktualizacji danych: " + error.message);
+    return res.status(500).json({ error: "Błąd podczas aktualizacji danych" });
+  }
+});
+
 module.exports = router;
