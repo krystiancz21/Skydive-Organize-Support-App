@@ -67,19 +67,20 @@ router.post("/updateOfferData", async (req, res) => {
 
 router.get("/addNewOffer", async (req, res) => {
   //const offerName = req.body.offerName;
+
   try {
-    const { error } = addNewOfferSchema.validate(req.body);
+    const { error } = addNewOfferSchema.validate(req.body.newOfferData);
 
     if (error) {
       return res.json({ error: error.details[0].message });
     }
 
     const values = [
-      req.body.offerData.jumpName,
-      req.body.offerData.jumpPrice,
-      req.body.offerData.jumpSeats,
-      req.body.offerData.jumpLicense,
-      req.body.offerData.jumpWieght,
+      req.body.newOfferData.jumpName,
+      req.body.newOfferData.jumpPrice,
+      req.body.newOfferData.jumpSeats,
+      req.body.newOfferData.jumpLicense,
+      req.body.newOfferData.jumpWieght,
       //req.body.offerId,
     ];
 
