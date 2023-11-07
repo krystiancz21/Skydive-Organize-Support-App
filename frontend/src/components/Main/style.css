@@ -2,11 +2,16 @@ svg{ /* obrazek domu i profilu */
     height: 30px;
     width: 30px;
 }
-.card{
+/* .card{
     margin-top: 200px;
     margin-right: 80px;
     justify-content: center;
+} */
+
+.card-group{
+  justify-content: center;
 }
+
 .card-img-top{
     border: 1px solid rgb(225, 221, 221);
 }
