@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const EmployeeAddNewOffer = () => {
-    const [offerData, setOfferData] = useState({
+    const [newOfferData, setNewOfferData] = useState({
         jumpName: "",
         jumpPrice: "",
         jumpSeats: "",
@@ -16,6 +16,7 @@ const EmployeeAddNewOffer = () => {
     })
 
     const [error, setError] = useState('');
+    const [updateSuccess, setUpdateSuccess] = useState(false);
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
@@ -26,7 +27,7 @@ const EmployeeAddNewOffer = () => {
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
     useEffect(() => {
-        axios.get('http://localhost:3001/api/auth/employee-plan-jumps')
+        axios.get('http://localhost:3001/api/auth/employee-add-new-offer')
             .then(res => {
                 if (res.data.Status === "Success") {
                     setIsAuth(true);
@@ -40,7 +41,8 @@ const EmployeeAddNewOffer = () => {
             .catch(err => console.log(err));
 
     }, []);
-    
+
+    // Wylogowanie
     const handleLogout = () => {
         axios.get('http://localhost:3001/api/auth/logout')
             .then(res => {
@@ -49,22 +51,46 @@ const EmployeeAddNewOffer = () => {
     }
 
     const handleChange = ({ currentTarget: input }) => {
-        setOfferData({ ...offerData, [input.name]: input.value })
-        // console.log(`Nowa wartość pola ${input.name}: ${input.value}`);
+        setNewOfferData({ ...newOfferData, [input.name]: input.value })
+        //console.log(`Nowa wartość pola ${input.name}: ${input.value}`);
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
+        //     e.preventDefault();
+
+        //     axios.post('http://localhost:3001/api/offer/addNewOffer', { newOfferData: newOfferData })
+        //     if (response.data.error) {
+        //         setError(response.data.error);
+        //         setUpdateSuccess(false);
+        //     } else if (response.data.Status === "Success") {
+        //         setError('');
+        //         setUpdateSuccess(true);
+        //     } else {
+        //         console.error("Błąd podczas aktualizacji oferty!");
+        //     }
+        // } catch (error) {
+        //     // console.error(error);
+        //     console.error('Błąd podczas aktualizacji oferty: ' + error.message);
+        // }
         e.preventDefault();
 
-        axios.post('http://localhost:3001/api/offer/addNewOffer', { offerData: offerData })
-            .then(res => {
-                if (res.data.error) {
-                    setError(res.data.error);
-                } else {
-                    window.location.reload();
-                }
-            })
-            .catch(err => console.log(err));
+        try {
+            const response = await axios.post('http://localhost:3001/api/offer/addNewOffer', {
+                newOfferData: newOfferData,
+            });
+            if (response.data.error) {
+                setError(response.data.error);
+                setUpdateSuccess(false);
+            } else if (response.data.Status === "Success") {
+                setError('');
+                setUpdateSuccess(true);
+            } else {
+                console.error("Błąd podczas dodawania oferty!");
+            }
+        } catch (error) {
+            // console.error(error);
+            console.error('Błąd podczas dodawania oferty: ' + error.message);
+        }
     }
 
     return (
@@ -100,7 +126,7 @@ const EmployeeAddNewOffer = () => {
                                                 <FormControl
                                                     type="text"
                                                     name="jumpName"
-                                                    value={offerData.jumpName}
+                                                    value={newOfferData.jumpName}
                                                     onChange={handleChange}
                                                 />
                                             </Col>
@@ -113,7 +139,7 @@ const EmployeeAddNewOffer = () => {
                                                 <FormControl
                                                     type="text"
                                                     name="jumpPrice"
-                                                    value={offerData.jumpPrice}
+                                                    value={newOfferData.jumpPrice}
                                                     onChange={handleChange}
 
                                                 />
@@ -127,7 +153,7 @@ const EmployeeAddNewOffer = () => {
                                                 <FormControl
                                                     type="text"
                                                     name="jumpSeats"
-                                                    value={offerData.jumpSeats}
+                                                    value={newOfferData.jumpSeats}
                                                     onChange={handleChange}
 
                                                 />
@@ -141,7 +167,7 @@ const EmployeeAddNewOffer = () => {
                                                 <FormControl
                                                     type="text"
                                                     name="jumpLicense"
-                                                    value={offerData.jumpLicense}
+                                                    value={newOfferData.jumpLicense}
                                                     onChange={handleChange}
 
                                                 />
@@ -155,13 +181,14 @@ const EmployeeAddNewOffer = () => {
                                                 <FormControl
                                                     type="text"
                                                     name="jumpWeight"
-                                                    value={offerData.jumpWieght}
+                                                    value={newOfferData.jumpWieght}
                                                     onChange={handleChange}
 
                                                 />
                                             </Col>
                                         </Form.Group>
                                     </div>
+                                    {error && <div className="alert alert-danger">{error}</div>}
                                     <div className='mt-4'>
                                         <Button variant="success" className="mt-3" id="przycisk2" onClick={handleSubmit}>
                                             DODAJ
