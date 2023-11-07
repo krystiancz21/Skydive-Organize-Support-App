@@ -220,6 +220,14 @@ router.get("/offer-edit", verifyUser, (req, res) => {
   }
 });
 
+router.get("/employee-add-new-offer", verifyUser, (req, res)=> {
+  if (req.userRole === "admin" || req.userRole === "pracownik") {
+    return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
+  } else {
+    return res.json({ Status: "Error" });
+  }
+});
+
 router.get("/employee-plan-jumps", verifyUser, (req, res) => {
   if (req.userRole === "admin" || req.userRole === "pracownik") {
     return res.json({ Status: "Success", mail: req.mail, userRole: req.userRole });
