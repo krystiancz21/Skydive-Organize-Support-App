@@ -18,9 +18,7 @@ import OwnerEmployeeAccounts from './components/OwnerEmployeeAccounts';
 import OwnerCreateAccount from './components/OwnerCreateAccount';
 import OwnerManageAccount from './components/OwnerManageAccount';
 import OwnerFinancialOverview from './components/OwnerFinancialOverview';
-import OwnerMain from './components/OwnerMain';
 
-import EmployeeMain from './components/EmployeeMain';
 import EmployeeOffer from './components/EmployeeOffer';
 import EmployeeUsersAccounts from './components/EmployeeUsersAccounts';
 import EmployeeCreateAccount from './components/EmployeeCreateAccount';
@@ -52,14 +50,12 @@ function App() {
       <Route path="/jump-dates" element={<JumpDates />} />
       <Route path="/reservation/:jumpId" element={<Reservation />} />
       <Route path="/jump-details/:jumpId" element={<JumpDetails />} />
-      <Route path="/employeemain" element={<EmployeeMain />} />
       <Route path="/login" element={<Login />} />
       <Route path="/main" element={<Main />} />
       <Route path="/messages" element={<Messages />} />
       <Route path="/myjumps" element={<MyJumps />} />
       <Route path="/offer" element={<Offer />} />
       <Route path="/offer-edit/:offerId" element={<OfferEdit />} />
-      <Route path="/ownermain" element={<OwnerMain />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/userprofile" element={<UserProfile />} />
 
