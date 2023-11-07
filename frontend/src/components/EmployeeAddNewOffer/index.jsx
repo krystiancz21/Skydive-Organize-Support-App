@@ -67,6 +67,8 @@ const EmployeeAddNewOffer = () => {
             } else if (response.data.Status === "Success") {
                 setError('');
                 setUpdateSuccess(true);
+            } else {
+                console.error("Błąd podczas dodawania oferty!");
             }
         } catch (error) {
             console.error('Błąd podczas dodawania oferty: ' + error.message);
