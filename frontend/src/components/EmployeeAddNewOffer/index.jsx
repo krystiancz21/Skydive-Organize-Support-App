@@ -21,8 +21,6 @@ const EmployeeAddNewOffer = () => {
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
-    const [newOffer, setNewOffer] = useState('');
-
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -58,6 +56,7 @@ const EmployeeAddNewOffer = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        console.log(newOfferData);
         try {
             const response = await axios.post('http://localhost:3001/api/offer/addNewOffer', {
                 newOfferData: newOfferData,
@@ -68,11 +67,8 @@ const EmployeeAddNewOffer = () => {
             } else if (response.data.Status === "Success") {
                 setError('');
                 setUpdateSuccess(true);
-            } else {
-                console.error("Błąd podczas dodawania oferty!");
             }
         } catch (error) {
-            // console.error(error);
             console.error('Błąd podczas dodawania oferty: ' + error.message);
         }
     }
@@ -165,13 +161,13 @@ const EmployeeAddNewOffer = () => {
                                                 <FormControl
                                                     type="text"
                                                     name="jumpWeight"
-                                                    value={newOfferData.jumpWieght}
+                                                    value={newOfferData.jumpWeight}
                                                     onChange={handleChange}
-
                                                 />
                                             </Col>
                                         </Form.Group>
                                     </div>
+                                    {updateSuccess && <div className="alert alert-success">Oferta została dodana</div>}
                                     {error && <div className="alert alert-danger">{error}</div>}
                                     <div className='mt-4'>
                                         <Button variant="success" className="mt-3" id="przycisk2" onClick={handleSubmit}>
@@ -200,7 +196,88 @@ const EmployeeAddNewOffer = () => {
                                     </Navbar.Collapse>
                                 </Container>
                             </Navbar>
-                            potem przekopjować container kontener od pracownika!
+                            <Container>
+                                <h1 className="text-center">DODAJ RODZAJ SKOKU</h1>
+                                <Form className="text-center">
+                                    <div className='max-width-form'>
+                                        <Form.Group as={Row} controlId="formEditOfferName" className="mb-3">
+                                            <Form.Label column sm={2}>
+                                                Nazwa
+                                            </Form.Label>
+                                            <Col sm={10}>
+                                                <FormControl
+                                                    type="text"
+                                                    name="jumpName"
+                                                    value={newOfferData.jumpName}
+                                                    onChange={handleChange}
+                                                />
+                                            </Col>
+                                        </Form.Group>
+                                        <Form.Group as={Row} controlId="formEditOfferPrice" className="mb-3">
+                                            <Form.Label column sm={2}>
+                                                Cena
+                                            </Form.Label>
+                                            <Col sm={10}>
+                                                <FormControl
+                                                    type="text"
+                                                    name="jumpPrice"
+                                                    value={newOfferData.jumpPrice}
+                                                    onChange={handleChange}
+
+                                                />
+                                            </Col>
+                                        </Form.Group>
+                                        <Form.Group as={Row} controlId="formEditOfferSeats" className="mb-3">
+                                            <Form.Label column sm={2}>
+                                                Liczba miejsc w samolocie
+                                            </Form.Label>
+                                            <Col sm={10}>
+                                                <FormControl
+                                                    type="text"
+                                                    name="jumpSeats"
+                                                    value={newOfferData.jumpSeats}
+                                                    onChange={handleChange}
+
+                                                />
+                                            </Col>
+                                        </Form.Group>
+                                        <Form.Group as={Row} controlId="formEditOfferLicense" className="mb-3">
+                                            <Form.Label column sm={2}>
+                                                Wymagana licencja
+                                            </Form.Label>
+                                            <Col sm={10}>
+                                                <FormControl
+                                                    type="text"
+                                                    name="jumpLicense"
+                                                    value={newOfferData.jumpLicense}
+                                                    onChange={handleChange}
+
+                                                />
+                                            </Col>
+                                        </Form.Group>
+                                        <Form.Group as={Row} controlId="formEditOfferWeight" className="mb-3">
+                                            <Form.Label column sm={2}>
+                                                Maksymalna masa
+                                            </Form.Label>
+                                            <Col sm={10}>
+                                                <FormControl
+                                                    type="text"
+                                                    name="jumpWeight"
+                                                    value={newOfferData.jumpWeight}
+                                                    onChange={handleChange}
+                                                />
+                                            </Col>
+                                        </Form.Group>
+                                    </div>
+                                    {updateSuccess && <div className="alert alert-success">Oferta została dodana</div>}
+                                    {error && <div className="alert alert-danger">{error}</div>}
+                                    <div className='mt-4'>
+                                        <Button variant="success" className="mt-3" id="przycisk2" onClick={handleSubmit}>
+                                            DODAJ
+                                        </Button>
+                                    </div>
+                                </Form>
+                            </Container>
                         </>
                     )}
                 </>
