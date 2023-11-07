@@ -80,7 +80,7 @@ router.post("/addNewOffer", async (req, res) => {
       req.body.newOfferData.jumpPrice,
       req.body.newOfferData.jumpSeats,
       req.body.newOfferData.jumpLicense,
-      req.body.newOfferData.jumpWieght,
+      req.body.newOfferData.jumpWeight,
       //req.body.offerId,
     ];
 
