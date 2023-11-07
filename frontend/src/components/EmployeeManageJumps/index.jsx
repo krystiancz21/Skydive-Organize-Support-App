@@ -40,78 +40,106 @@ const EmployeeManageJumps = () => {
             }).catch(err => console.log(err));
     }
 
+    // Nawigacja dla poszczególnych ról
+    const getNavbar = (role, mail, handleDelete) => {
+        switch (role) {
+            case 'pracownik':
+                return (
+                    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                        <Container>
+                            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                            <Navbar.Collapse id="responsive-navbar-nav">
+                                <Nav className="me-auto">
+                                    <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                    <Nav.Link href="/employeeoffer">OFERTA</Nav.Link>
+                                    <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                    <Nav.Link href="/employeeuseraccounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                </Nav>
+                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
+                                <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
+                );
+            case 'admin':
+                return (
+                    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                        <Container>
+                            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                            <Navbar.Collapse id="responsive-navbar-nav">
+                                <Nav className="me-auto">
+                                    <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                    <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                    <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                    <Nav.Link href="/employeeusersaccounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                    <Nav.Link href="/employeemanagejumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                    <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
+                                </Nav>
+                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
+                                <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
+                );
+            default:
+                return null;
+        }
+    }
+
 
     return (
         <>
             {isAuth ? (
                 <>
-                    {/* Wyświetl odpowiednią nawigację w zależności od roli */}
-                    {userRole === 'pracownik' && (
-                        // User zalogowany
-                        <>
-                            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-                                <Container>
-                                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                                    <Navbar.Collapse id="responsive-navbar-nav">
-                                        <Nav className="me-auto">
-                                            <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-                                            <Nav.Link href="/employeeoffer">OFERTA</Nav.Link>
-                                            <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
-                                            <Nav.Link href="/employeeuseraccounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
-                                        </Nav>
-                                        <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
-                                        <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
-                                    </Navbar.Collapse>
-                                </Container>
-                            </Navbar>
-                            <Container className={styles.content}>
-                                <h1 className="text-center">ZARZĄDZANIE SKOKAMI</h1>
-                                <Row >
-                                    <Col className="text-center">
-                                        <Link to='/employee-plan-jumps'>
-                                            <Button variant="secondary" className="mt-3" id="btn-edit">
-                                                <BsFillCalendarPlusFill /> Zaplanuj skoki <BsArrowRightShort />
-                                            </Button>
-                                        </Link>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col className="text-center">
-                                        <Link to='/employee-cancel-jumps'>
-                                            <Button variant="secondary" className="mt-3" id="btn-jumps">
-                                                <ImCancelCircle /> Odwołaj skoki <BsArrowRightShort />
-                                            </Button>
-                                        </Link>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col className="text-center">
-                                        <Link to='/employee-payment-method'>
-                                            <Button variant="secondary" className="mt-3" id="btn-jumps">
-                                                <MdAddCard /> Metody płatności <BsArrowRightShort />
-                                            </Button>
-                                        </Link>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col className="text-center">
-                                        <Link to='/employee-add-new-offer'>
-                                            <Button variant="secondary" className="mt-3" id="btn-jumps">
-                                                <BsBagPlusFill /> Oferta <BsArrowRightShort />
-                                            </Button>
-                                        </Link>
-                                    </Col>
-                                </Row>
-                            </Container></>
-                    )}
-                </>
+                    {getNavbar(userRole, mail, handleLogout)}
+                    <Container className={styles.content}>
+                        <h1 className="text-center">ZARZĄDZANIE SKOKAMI</h1>
+                        <Row >
+                            <Col className="text-center">
+                                <Link to='/employee-plan-jumps'>
+                                    <Button variant="secondary" className="mt-3" id="btn-edit">
+                                        <BsFillCalendarPlusFill /> Zaplanuj skoki <BsArrowRightShort />
+                                    </Button>
+                                </Link>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col className="text-center">
+                                <Link to='/employee-cancel-jumps'>
+                                    <Button variant="secondary" className="mt-3" id="btn-jumps">
+                                        <ImCancelCircle /> Odwołaj skoki <BsArrowRightShort />
+                                    </Button>
+                                </Link>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col className="text-center">
+                                <Link to='/employee-payment-method'>
+                                    <Button variant="secondary" className="mt-3" id="btn-jumps">
+                                        <MdAddCard /> Metody płatności <BsArrowRightShort />
+                                    </Button>
+                                </Link>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col className="text-center">
+                                <Link to='/employee-add-new-offer'>
+                                    <Button variant="secondary" className="mt-3" id="btn-jumps">
+                                        <BsBagPlusFill /> Oferta <BsArrowRightShort />
+                                    </Button>
+                                </Link>
+                            </Col>
+                        </Row>
+                    </Container></>
+
+
             ) : (
                 // User niezalogowany
                 <></>
-            )}
+            )
+            }
         </>
     );
 }
 
 export default EmployeeManageJumps
-
