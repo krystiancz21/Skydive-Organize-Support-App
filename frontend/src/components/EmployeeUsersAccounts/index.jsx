@@ -130,7 +130,7 @@ const EmployeeUsersAccounts = () => {
                                         <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                         <Nav.Link href="/offer">OFERTA</Nav.Link>
                                         <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
-                                        <Nav.Link href="/employeemanagejumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                        <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
                                         <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
                                     </Nav>
                                     <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
