@@ -65,7 +65,7 @@ router.post("/updateOfferData", async (req, res) => {
   }
 });
 
-router.get("/addNewOffer", async (req, res) => {
+router.post("/addNewOffer", async (req, res) => {
   //const offerName = req.body.offerName;
 
   try {
