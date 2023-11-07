@@ -14,12 +14,8 @@ import JumpCalendar from './components/JumpCalendar';
 import JumpDates from './components/JumpDates';
 import JumpDetails from './components/JumpDetails';
 
-import OwnerEmployeeAccounts from './components/OwnerEmployeeAccounts';
-import OwnerCreateAccount from './components/OwnerCreateAccount';
-import OwnerManageAccount from './components/OwnerManageAccount';
 import OwnerFinancialOverview from './components/OwnerFinancialOverview';
 
-import EmployeeOffer from './components/EmployeeOffer';
 import EmployeeUsersAccounts from './components/EmployeeUsersAccounts';
 import EmployeeCreateAccount from './components/EmployeeCreateAccount';
 import EmployeeEditAccount from './components/EmployeeEditAccount';
@@ -59,12 +55,8 @@ function App() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/userprofile" element={<UserProfile />} />
 
-      <Route path="/owner-employee-accounts" element={<OwnerEmployeeAccounts />} />
-      <Route path="/owner-create-account" element={<OwnerCreateAccount />} />
-      <Route path="/owner-manage-account" element={<OwnerManageAccount />} />
       <Route path="/owner-financial-overview" element={<OwnerFinancialOverview />} />
       
-      <Route path="/employee-offer" element={<EmployeeOffer />} />
       <Route path="/employee-users-accounts" element={<EmployeeUsersAccounts />} />
       <Route path="/employee-create-account" element={<EmployeeCreateAccount />} />
       <Route path="/employee-edit-account/:clientId" element={<EmployeeEditAccount />} />
