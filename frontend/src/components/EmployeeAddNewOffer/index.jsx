@@ -56,22 +56,6 @@ const EmployeeAddNewOffer = () => {
     }
 
     const handleSubmit = async (e) => {
-        //     e.preventDefault();
-
-        //     axios.post('http://localhost:3001/api/offer/addNewOffer', { newOfferData: newOfferData })
-        //     if (response.data.error) {
-        //         setError(response.data.error);
-        //         setUpdateSuccess(false);
-        //     } else if (response.data.Status === "Success") {
-        //         setError('');
-        //         setUpdateSuccess(true);
-        //     } else {
-        //         console.error("Błąd podczas aktualizacji oferty!");
-        //     }
-        // } catch (error) {
-        //     // console.error(error);
-        //     console.error('Błąd podczas aktualizacji oferty: ' + error.message);
-        // }
         e.preventDefault();
 
         try {
