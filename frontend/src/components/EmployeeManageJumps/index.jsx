@@ -51,9 +51,9 @@ const EmployeeManageJumps = () => {
                             <Navbar.Collapse id="responsive-navbar-nav">
                                 <Nav className="me-auto">
                                     <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-                                    <Nav.Link href="/employeeoffer">OFERTA</Nav.Link>
+                                    <Nav.Link href="/offer">OFERTA</Nav.Link>
                                     <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
-                                    <Nav.Link href="/employeeuseraccounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                    <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
                                 </Nav>
                                 <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
                                 <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
@@ -85,6 +85,15 @@ const EmployeeManageJumps = () => {
         }
     }
 
+    const SmallFooter = () => {
+        const year = new Date().getFullYear();
+    
+        return (
+            <footer className="text-center footer fixed-bottom">
+                <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
+            </footer>
+        );
+    };
 
     return (
         <>
@@ -129,7 +138,9 @@ const EmployeeManageJumps = () => {
                                 </Link>
                             </Col>
                         </Row>
-                    </Container></>
+                    </Container>
+                    <SmallFooter/>
+                    </>
 
 
             ) : (

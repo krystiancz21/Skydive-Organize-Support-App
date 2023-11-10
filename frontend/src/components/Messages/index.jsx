@@ -3,6 +3,42 @@ import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
 import { BsArrowLeft, BsPersonCircle } from 'react-icons/bs';
 import styles from "./style.css"
+import logo from '../Images/logo.jpg';
+
+const Stopka = () => (
+    <footer className="big-footer mt-5">
+        <Container fluid>
+            <Row>
+                <Col md={4} className="d-flex flex-column align-items-center text-center">
+                    <div className='logo'>
+                        {/*https://www.vecteezy.com/vector-art/17127793-parachute-logo-icon-design-and-symbol-skydiving-vector */}
+                        <img src={logo} alt="Logo" />
+                    </div>
+                    <p>&copy; 2023 System wspomagający organizację skoków spadochronowych</p>
+                </Col>
+                <Col md={4} className="d-flex justify-content-center">
+                    <div>
+                        <h4>Szybkie linki</h4>
+                        <ul className="list-unstyled">
+                            <li><a href="/main">Strona główna</a></li>
+                            <li><a href="/offer">Oferta</a></li>
+                            <li><a href="/jump-calendar">Terminy skoków</a></li>
+                            <li><a href="/messages">Wiadomości</a></li>
+                        </ul>
+                    </div>
+                </Col>
+                <Col md={4} className="d-flex justify-content-center">
+                    <div>
+                        <h4>Autorzy</h4>
+                        <p>Krystian Czapla</p>
+                        <p>Kacper Czajka</p>
+                        <p>Mariusz Choroś</p>
+                    </div>
+                </Col>
+            </Row>
+        </Container>
+    </footer>
+);
 
 const Messages = () => {
     return (
@@ -14,7 +50,7 @@ const Messages = () => {
                         <Nav className="me-auto">
                             <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                             <Nav.Link href="/offer">OFERTA</Nav.Link>
-                            <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>
+                            <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
                         </Nav>
                         <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  PROFIL UŻYTKOWNIKA</Navbar.Brand></Nav.Link>
                         <Button variant="danger" href="/logout">WYLOGUJ</Button>
@@ -59,6 +95,7 @@ const Messages = () => {
                     </Col>
                 </Row>
             </Container>
+            <Stopka />
         </>
     )
 }

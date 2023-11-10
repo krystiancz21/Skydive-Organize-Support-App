@@ -142,6 +142,16 @@ const EditUserData = () => {
         }
     }
 
+    const SmallFooter = () => {
+        const year = new Date().getFullYear();
+    
+        return (
+            <footer className="text-center footer fixed-bottom">
+                <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
+            </footer>
+        );
+    };
+
     // Nawigacja dla poszczególnych ról
     const getNavbar = (role, mail, handleDelete) => {
         switch (role) {
@@ -153,7 +163,7 @@ const EditUserData = () => {
                             <Nav className="me-auto">
                                 <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                 <Nav.Link href="/offer">OFERTA</Nav.Link>
-                                <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>
+                                <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
                                 <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                             </Nav>
                             <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
@@ -171,7 +181,7 @@ const EditUserData = () => {
                                 <Nav className="me-auto">
                                     <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                     <Nav.Link href="/offer">OFERTA</Nav.Link>
-                                    <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>
+                                    <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
                                     <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                     <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
                                     <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
@@ -191,7 +201,7 @@ const EditUserData = () => {
                                 <Nav className="me-auto">
                                     <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                     <Nav.Link href="/offer">OFERTA</Nav.Link>
-                                    <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>
+                                    <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
                                     <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                     <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
                                     <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>

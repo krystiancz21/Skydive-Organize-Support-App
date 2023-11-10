@@ -107,9 +107,9 @@ const EmployeePlanJumps = () => {
                                     <Navbar.Collapse id="responsive-navbar-nav">
                                         <Nav className="me-auto">
                                             <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-                                            <Nav.Link href="/employeeoffer">OFERTA</Nav.Link>
+                                            <Nav.Link href="/offer">OFERTA</Nav.Link>
                                             <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
-                                            <Nav.Link href="/employeeusersaccounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                            <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
                                         </Nav>
                                         <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
                                         <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>

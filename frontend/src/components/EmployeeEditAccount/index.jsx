@@ -140,13 +140,11 @@ const EmployeeEditAccount = () => {
     // Edycja danych 
     const handleSubmit = async (e) => {
         e.preventDefault(); // Zapobiega przeładowaniu strony
-
         try {
             const response = await axios.post('http://localhost:3001/api/user/updateClientDataById', {
                 formData: data,
                 clientId: clientId
             });
-
             if (response.data.Status === 'Success') {
                 setEditUserSuccess(true);
                 setError('');
@@ -273,9 +271,9 @@ const EmployeeEditAccount = () => {
                                     <Navbar.Collapse id="responsive-navbar-nav">
                                         <Nav className="me-auto">
                                             <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-                                            <Nav.Link href="/employeeoffer">OFERTA</Nav.Link>
+                                            <Nav.Link href="/offer">OFERTA</Nav.Link>
                                             <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
-                                            <Nav.Link href="/employeemanagejumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                            <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
                                         </Nav>
                                         <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
                                         <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>

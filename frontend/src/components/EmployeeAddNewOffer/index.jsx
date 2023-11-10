@@ -64,11 +64,9 @@ const EmployeeAddNewOffer = () => {
             if (response.data.error) {
                 setError(response.data.error);
                 setUpdateSuccess(false);
-            } else if (response.data.Status === "Success") {
+            } else {
                 setError('');
                 setUpdateSuccess(true);
-            } else {
-                console.error("Błąd podczas dodawania oferty!");
             }
         } catch (error) {
             console.error('Błąd podczas dodawania oferty: ' + error.message);
@@ -87,7 +85,7 @@ const EmployeeAddNewOffer = () => {
                                     <Navbar.Collapse id="responsive-navbar-nav">
                                         <Nav className="me-auto">
                                             <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-                                            <Nav.Link href="/employeeoffer">OFERTA</Nav.Link>
+                                            <Nav.Link href="/offer">OFERTA</Nav.Link>
                                             <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                             <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
                                         </Nav>
@@ -169,7 +167,7 @@ const EmployeeAddNewOffer = () => {
                                             </Col>
                                         </Form.Group>
                                     </div>
-                                    {updateSuccess && <div className="alert alert-success">Oferta została dodana</div>}
+                                    {updateSuccess && <div className="alert alert-success">Nowa oferta została dodana!</div>}
                                     {error && <div className="alert alert-danger">{error}</div>}
                                     <div className='mt-4'>
                                         <Button variant="success" className="mt-3" id="przycisk2" onClick={handleSubmit}>

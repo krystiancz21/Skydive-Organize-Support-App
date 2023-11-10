@@ -81,7 +81,7 @@ const EmployeePaymentMethod = () => {
                                     <Navbar.Collapse id="responsive-navbar-nav">
                                         <Nav className="me-auto">
                                             <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-                                            <Nav.Link href="/employeeoffer">OFERTA</Nav.Link>
+                                            <Nav.Link href="/offer">OFERTA</Nav.Link>
                                             <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                             <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
                                         </Nav>
@@ -127,7 +127,7 @@ const EmployeePaymentMethod = () => {
                                                 />
                                             </Form.Group>
 
-                                            <div className="d-flex justify-content-center">
+                                            <div className="d-flex justify-content-center mb-5">
                                                 <Button variant="success" type="submit" onClick={handleSubmit}>
                                                     DODAJ
                                                 </Button>

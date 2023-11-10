@@ -47,6 +47,16 @@ const Login = () => {
         }
     };
 
+    const SmallFooter = () => {
+        const year = new Date().getFullYear();
+    
+        return (
+            <footer className="text-center footer fixed-bottom">
+                <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
+            </footer>
+        );
+    };
+
     return (
         <>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -56,7 +66,7 @@ const Login = () => {
                         <Nav className="me-auto">
                             <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                             <Nav.Link href="/offer">OFERTA</Nav.Link>
-                            <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>
+                            <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
@@ -110,6 +120,7 @@ const Login = () => {
                     </div>
                 </Form>
             </Container>
+            <SmallFooter/>
         </>
     )
 }

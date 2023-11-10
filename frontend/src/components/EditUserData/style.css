@@ -15,3 +15,10 @@ h1{
     float: left;
     margin: 20px;
 }
+
+.stopa {
+    background-color: #343a40; 
+    padding: 10px;
+    text-align: center;
+    color: #ffffff; 
+}

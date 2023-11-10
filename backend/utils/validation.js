@@ -92,7 +92,7 @@ const addNewOfferSchema = Joi.object({
   jumpPrice: Joi.number().required().label("Cena"),
   jumpSeats: Joi.number().required().label("Liczba miejsc"),
   jumpLicense: Joi.number().required().label("Wymagana licencja"), // moze Joi.boolean() ?
-  jumpWeight: Joi.number().required().label("Masa ciala")
+  jumpWeight: Joi.number().required().label("Masa ciała")
 }).messages(customMessages);
 
 const passwordComplexityInstance = passwordComplexity(complexityOptions);

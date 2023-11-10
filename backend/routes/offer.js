@@ -1,7 +1,7 @@
 require('dotenv').config()
 const router = require("express").Router();
 const db = require("../db");
-const { editOfferSchema } = require("../utils/validation");
+const { editOfferSchema, addNewOfferSchema } = require("../utils/validation");
 
 router.get('/showAllOffers', async (req, res) => {
   const sql = `SELECT * FROM rodzaj_skoku`;

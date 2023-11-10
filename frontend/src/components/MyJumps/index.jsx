@@ -62,6 +62,15 @@ const MyJumps = () => {
             .catch(err => console.log(err));
     }, [mail]);
 
+    const SmallFooter = () => {
+        const year = new Date().getFullYear();
+
+        return (
+            <footer className="text-center footer fixed-bottom">
+                <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
+            </footer>
+        );
+    };
 
     return (
         <>
@@ -75,7 +84,7 @@ const MyJumps = () => {
                                 <Nav className="me-auto">
                                     <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                     <Nav.Link href="/offer">OFERTA</Nav.Link>
-                                    <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>
+                                    <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
                                     <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                 </Nav>
                                 <Nav.Link href="#"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
@@ -118,46 +127,46 @@ const MyJumps = () => {
                             </>
                         )} */}
                         {isChecked ? (
-                        currentJumps.length > 0 ? (
-                            <>
-                                {currentJumps.map((item, index) => (
-                                    // Mapowanie skoków aktualnych
-                                    <Row key={index} className="accounts-container mx-auto text-center mb-3">
-                                        <Col md={4} className='mt-2'>{item.nazwa}</Col>
-                                        <Col md={4} className='mt-2'>{moment(item.data_czas).format('DD.MM.YYYY HH:mm')}</Col>
-                                        <Col md={4}>
-                                            <Link to={`/jump-details/${item.rezerwacje_id}`}>
-                                                <Button variant="success">Szczegóły</Button>
-                                            </Link>
-                                        </Col>
-                                    </Row>
-                                ))}
-                            </>
+                            currentJumps.length > 0 ? (
+                                <>
+                                    {currentJumps.map((item, index) => (
+                                        // Mapowanie skoków aktualnych
+                                        <Row key={index} className="accounts-container mx-auto text-center mb-3">
+                                            <Col md={4} className='mt-2'>{item.nazwa}</Col>
+                                            <Col md={4} className='mt-2'>{moment(item.data_czas).format('DD.MM.YYYY HH:mm')}</Col>
+                                            <Col md={4}>
+                                                <Link to={`/jump-details/${item.rezerwacje_id}`}>
+                                                    <Button variant="success">Szczegóły</Button>
+                                                </Link>
+                                            </Col>
+                                        </Row>
+                                    ))}
+                                </>
+                            ) : (
+                                <p className="text-center">Tutaj nic nie ma...</p>
+                            )
                         ) : (
-                            <p className="text-center">Tutaj nic nie ma...</p>
-                        )
-                    ) : (
-                        archivalJumps.length > 0 ? (
-                            <>
-                                {archivalJumps.map((item, index) => (
-                                    // Mapowanie skoków archiwalnych
-                                    <Row key={index} className="accounts-container mx-auto text-center mb-3">
-                                        <Col md={4} className='mt-2'>{item.nazwa}</Col>
-                                        <Col md={4} className='mt-2'>{moment(item.data_czas).format('DD.MM.YYYY HH:mm')}</Col>
-                                        <Col md={4}>
-                                            <Link to={`/jump-details/${item.rezerwacje_id}`}>
-                                                <Button variant="success">Szczegóły</Button>
-                                            </Link>
-                                        </Col>
-                                    </Row>
-                                ))}
-                            </>
-                        ) : (
-                            <p className="text-center">Tutaj nic nie ma...</p>
-                        )
-                    )}
+                            archivalJumps.length > 0 ? (
+                                <>
+                                    {archivalJumps.map((item, index) => (
+                                        // Mapowanie skoków archiwalnych
+                                        <Row key={index} className="accounts-container mx-auto text-center mb-3">
+                                            <Col md={4} className='mt-2'>{item.nazwa}</Col>
+                                            <Col md={4} className='mt-2'>{moment(item.data_czas).format('DD.MM.YYYY HH:mm')}</Col>
+                                            <Col md={4}>
+                                                <Link to={`/jump-details/${item.rezerwacje_id}`}>
+                                                    <Button variant="success">Szczegóły</Button>
+                                                </Link>
+                                            </Col>
+                                        </Row>
+                                    ))}
+                                </>
+                            ) : (
+                                <p className="text-center">Tutaj nic nie ma...</p>
+                            )
+                        )}
                     </Container>
-
+                    <SmallFooter />
 
                     {/* <Container className="form-container">
                         <Row>

@@ -20,7 +20,12 @@ h1{
     margin: 0 auto; /* Centralizacja formularza na stronie */
 }
 
-
+.stopa {
+    background-color: #343a40; 
+    padding: 10px;
+    text-align: center;
+    color: #ffffff; 
+}
 
 /* .input-group {
     display: flex;

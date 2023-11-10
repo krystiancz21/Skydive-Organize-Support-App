@@ -67,6 +67,16 @@ const EmployeeUsersAccounts = () => {
             .catch(err => console.error('Wystąpił błąd podczas pobierania danych pracowników:', err));
     }, [isAuth]);
 
+    const SmallFooter = () => {
+        const year = new Date().getFullYear();
+    
+        return (
+            <footer className="text-center footer fixed-bottom">
+                <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
+            </footer>
+        );
+    };
+
     return (
         <>
             {isAuth ? (
@@ -80,7 +90,7 @@ const EmployeeUsersAccounts = () => {
                                         <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                         <Nav.Link href="/offer">OFERTA</Nav.Link>
                                         <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
-                                        <Nav.Link href="/employeemanagejumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                        <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
                                     </Nav>
                                     <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
                                     <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
@@ -119,6 +129,7 @@ const EmployeeUsersAccounts = () => {
                                     </Col>
                                 </Row>
                             </Container>
+                            <SmallFooter/>
                         </>
                     )}
                     {userRole === 'admin' && (
@@ -183,7 +194,7 @@ const EmployeeUsersAccounts = () => {
                                         </>
                                     )}
                                 </Row>
-                                <Row className="mt-3">
+                                <Row className="mt-2">
                                     <Col className="text-center">
                                         <h3>Dodaj nowego użytkownika</h3>
                                         <Link to={`/employee-create-account`}>
@@ -192,6 +203,7 @@ const EmployeeUsersAccounts = () => {
                                     </Col>
                                 </Row>
                             </Container>
+                            <SmallFooter/>
                         </>
                     )}
                 </>

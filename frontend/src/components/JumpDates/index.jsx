@@ -9,6 +9,7 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import 'react-calendar/dist/Calendar.css';
+import logo from '../Images/logo.jpg';
 
 const JumpDates = () => {
     const [isAuth, setIsAuth] = useState(false);
@@ -80,6 +81,50 @@ const JumpDates = () => {
             .catch(err => console.log(err));
     }, [date]);
 
+    const Stopka = () => (
+        <footer className="big-footer mt-5">
+            <Container fluid>
+                <Row>
+                    <Col md={4} className="d-flex flex-column align-items-center text-center">
+                        <div className='logo'>
+                            {/*https://www.vecteezy.com/vector-art/17127793-parachute-logo-icon-design-and-symbol-skydiving-vector */}
+                            <img src={logo} alt="Logo" />
+                        </div>
+                        <p>&copy; 2023 System wspomagający organizację skoków spadochronowych</p>
+                    </Col>
+                    <Col md={4} className="d-flex justify-content-center">
+                        <div>
+                            <h4>Szybkie linki</h4>
+                            <ul className="list-unstyled">
+                                <li><a href="/main">Strona główna</a></li>
+                                <li><a href="/offer">Oferta</a></li>
+                                <li><a href="/jump-calendar">Terminy skoków</a></li>
+                                <li><a href="/messages">Wiadomości</a></li>
+                            </ul>
+                        </div>
+                    </Col>
+                    <Col md={4} className="d-flex justify-content-center">
+                        <div>
+                            <h4>Autorzy</h4>
+                            <p>Krystian Czapla</p>
+                            <p>Kacper Czajka</p>
+                            <p>Mariusz Choroś</p>
+                        </div>
+                    </Col>
+                </Row>
+            </Container>
+        </footer>
+    );
+
+    const SmallFooter = () => {
+        const year = new Date().getFullYear();
+    
+        return (
+            <footer className="text-center footer fixed-bottom">
+                <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
+            </footer>
+        );
+    };
     
     return (
         <>
@@ -93,7 +138,7 @@ const JumpDates = () => {
                                 <Nav className="me-auto">
                                     <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                     <Nav.Link href="/offer">OFERTA</Nav.Link>
-                                    <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>
+                                    <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
                                     <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                 </Nav>
                                 <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
@@ -121,12 +166,10 @@ const JumpDates = () => {
                             </Col>
                             <Col className="text-center">
                                 <h2>Wolne terminy na skoki</h2>
-
-                                {availableJumps.length > 0 ? (
-                                    <>
+                                {availableJumps.length > 0 ? (<>
                                         <ul className="list-unstyled w-50 mx-auto">
                                             {availableJumps.map((jump, index) => (
-                                                <li key={index} className="accounts-container">
+                                                <li key={index} className="jump-date-container">
                                                     <h5 className="mb-1">{jump.nazwa}</h5>
                                                     <p className="mb-1">Data: {moment(jump.data_czas).format('DD.MM.YYYY')}</p>
                                                     <p className="mb-1">Godzina: {moment(jump.data_czas).format('HH:mm')}</p>
@@ -134,17 +177,15 @@ const JumpDates = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </>
-                                ) : (
-                                    <>
+                                    </>) : ( <>
                                         <p>W tym dniu nie ma zaplanowanych skoków. Wybierz inną datę.</p>
                                     </>
                                 )}
-
                             </Col>
 
                         </Row>
                     </Container>
+                    <Stopka/>
                 </>
             ) : (
                 // User niezalogowany
@@ -187,7 +228,7 @@ const JumpDates = () => {
                                     <>
                                         <ul className="list-unstyled w-50 mx-auto">
                                             {availableJumps.map((jump, index) => (
-                                                <li key={index} className="accounts-container">
+                                                <li key={index} className="jump-date-container">
                                                     <h5 className="mb-1">{jump.nazwa}</h5>
                                                     <p className="mb-1">Data: {moment(jump.data_czas).format('DD.MM.YYYY')}</p>
                                                     <p className="mb-1">Godzina: {moment(jump.data_czas).format('HH:mm')}</p>
@@ -206,6 +247,7 @@ const JumpDates = () => {
 
                         </Row>
                     </Container>
+                    <SmallFooter/>
                 </>
             )}
         </>

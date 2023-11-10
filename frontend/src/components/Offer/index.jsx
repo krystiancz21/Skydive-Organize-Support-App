@@ -7,6 +7,10 @@ import obraz from '../Images/obraz.jpg';
 import axios from "axios";
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import o1 from '../Images/funjump.jpg';
+import o2 from '../Images/tandemjump.jpg';
+import o3 from '../Images/camerajump.jpg';
+import logo from '../Images/logo.jpg';
 
 const Offer = () => {
     const [error, setError] = useState("")
@@ -65,6 +69,51 @@ const Offer = () => {
             .catch(err => console.error(err));
     }, []);
 
+    const Stopka = () => (
+        <footer className="big-footer mt-5">
+            <Container fluid>
+                <Row>
+                    <Col md={4} className="d-flex flex-column align-items-center text-center">
+                        <div className='logo'>
+                            {/*https://www.vecteezy.com/vector-art/17127793-parachute-logo-icon-design-and-symbol-skydiving-vector */}
+                            <img src={logo} alt="Logo" />
+                        </div>
+                        <p>&copy; 2023 System wspomagający organizację skoków spadochronowych</p>
+                    </Col>
+                    <Col md={4} className="d-flex justify-content-center">
+                        <div>
+                            <h4>Szybkie linki</h4>
+                            <ul className="list-unstyled">
+                                <li><a href="/main">Strona główna</a></li>
+                                <li><a href="/offer">Oferta</a></li>
+                                <li><a href="/jump-calendar">Terminy skoków</a></li>
+                                <li><a href="/messages">Wiadomości</a></li>
+                            </ul>
+                        </div>
+                    </Col>
+                    <Col md={4} className="d-flex justify-content-center">
+                        <div>
+                            <h4>Autorzy</h4>
+                            <p>Krystian Czapla</p>
+                            <p>Kacper Czajka</p>
+                            <p>Mariusz Choroś</p>
+                        </div>
+                    </Col>
+                </Row>
+            </Container>
+        </footer>
+    );
+
+    const SmallFooter = () => {
+        const year = new Date().getFullYear();
+
+        return (
+            <footer className="text-center footer fixed-bottom">
+                <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
+            </footer>
+        );
+    };
+
     return (
         <>
             {isAuth ? (
@@ -77,7 +126,7 @@ const Offer = () => {
                                 <Navbar.Collapse id="responsive-navbar-nav">
                                     <Nav className="me-auto">
                                         <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-                                        <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>
+                                        <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
                                         <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                     </Nav>
                                     <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
@@ -85,23 +134,27 @@ const Offer = () => {
                                 </Navbar.Collapse>
                             </Container>
                         </Navbar>
-                            <Container className={styles.content}>
+                            {/* <Container fluid className="d-flex flex-column align-items-center text-center"> */}
+                            <Container>
                                 <h1 className="text-center">OFERTA</h1>
-                                <CardGroup>
-                                    {jumpData.map((offer) => (
-                                        <Card key={offer.skok_id}>
-                                            <Card.Img variant="top" src={obraz} alt="img-oferta" />
-                                            <Card.Body>
-                                                <Card.Title>{offer.nazwa}</Card.Title>
-                                                <Card.Text>Cena: {offer.cena} zł</Card.Text>
-                                                <Link to={`/jump-calendar/${offer.skok_id}`}>
-                                                    <Button variant="primary">ZAREZERWUJ SKOK</Button>
-                                                </Link>
-                                            </Card.Body>
-                                        </Card>
+                                <Row className="justify-content-center">
+                                    {jumpData.map((offer, index) => (
+                                        <Col lg={4} key={offer.skok_id} className="mb-4">
+                                            <Card className='w-100 mx-auto'>
+                                                <Card.Img variant="top" src={index === 0 ? o1 : index === 1 ? o2 : o3} alt={`img-oferta-${index + 1}`} />
+                                                <Card.Body>
+                                                    <Card.Title>{offer.nazwa}</Card.Title>
+                                                    <Card.Text>Cena: {offer.cena} zł</Card.Text>
+                                                    <Link to={`/jump-calendar/${offer.skok_id}`}>
+                                                        <Button variant="primary">ZAREZERWUJ SKOK</Button>
+                                                    </Link>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
                                     ))}
-                                </CardGroup>
-                            </Container></>
+                                </Row>
+                            </Container>
+                            <Stopka /></>
                     )}
                     {userRole === 'pracownik' && (
                         <><Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -112,33 +165,37 @@ const Offer = () => {
                                         <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                         <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                         <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
-                                        <Nav.Link href="/employeemanagejumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                        <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
                                     </Nav>
                                     <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
                                     <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                                 </Navbar.Collapse>
                             </Container>
                         </Navbar>
-                            <Container className={styles.content}>
+                            <Container>
                                 <h1 className="text-center">OFERTA</h1>
-                                <CardGroup>
-                                    {jumpData.map((offer) => (
-                                        <Card key={offer.skok_id}>
-                                            <Card.Img variant="top" src={obraz} alt="img-oferta" />
-                                            <Card.Body>
-                                                <Card.Title>{offer.nazwa}</Card.Title>
-                                                <Card.Text>Cena: {offer.cena} zł</Card.Text>
-                                                <Link to={`/jump-calendar/${offer.skok_id}`}>
-                                                    <Button variant="primary">ZAREZERWUJ SKOK</Button>
-                                                </Link><p></p>
-                                                <Link to={`/offer-edit/${offer.skok_id}`}>
-                                                    <Button variant="success">EDYTUJ SKOK</Button>
-                                                </Link>
-                                            </Card.Body>
-                                        </Card>
+                                <Row className="justify-content-center">
+                                    {jumpData.map((offer, index) => (
+                                        <Col lg={4} key={offer.skok_id} className="mb-4">
+                                            <Card className='w-100 mx-auto'>
+                                                <Card.Img variant="top" src={index === 0 ? o1 : index === 1 ? o2 : o3} alt={`img-oferta-${index + 1}`} />
+                                                <Card.Body>
+                                                    <Card.Title>{offer.nazwa}</Card.Title>
+                                                    <Card.Text>Cena: {offer.cena} zł</Card.Text>
+                                                    <Link to={`/jump-calendar/${offer.skok_id}`}>
+                                                        <Button variant="primary">ZAREZERWUJ SKOK</Button>
+                                                    </Link><p></p>
+                                                    <Link to={`/offer-edit/${offer.skok_id}`}>
+                                                        <Button variant="success">EDYTUJ SKOK</Button>
+                                                    </Link>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
                                     ))}
-                                </CardGroup>
-                            </Container></>
+                                </Row>
+                            </Container>
+                            <Stopka />
+                        </>
                     )}
                     {userRole === 'admin' && (
                         <><Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -194,23 +251,23 @@ const Offer = () => {
                         </Navbar.Collapse>
                     </Container>
                 </Navbar>
-                    <Container className={styles.content}>
+                    <Container>
                         <h1 className="text-center">OFERTA</h1>
-                        <CardGroup>
-                            {jumpData.map((offer) => (
-                                <Card key={offer.skok_id}>
-                                    <Card.Img variant="top" src={obraz} alt="img-oferta" />
-                                    <Card.Body>
-                                        <Card.Title>{offer.nazwa}</Card.Title>
-                                        <Card.Text>Cena: {offer.cena} zł</Card.Text>
-                                        {/* <Link to={`/jump-calendar/${offer.skok_id}`}>
-                                            <Button variant="primary">ZAREZERWUJ SKOK</Button>
-                                        </Link> */}
-                                    </Card.Body>
-                                </Card>
+                        <Row>
+                            {jumpData.map((offer, index) => (
+                                <Col lg={4} key={offer.skok_id}>
+                                    <Card className='w-100 mx-auto mb-3'>
+                                        <Card.Img variant="top" src={index === 0 ? o1 : index === 1 ? o2 : o3} alt={`img-oferta-${index + 1}`} />
+                                        <Card.Body>
+                                            <Card.Title>{offer.nazwa}</Card.Title>
+                                            <Card.Text>Cena: {offer.cena} zł</Card.Text>
+                                        </Card.Body>
+                                    </Card>
+                                </Col>
                             ))}
-                        </CardGroup>
-                    </Container></>
+                        </Row>
+                    </Container>
+                    <SmallFooter /></>
             )}
         </>
     )

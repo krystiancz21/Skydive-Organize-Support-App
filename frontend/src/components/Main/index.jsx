@@ -15,6 +15,7 @@ import logo from '../Images/logo.jpg';
 import offer from '../Images/offer.jpg';
 import terminy from '../Images/terminy.jpg';
 import messages from '../Images/messages.jpg';
+import usericon from '../Images/usericon.png';
 
 const Karuzela = () => (
     <Carousel className="custom-carousel">
@@ -44,7 +45,7 @@ const Karuzela = () => (
 );
 
 const Stopka = () => (
-    <footer className="big-footer mt-3">
+    <footer className="big-footer mt-5">
         <Container fluid>
             <Row>
                 <Col md={4} className="d-flex flex-column align-items-center text-center">
@@ -122,19 +123,24 @@ const Main = () => {
                                     <Navbar.Collapse id="responsive-navbar-nav">
                                         <Nav className="me-auto">
                                             <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                            <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                            <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
+                                            <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                         </Nav>
                                         <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
                                         <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                                     </Navbar.Collapse>
                                 </Container>
                             </Navbar>
-                            <Container className={styles.content}>
-                                <h1 className="text-center my-4">STRONA GŁÓWNA</h1>
-                                <CardGroup>
-                                    <Row>
-                                        <Col>
-                                            <Card>
-                                                <Card.Img variant="top" src={obraz} alt="img-oferta" />
+                            <div className="d-flex justify-content-center">
+                                <Container>
+                                    <h1 className="text-center my-4">STRONA GŁÓWNA</h1>
+                                    <Karuzela />
+
+                                    <Row className="justify-content-center">
+                                        <Col lg={3} className="mb-4">
+                                            <Card className='w-100 mx-auto'>
+                                                <Card.Img variant="top" src={offer} alt="img-oferta" />
                                                 <Card.Body>
                                                     <Card.Title>
                                                         <Link to='/offer'>
@@ -144,9 +150,10 @@ const Main = () => {
                                                 </Card.Body>
                                             </Card>
                                         </Col>
-                                        <Col>
-                                            <Card>
-                                                <Card.Img variant="top" src={obraz} alt="img-terminy" />
+
+                                        <Col lg={3} className="mb-4">
+                                            <Card className='w-100 mx-auto'>
+                                                <Card.Img variant="top" src={terminy} alt="img-terminy" />
                                                 <Card.Body>
                                                     <Card.Title>
                                                         <Link to='/jump-dates'>
@@ -156,21 +163,24 @@ const Main = () => {
                                                 </Card.Body>
                                             </Card>
                                         </Col>
-                                        <Col>
-                                            <Card>
-                                                <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
+
+                                        <Col lg={3} className="mb-4">
+                                            <Card className='w-100 mx-auto'>
+                                                <Card.Img variant="top" src={messages} alt="img-wiadomosci" />
                                                 <Card.Body>
                                                     <Card.Title>
                                                         <Link to='/messages'>
-                                                            <Button variant="primary" size="sm">WIADOMOŚCI <BsArrowRightShort /></Button>
+                                                            <Button variant="primary" size="sm">WIADOMOŚCI<BsArrowRightShort /></Button>
                                                         </Link>
                                                     </Card.Title>
                                                 </Card.Body>
                                             </Card>
                                         </Col>
                                     </Row>
-                                </CardGroup>
-                            </Container>
+
+                                </Container>
+                            </div>
+                            <Stopka />
                         </>
                     )}
                     {userRole === 'pracownik' && (
@@ -181,19 +191,25 @@ const Main = () => {
                                     <Navbar.Collapse id="responsive-navbar-nav">
                                         <Nav className="me-auto">
                                             <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                            <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                            <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
+                                            <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                            <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                            <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
                                         </Nav>
                                         <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
                                         <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                                     </Navbar.Collapse>
                                 </Container>
                             </Navbar>
-                            <Container className={styles.content}>
-                                <h1 className="text-center">STRONA GŁÓWNA</h1>
-                                <CardGroup>
+                            <div className="d-flex justify-content-center">
+                                <Container>
+                                    <h1 className="text-center">STRONA GŁÓWNA</h1>
+
                                     <Row>
-                                        <Col>
-                                            <Card>
-                                                <Card.Img variant="top" src={obraz} alt="img-oferta" />
+                                        <Col md={6} className="mb-2">
+                                            <Card className='w-50 mx-auto'>
+                                                <Card.Img variant="top" src={messages} alt="img-wiadomosci" className='img-fluid' id="mess-card-img" />
                                                 <Card.Body>
                                                     <Card.Title>
                                                         <Link to='/messages'>
@@ -203,35 +219,9 @@ const Main = () => {
                                                 </Card.Body>
                                             </Card>
                                         </Col>
-                                        <Col>
-                                            <Card>
-                                                <Card.Img variant="top" src={obraz} alt="img-terminy" />
-                                                <Card.Body>
-                                                    <Card.Title>
-                                                        <Link to='/offer'>
-                                                            <Button variant="primary" size="sm">OFERTA <BsArrowRightShort /></Button>
-                                                        </Link>
-                                                    </Card.Title>
-                                                </Card.Body>
-                                            </Card>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col>
-                                            <Card>
-                                                <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
-                                                <Card.Body>
-                                                    <Card.Title>
-                                                        <Link to='/employee-users-accounts'>
-                                                            <Button variant="primary" size="sm">KONTA UŻYTKOWNIKÓW <BsArrowRightShort /></Button>
-                                                        </Link>
-                                                    </Card.Title>
-                                                </Card.Body>
-                                            </Card>
-                                        </Col>
-                                        <Col>
-                                            <Card>
-                                                <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
+                                        <Col md={6} className="mb-2">
+                                            <Card className='w-50 mx-auto'>
+                                                <Card.Img variant="top" src={terminy} alt="img-skoki" className='img-fluid' />
                                                 <Card.Body>
                                                     <Card.Title>
                                                         <Link to='/employee-manage-jumps'>
@@ -242,8 +232,36 @@ const Main = () => {
                                             </Card>
                                         </Col>
                                     </Row>
-                                </CardGroup>
-                            </Container></>
+                                    <Row>
+                                        <Col md={6} className="mb-2">
+                                            <Card className='w-50 mx-auto'>
+                                                <Card.Img variant="top" src={offer} alt="img-oferta" className='img-fluid' />
+                                                <Card.Body>
+                                                    <Card.Title>
+                                                        <Link to='/offer'>
+                                                            <Button variant="primary" size="sm">OFERTA <BsArrowRightShort /></Button>
+                                                        </Link>
+                                                    </Card.Title>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
+                                        <Col md={6} className="mb-2">
+                                            <Card className='w-50 mx-auto'>
+                                                <Card.Img variant="top" src={usericon} alt="img-konta" className='img-fluid' />
+                                                <Card.Body>
+                                                    <Card.Title>
+                                                        <Link to='/employee-users-accounts'>
+                                                            <Button variant="primary" size="sm">KONTA KLIENTÓW <BsArrowRightShort /></Button>
+                                                        </Link>
+                                                    </Card.Title>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
+                                    </Row>
+                                </Container>
+                            </div>
+                            <Stopka />
+                        </>
                     )}
                     {userRole === 'admin' && (
                         <>
@@ -263,9 +281,9 @@ const Main = () => {
                                 <h1 className="text-center">STRONA GŁÓWNA</h1>
                                 <CardGroup>
                                     <Row>
-                                        <Col>
-                                            <Card>
-                                                <Card.Img variant="top" src={obraz} alt="img-oferta" />
+                                        <Col md={6} className="mb-2">
+                                            <Card className='w-50 mx-auto'>
+                                                <Card.Img variant="top" src={messages} alt="img-wiadomosci" className='img-fluid' id="mess-card-img" />
                                                 <Card.Body>
                                                     <Card.Title>
                                                         <Link to='/messages'>
@@ -275,9 +293,9 @@ const Main = () => {
                                                 </Card.Body>
                                             </Card>
                                         </Col>
-                                        <Col>
-                                            <Card>
-                                                <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
+                                        <Col md={6} className="mb-2">
+                                            <Card className='w-50 mx-auto'>
+                                                <Card.Img variant="top" src={offer} alt="img-oferta" className='img-fluid' />
                                                 <Card.Body>
                                                     <Card.Title>
                                                         <Link to='/offer'>
@@ -289,9 +307,9 @@ const Main = () => {
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col>
-                                            <Card>
-                                                <Card.Img variant="top" src={obraz} alt="img-terminy" />
+                                        <Col md={6} className="mb-2">
+                                            <Card className='w-50 mx-auto'>
+                                                <Card.Img variant="top" src={usericon} alt="img-konta" className='img-fluid' />
                                                 <Card.Body>
                                                     <Card.Title>
                                                         <Link to='/employee-users-accounts'>
@@ -301,9 +319,9 @@ const Main = () => {
                                                 </Card.Body>
                                             </Card>
                                         </Col>
-                                        <Col>
-                                            <Card>
-                                                <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
+                                        <Col md={6} className="mb-2">
+                                            <Card className='w-50 mx-auto'>
+                                                <Card.Img variant="top" src={terminy} alt="img-skoki" className='img-fluid' />
                                                 <Card.Body>
                                                     <Card.Title>
                                                         <Link to='/owner-financial-overview'>

@@ -101,7 +101,7 @@ const JumpCalendar = () => {
                                 <Nav className="me-auto">
                                     <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                     <Nav.Link href="/offer">OFERTA</Nav.Link>
-                                    <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>
+                                    <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
                                     <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                 </Nav>
                                 <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
@@ -134,7 +134,7 @@ const JumpCalendar = () => {
                                     <>
                                         <ul className="list-unstyled w-50 mx-auto">
                                             {availableJumps.map((jump, index) => (
-                                                <li key={index} className="accounts-container">
+                                                <li key={index} className="jump-avaiable-date-container">
                                                     <p className="mb-1">Data: {moment(jump.data_czas).format('DD.MM.YYYY')}</p>
                                                     <p className="mb-1">Godzina: {moment(jump.data_czas).format('HH:mm')}</p>
                                                     <p className="mb-1">Liczba wolnych miejsc: {jump.liczba_miejsc_w_samolocie}</p>
