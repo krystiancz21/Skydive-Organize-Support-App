@@ -139,6 +139,7 @@ CREATE TABLE IF NOT EXISTS `skydive`.`rodzaj_skoku` (
   `liczba_miejsc_w_samolocie` INT NOT NULL,
   `wymagana_licencja` TINYINT NULL,
   `max_masa` INT NOT NULL,
+  `sciezka_do_grafiki` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`skok_id`));
 
 
@@ -264,10 +265,10 @@ INSERT INTO `skydive`.`rola_user` (`rola_od`, `rola_do`, `user_id`, `rola_rola_i
 ('2023-10-15 12:00:00', '2024-10-15 12:00:00', 2, 2),
 ('2023-10-15 12:00:00', '2024-10-15 12:00:00', 3, 3);
 
-INSERT INTO `skydive`.`rodzaj_skoku` (`nazwa`, `cena`, `liczba_miejsc_w_samolocie`, `wymagana_licencja`, `max_masa`) VALUES 
-('Skok samodzielny z licencją','600.00','1','1','120'),
-('Skok w tandemie','900.00','2','0','120'),
-('Skok w tandemie z kamerzystą','1100.00','3','0','120');
+INSERT INTO `skydive`.`rodzaj_skoku` (`nazwa`, `cena`, `liczba_miejsc_w_samolocie`, `wymagana_licencja`, `max_masa`, `sciezka_do_grafiki`) VALUES 
+('Skok samodzielny z licencją','600.00','1','1','120', 'public\\Images\\funjump.jpg'),
+('Skok w tandemie','900.00','2','0','120', 'public\\Images\\tandemjump.jpg'),
+('Skok w tandemie z kamerzystą','1100.00','3','0','120', 'public\\Images\\camerajump.jpg');
 
 INSERT INTO `skydive`.`planowane_terminy` (`nazwa`, `data_czas`, `liczba_miejsc_w_samolocie`, `miejsce_startu`, `status_terminu_id`) VALUES
 ('Skok samodzielny z licencją', '2023-11-20 10:00:00', 2, 'Lublin', 1),

@@ -169,42 +169,60 @@ router.post('/availableDateAllJumpType', (req, res) => {
 router.post("/reserveJump", async (req, res) => {
   try {
     // Aktualizacja wagi użytkownika
-    const { error } = editUserWeight.validate({ userWeight: req.body.userWeight });
+    // const { error } = editUserWeight.validate({ userWeight: req.body.userWeight });
 
-    if (error) {
-      return res.json({ error: error.details[0].message });
-    }
+    // if (error) {
+    //   return res.json({ error: error.details[0].message });
+    // }
+    const sqlMaxWeight = `SELECT max_masa FROM rodzaj_skoku WHERE skok_id = ?`;
 
-    const valuesWeight = [
-      req.body.userWeight,
-      req.body.mail
-    ];
-
-    const sqlWeight = "UPDATE user SET `masa` = ? WHERE `mail` = ?";
-
-    db.query(sqlWeight, valuesWeight, (err, result) => {
+    db.query(sqlMaxWeight, [req.body.rodzajSkokuId], (err, result) => {
       if (err) {
-        console.error('Błąd podczas aktualizacji wagi użytkownika: ' + err.message);
-        res.status(500).send({ error: 'Wystąpił błąd podczas aktualizacji wagi użytkownika' });
+        console.error('Błąd podczas rezerwacji skoku: ' + err.message);
+        res.status(500).send({ error: 'Wystąpił błąd podczas rezerwacji skoku' });
       } else {
-        // Rezerwacja skoku po pomyślnej aktualizacji wagi
-        const valuesReservation = [
-          req.body.userId,
-          req.body.planowaneTerminyId,
-          req.body.statusSkokuId, // to domyślnie 1- niezrealizowany
-          req.body.rodzajSkokuId,
-          req.body.platnoscId,
-          req.body.cena
+        const maxMasa = result[0].max_masa;
+        const userWeight = req.body.userWeight;
+        if (userWeight < 30) {
+          res.send({ error: 'Masa skoczka powinna być większa niż 30kg' });
+          return;
+        } else if (userWeight > maxMasa) {
+          res.send({ error: `Masa skoczka powinna być minejsza niż ${maxMasa}kg` });
+          return;
+        }
+
+        const valuesWeight = [
+          req.body.userWeight,
+          req.body.mail
         ];
 
-        const sqlReservation = "INSERT INTO rezerwacje_terminow (user_id, planowane_terminy_id, status_skoku_id, rodzaj_skoku_id, platnosc_id, cena) VALUES (?, ?, ?, ?, ?, ?)";
+        const sqlWeight = "UPDATE user SET `masa` = ? WHERE `mail` = ?";
 
-        db.query(sqlReservation, valuesReservation, (err, result) => {
+        db.query(sqlWeight, valuesWeight, (err, result) => {
           if (err) {
-            console.error('Błąd podczas rezerwacji skoku: ' + err.message);
-            res.status(500).send({ error: 'Wystąpił błąd podczas rezerwacji skoku' });
+            console.error('Błąd podczas aktualizacji wagi użytkownika: ' + err.message);
+            res.status(500).send({ error: 'Wystąpił błąd podczas aktualizacji wagi użytkownika' });
           } else {
-            res.send({ Status: 'Success' });
+            // Rezerwacja skoku po pomyślnej aktualizacji wagi
+            const valuesReservation = [
+              req.body.userId,
+              req.body.planowaneTerminyId,
+              req.body.statusSkokuId, // to domyślnie 1- niezrealizowany
+              req.body.rodzajSkokuId,
+              req.body.platnoscId,
+              req.body.cena
+            ];
+
+            const sqlReservation = "INSERT INTO rezerwacje_terminow (user_id, planowane_terminy_id, status_skoku_id, rodzaj_skoku_id, platnosc_id, cena) VALUES (?, ?, ?, ?, ?, ?)";
+
+            db.query(sqlReservation, valuesReservation, (err, result) => {
+              if (err) {
+                console.error('Błąd podczas rezerwacji skoku: ' + err.message);
+                res.status(500).send({ error: 'Wystąpił błąd podczas rezerwacji skoku' });
+              } else {
+                res.send({ Status: 'Success' });
+              }
+            });
           }
         });
       }

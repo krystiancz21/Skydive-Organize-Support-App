@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require('path');
 const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -11,6 +12,7 @@ const paymentRoutes = require("./routes/payment");
 const port = process.env.PORT || 3001;
 
 app.use(express.json());
+app.use('/images', express.static(path.join(__dirname, 'public/Images')));
 app.use(
   cors({
     origin: ["http://localhost:3000"],

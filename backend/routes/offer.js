@@ -1,6 +1,7 @@
 require('dotenv').config()
 const router = require("express").Router();
 const db = require("../db");
+const multer = require("multer");
 const { editOfferSchema, addNewOfferSchema } = require("../utils/validation");
 
 router.get('/showAllOffers', async (req, res) => {
@@ -65,9 +66,29 @@ router.post("/updateOfferData", async (req, res) => {
   }
 });
 
-router.post("/addNewOffer", async (req, res) => {
-  //const offerName = req.body.offerName;
+// obsługa dodania grafiki skoku
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    return cb(null, "./public/Images")
+  },
+  filename: function (req, file, cb) {
+    return cb(null, `${Date.now()}_${file.originalname}`)
+  }
+});
 
+const upload = multer({ storage });
+
+// dodanie pliku na serwer
+router.post("/uploadOfferPhoto", upload.single('file'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "Plik nie został przesłany." });
+  }
+
+  const filePath = req.file.path; // Ścieżka do zapisanego pliku
+  res.json({ filePath });
+});
+
+router.post("/addNewOffer", async (req, res) => {
   try {
     const { error } = addNewOfferSchema.validate(req.body.newOfferData);
 
@@ -81,10 +102,11 @@ router.post("/addNewOffer", async (req, res) => {
       req.body.newOfferData.jumpSeats,
       req.body.newOfferData.jumpLicense,
       req.body.newOfferData.jumpWeight,
+      req.body.filePath
       //req.body.offerId,
     ];
 
-    const sql = "INSERT INTO rodzaj_skoku (`nazwa`, `cena`, `liczba_miejsc_w_samolocie`, `wymagana_licencja`, `max_masa`) VALUES (?, ?, ?, ?, ?)"
+    const sql = "INSERT INTO rodzaj_skoku (`nazwa`, `cena`, `liczba_miejsc_w_samolocie`, `wymagana_licencja`, `max_masa`, `sciezka_do_grafiki`) VALUES (?, ?, ?, ?, ?, ?)"
 
     db.query(sql, values, (err, result) => {
       if (err) {

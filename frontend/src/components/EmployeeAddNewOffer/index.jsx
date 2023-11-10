@@ -22,6 +22,9 @@ const EmployeeAddNewOffer = () => {
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
 
+    const [file, setFile] = useState(null);
+    const [updateFile, setUpdateFile] = useState(false);
+
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
     useEffect(() => {
@@ -56,20 +59,33 @@ const EmployeeAddNewOffer = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log(newOfferData);
+        const formData = new FormData();
+        formData.append('file', file);
+
         try {
-            const response = await axios.post('http://localhost:3001/api/offer/addNewOffer', {
+            const uploadResponse = await axios.post('http://localhost:3001/api/offer/uploadOfferPhoto', formData);
+            const filePath = uploadResponse.data.filePath; // Oczekuj odpowiedzi z ścieżką do zapisanego pliku
+
+            axios.post('http://localhost:3001/api/offer/addNewOffer', {
                 newOfferData: newOfferData,
-            });
-            if (response.data.error) {
-                setError(response.data.error);
-                setUpdateSuccess(false);
-            } else {
-                setError('');
-                setUpdateSuccess(true);
-            }
+                filePath: filePath,
+            }).then(res => {
+                if (res.data.error) {
+                    setError(res.data.error);
+                    setUpdateSuccess(false);
+                } else {
+                    setError('');
+                    setUpdateSuccess(true);
+                }
+            }).catch(err => console.log('Błąd podczas dodawania oferty: ' + err.message));
+    
         } catch (error) {
-            console.error('Błąd podczas dodawania oferty: ' + error.message);
+            if (error.response && error.response.data && error.response.data.error) {
+                setError(error.response.data.error);
+            } else {
+                setError('Wystąpił błąd podczas przesyłania pliku');
+            }
+            console.error("Błąd podczas przesyłania pliku: " + error.message);
         }
     }
 
@@ -153,6 +169,25 @@ const EmployeeAddNewOffer = () => {
                                                 />
                                             </Col>
                                         </Form.Group>
+                                        {/* <Form.Group as={Row} controlId="formEditOfferLicense" className="mb-3">
+                                            <Form.Label column sm={2}>
+                                                Wymagana licencja
+                                            </Form.Label>
+                                            <Col sm={5}>
+                                                <Form.Check
+                                                    type="radio"
+                                                    label="Tak"
+                                                    id="On"
+                                                />
+                                            </Col>
+                                            <Col sm={5}>
+                                                <Form.Check
+                                                    type="radio"
+                                                    label="Nie"
+                                                    id="Off"
+                                                />
+                                            </Col>
+                                        </Form.Group> */}
                                         <Form.Group as={Row} controlId="formEditOfferWeight" className="mb-3">
                                             <Form.Label column sm={2}>
                                                 Maksymalna masa
@@ -164,6 +199,20 @@ const EmployeeAddNewOffer = () => {
                                                     value={newOfferData.jumpWeight}
                                                     onChange={handleChange}
                                                 />
+                                            </Col>
+                                        </Form.Group>
+                                        <Form.Group as={Row} controlId="formEditOfferImg" className="mb-3">
+                                            <Form.Label column sm={2}>
+                                                Zdjęcie poglądowe
+                                            </Form.Label>
+                                            <Col sm={10}>
+                                                <div className="d-flex flex-column">
+                                                    <Form.Control
+                                                        type="file"
+                                                        accept=".jpg, .jpeg, .png"
+                                                        onChange={(e) => setFile(e.target.files[0])}
+                                                    />
+                                                </div>
                                             </Col>
                                         </Form.Group>
                                     </div>
@@ -266,6 +315,20 @@ const EmployeeAddNewOffer = () => {
                                                     value={newOfferData.jumpWeight}
                                                     onChange={handleChange}
                                                 />
+                                            </Col>
+                                        </Form.Group>
+                                        <Form.Group as={Row} controlId="formEditOfferImg" className="mb-3">
+                                            <Form.Label column sm={2}>
+                                                Zdjęcie poglądowe
+                                            </Form.Label>
+                                            <Col sm={10}>
+                                                <div className="d-flex flex-column">
+                                                    <Form.Control
+                                                        type="file"
+                                                        accept=".jpg, .jpeg, .png"
+                                                        onChange={(e) => setFile(e.target.files[0])}
+                                                    />
+                                                </div>
                                             </Col>
                                         </Form.Group>
                                     </div>

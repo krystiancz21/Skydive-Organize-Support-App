@@ -3,13 +3,13 @@ import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
 import { BsArrowRightShort } from 'react-icons/bs';
 import styles from "./style.css"
-import obraz from '../Images/obraz.jpg';
 import axios from "axios";
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import o1 from '../Images/funjump.jpg';
-import o2 from '../Images/tandemjump.jpg';
-import o3 from '../Images/camerajump.jpg';
+// import obraz from '../Images/obraz.jpg';
+// import o1 from '../Images/funjump.jpg';
+// import o2 from '../Images/tandemjump.jpg';
+// import o3 from '../Images/camerajump.jpg';
 import logo from '../Images/logo.jpg';
 
 const Offer = () => {
@@ -62,6 +62,7 @@ const Offer = () => {
             .then(res => {
                 if (res.data.Status === 'Success') {
                     setJumpData(res.data.offers);
+                    console.log(res.data.offers)
                 } else {
                     console.error(res.data.Error);
                 }
@@ -141,7 +142,7 @@ const Offer = () => {
                                     {jumpData.map((offer, index) => (
                                         <Col lg={4} key={offer.skok_id} className="mb-4">
                                             <Card className='w-100 mx-auto'>
-                                                <Card.Img variant="top" src={index === 0 ? o1 : index === 1 ? o2 : o3} alt={`img-oferta-${index + 1}`} />
+                                                <Card.Img variant="top" src={`http://localhost:3001/images/${offer.sciezka_do_grafiki.split('\\').pop()}`} alt={`img-oferta-${index + 1}`} />
                                                 <Card.Body>
                                                     <Card.Title>{offer.nazwa}</Card.Title>
                                                     <Card.Text>Cena: {offer.cena} zł</Card.Text>
@@ -178,7 +179,8 @@ const Offer = () => {
                                     {jumpData.map((offer, index) => (
                                         <Col lg={4} key={offer.skok_id} className="mb-4">
                                             <Card className='w-100 mx-auto'>
-                                                <Card.Img variant="top" src={index === 0 ? o1 : index === 1 ? o2 : o3} alt={`img-oferta-${index + 1}`} />
+                                                {/* <Card.Img variant="top" src={index === 0 ? o1 : index === 1 ? o2 : o3} alt={`img-oferta-${index + 1}`} /> */}
+                                                <Card.Img variant="top" src={`http://localhost:3001/images/${offer.sciezka_do_grafiki.split('\\').pop()}`} alt={`img-oferta-${index + 1}`} />
                                                 <Card.Body>
                                                     <Card.Title>{offer.nazwa}</Card.Title>
                                                     <Card.Text>Cena: {offer.cena} zł</Card.Text>
@@ -217,9 +219,9 @@ const Offer = () => {
                             <Container className={styles.content}>
                                 <h1 className="text-center">OFERTA</h1>
                                 <CardGroup>
-                                    {jumpData.map((offer) => (
+                                    {jumpData.map((offer, index) => (
                                         <Card key={offer.skok_id}>
-                                            <Card.Img variant="top" src={obraz} alt="img-oferta" />
+                                            <Card.Img variant="top" src={`http://localhost:3001/images/${offer.sciezka_do_grafiki.split('\\').pop()}`} alt={`img-oferta-${index + 1}`} />
                                             <Card.Body>
                                                 <Card.Title>{offer.nazwa}</Card.Title>
                                                 <Card.Text>Cena: {offer.cena} zł</Card.Text>
@@ -257,7 +259,7 @@ const Offer = () => {
                             {jumpData.map((offer, index) => (
                                 <Col lg={4} key={offer.skok_id}>
                                     <Card className='w-100 mx-auto mb-3'>
-                                        <Card.Img variant="top" src={index === 0 ? o1 : index === 1 ? o2 : o3} alt={`img-oferta-${index + 1}`} />
+                                        <Card.Img variant="top" src={`http://localhost:3001/images/${offer.sciezka_do_grafiki.split('\\').pop()}`} alt={`img-oferta-${index + 1}`} />
                                         <Card.Body>
                                             <Card.Title>{offer.nazwa}</Card.Title>
                                             <Card.Text>Cena: {offer.cena} zł</Card.Text>
