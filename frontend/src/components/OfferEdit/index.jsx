@@ -1,7 +1,7 @@
 import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, CardGroup, Image } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
-import { BsFillPersonFill, BsArrowRightShort, BsFillBellFill, BsPencilSquare } from 'react-icons/bs';
+import { BsFillPersonFill, BsArrowRightShort, BsFillBellFill, BsPencilSquare, BsFillTrashFill } from 'react-icons/bs';
 import obraz from '../Images/obraz.jpg';
 import styles from "./style.css"
 import axios from "axios";
@@ -19,6 +19,7 @@ const OfferEdit = () => {
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
+    const [file, setFile] = useState(null);
 
     const { offerId } = useParams();
     const navigate = useNavigate();
@@ -68,14 +69,32 @@ const OfferEdit = () => {
         // console.log(`Nowa wartość pola ${input.name}: ${input.value}`);
     }
 
+    // Usuwanie oferty
+    const handleDeleteOffer = () => {
+        if (window.confirm("Czy na pewno chcesz usunąć ofertę?")) {
+            axios.delete(`http://localhost:3001/api/offer/deleteOffer/?offerId=${offerId}`)
+                .then(res => {
+                    // Przekierowanie na stronę główną po usunięciu konta
+                    window.location.href = "http://localhost:3000/offer";
+                })
+                .catch(err => console.log(err));
+        }
+    }
+
     // Edycja oferty
     const handleOfferEdit = async (e) => {
         e.preventDefault();
 
+        const formData = new FormData();
+        formData.append('file', file);
+
         try {
-            // const response = await axios.post('http://localhost:3001/api/offer/updateOfferData', offerData);
+            const uploadResponse = await axios.post('http://localhost:3001/api/offer/uploadOfferPhoto', formData);
+            const filePath = uploadResponse.data.filePath; // Oczekuj odpowiedzi z ścieżką do zapisanego pliku
+
             const response = await axios.post('http://localhost:3001/api/offer/updateOfferData', {
                 offerData: offerData,
+                filePath: filePath,
                 offerId: offerId
             });
             if (response.data.error) {
@@ -158,7 +177,6 @@ const OfferEdit = () => {
                                             name="jumpName"
                                             value={offerData.jumpName}
                                             onChange={handleChange}
-                                        // onChange={(e) => setJumpName(e.target.value)}
                                         />
                                     </Col>
                                 </Form.Group>
@@ -172,8 +190,21 @@ const OfferEdit = () => {
                                             name="jumpPrice"
                                             value={offerData.jumpPrice}
                                             onChange={handleChange}
-                                        // onChange={(e) => setJumpPrice(e.target.value)}
                                         />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} controlId="formEditOfferImg" className="mb-3">
+                                    <Form.Label column sm={2}>
+                                        Zdjęcie poglądowe
+                                    </Form.Label>
+                                    <Col sm={10}>
+                                        <div className="d-flex flex-column">
+                                            <Form.Control
+                                                type="file"
+                                                accept=".jpg, .jpeg, .png"
+                                                onChange={(e) => setFile(e.target.files[0])}
+                                            />
+                                        </div>
                                     </Col>
                                 </Form.Group>
                             </div>
@@ -183,9 +214,11 @@ const OfferEdit = () => {
                                 <Button variant="success" className="mt-3" id="przycisk2" onClick={handleOfferEdit}>
                                     <BsPencilSquare /> EDYTUJ SKOK
                                 </Button>
+                                <Button variant="danger" className="mt-3" id="przycisk2" onClick={handleDeleteOffer}><BsFillTrashFill /> USUŃ OFERTĘ</Button>
                             </div>
                         </Form>
-                    </Container></>) : (
+                    </Container></>
+            ) : (
                 // User niezalogowany
                 <>
                     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
