@@ -49,10 +49,11 @@ router.post("/updateOfferData", async (req, res) => {
     const values = [
       req.body.offerData.jumpName,
       req.body.offerData.jumpPrice,
+      req.body.filePath,
       req.body.offerId,
     ];
 
-    const sql = "UPDATE rodzaj_skoku SET `nazwa` = ?, `cena` = ? WHERE `skok_id` = ?";
+    const sql = "UPDATE rodzaj_skoku SET `nazwa` = ?, `cena` = ?, `sciezka_do_grafiki` = ? WHERE `skok_id` = ?";
     db.query(sql, values, (err, result) => {
       if (err) {
         res.status(500).send({ error: 'Wystąpił błąd podczas aktualizacji danych oferty' });
@@ -120,6 +121,22 @@ router.post("/addNewOffer", async (req, res) => {
     console.error("Błąd podczas aktualizacji danych: " + error.message);
     return res.status(500).json({ error: "Błąd podczas aktualizacji danych" });
   }
+});
+
+// Usuwanie oferty
+router.delete('/deleteOffer', (req, res) => {
+  const offerId = req.query.offerId;
+
+  const sql = "DELETE FROM rodzaj_skoku WHERE skok_id = ?";
+
+  db.query(sql, [offerId], (err, result) => {
+      if (err) {
+          console.error('Błąd podczas usuwania oferty (/deleteOffer): ' + err.message);
+          res.status(500).send({ error: 'Wystąpił błąd podczas oferty (/deleteOffer)' });
+      } else {
+          res.status(200).json(result);
+      }
+  });
 });
 
 module.exports = router;
