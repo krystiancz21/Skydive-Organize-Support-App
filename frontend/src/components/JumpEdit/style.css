@@ -1,0 +1,19 @@
+.react-calendar__tile {
+    position: relative;
+}
+
+.react-calendar__tile > div {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.jump-avaiable-date-container {
+    border: 2px solid #aaa;
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}

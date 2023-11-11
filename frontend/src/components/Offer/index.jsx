@@ -6,10 +6,6 @@ import styles from "./style.css"
 import axios from "axios";
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-// import obraz from '../Images/obraz.jpg';
-// import o1 from '../Images/funjump.jpg';
-// import o2 from '../Images/tandemjump.jpg';
-// import o3 from '../Images/camerajump.jpg';
 import logo from '../Images/logo.jpg';
 
 const Offer = () => {
@@ -19,9 +15,6 @@ const Offer = () => {
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
     const [jumpData, setJumpData] = useState([]);
-
-    const { offerId } = useParams();
-    const navigate = useNavigate();
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -49,20 +42,11 @@ const Offer = () => {
             }).catch(err => console.log(err));
     }
 
-    // const handleReserveClick = (type) => {
-    //     navigate(`/jump-calendar/${type}`);
-    // }
-
-    // const handleOfferEditClick = (skokId) => {
-    //     navigate(`/offer-edit/${skokId}`);
-    // }
-
     useEffect(() => {
         axios.get('http://localhost:3001/api/offer/showAllOffers')
             .then(res => {
                 if (res.data.Status === 'Success') {
                     setJumpData(res.data.offers);
-                    console.log(res.data.offers)
                 } else {
                     console.error(res.data.Error);
                 }

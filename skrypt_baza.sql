@@ -275,7 +275,7 @@ INSERT INTO `skydive`.`planowane_terminy` (`nazwa`, `data_czas`, `liczba_miejsc_
 ('Skok samodzielny z licencją', '2023-11-24 18:00:00', 2, 'Lublin', 1),
 ('Skok samodzielny z licencją', '2023-11-24 08:00:00', 7, 'Lublin', 1),
 ('Skok samodzielny z licencją', '2023-11-29 12:00:00', 10, 'Lublin', 2),
-('Skok w tandemie', '2023-10-31 18:00:00', 5, 'Lublin', 1),
+('Skok w tandemie', '2023-12-26 18:00:00', 5, 'Lublin', 1),
 ('Skok w tandemie', '2023-12-02 08:00:00', 6, 'Lublin', 1),
 ('Skok w tandemie z kamerzystą', '2023-12-12 10:00:00', 2, 'Lublin', 1),
 ('Skok w tandemie z kamerzystą', '2023-12-19 08:00:00', 8, 'Lublin', 1);
@@ -333,6 +333,52 @@ BEGIN
     UPDATE planowane_terminy
     SET liczba_miejsc_w_samolocie = liczba_miejsc_w_samolocie + seats_to_increase
     WHERE terminy_id = OLD.planowane_terminy_id;
+END;
+//
+DELIMITER ;
+
+-- Triggery do aktualizacji liczby wolnych miejsc w samolocie podczas edycji terminu
+-- Trigger 1
+USE skydive;
+
+DELIMITER //
+CREATE TRIGGER increase_seats_before_update
+BEFORE UPDATE ON rezerwacje_terminow
+FOR EACH ROW
+BEGIN
+    DECLARE seats_to_increase INT;
+    
+    -- pobierz ile miejsc ma dany typ skoku
+    SET seats_to_increase = (SELECT liczba_miejsc_w_samolocie FROM rodzaj_skoku WHERE skok_id = OLD.rodzaj_skoku_id);
+
+    -- Zaktualizuj ilość dostępnych miejsc w starym terminie skoku
+    UPDATE planowane_terminy
+    SET liczba_miejsc_w_samolocie = liczba_miejsc_w_samolocie + seats_to_increase
+    WHERE terminy_id = OLD.planowane_terminy_id;
+END;
+//
+DELIMITER ;
+
+-- Trigger 2
+USE skydive;
+
+DELIMITER //
+CREATE TRIGGER decrease_seats_after_update
+AFTER UPDATE ON rezerwacje_terminow
+FOR EACH ROW
+BEGIN
+    DECLARE seats_to_decrease INT;
+    DECLARE available_seats INT;
+   
+    SET seats_to_decrease = (SELECT liczba_miejsc_w_samolocie FROM rodzaj_skoku WHERE skok_id = NEW.rodzaj_skoku_id);
+    SET available_seats = (SELECT liczba_miejsc_w_samolocie FROM planowane_terminy WHERE terminy_id = NEW.planowane_terminy_id);
+   
+    -- Jeśli dostępna liczba miejsc jest wystarczająca, zaktualizuj ją
+    IF available_seats >= seats_to_decrease THEN
+        UPDATE planowane_terminy
+        SET liczba_miejsc_w_samolocie = available_seats - seats_to_decrease
+        WHERE terminy_id = NEW.planowane_terminy_id;
+    END IF;
 END;
 //
 DELIMITER ;

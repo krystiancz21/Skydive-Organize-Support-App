@@ -52,7 +52,7 @@ router.post('/freeDatesOnJump', (req, res) => {
           WHERE data_czas > NOW()
           AND status_terminu_id = 1
           AND nazwa = ?
-          AND liczba_miejsc_w_samolocie > ?`;
+          AND liczba_miejsc_w_samolocie >= ?`;
 
         // Wykonujemy drugie zapytanie, przekazując nazwę z wyników pierwszego zapytania
         db.query(sql, [nazwa, liczbaMiejsc], (err, secondResults) => {
@@ -92,7 +92,7 @@ router.post('/availableDatesByJumpId', (req, res) => {
                     WHERE CAST(data_czas as DATE) = CAST(? as DATE)
                     AND data_czas >= CURDATE()
                     AND nazwa = ?
-                    AND liczba_miejsc_w_samolocie > ?`;
+                    AND liczba_miejsc_w_samolocie >= ?`;
 
         db.query(sql, [selectedDate, jumpName, seatsCount], (err, secondResults) => {
           if (err) {
@@ -237,7 +237,7 @@ router.post("/reserveJump", async (req, res) => {
 router.post("/showJumpsById", async (req, res) => {
   const jumpId = req.body.jumpId;
 
-  const sql = `SELECT rt.rezerwacje_id, rt.status_skoku_id, u.imie, u.nazwisko, pt.nazwa AS nazwa_skoku, pt.data_czas, pt.miejsce_startu, pt.liczba_miejsc_w_samolocie, sp.nazwa, rt.cena 
+  const sql = `SELECT rt.rezerwacje_id, rt.status_skoku_id, u.imie, u.nazwisko, pt.nazwa AS nazwa_skoku, pt.data_czas, pt.miejsce_startu, pt.liczba_miejsc_w_samolocie, sp.nazwa, rt.cena,  rt.rodzaj_skoku_id
   FROM rezerwacje_terminow rt
   JOIN user u ON u.user_id = rt.user_id
   JOIN planowane_terminy pt ON pt.terminy_id = rt.planowane_terminy_id
@@ -301,7 +301,6 @@ router.post("/showArchivalMyJumpsByMail", async (req, res) => {
 
 router.post("/resignJump", async (req, res) => {
   const rezerwacjaId = req.body.rezerwacjaId;
-  console.log(rezerwacjaId);
 
   const sql = `DELETE FROM rezerwacje_terminow WHERE rezerwacje_id = ?`;
 
@@ -309,6 +308,24 @@ router.post("/resignJump", async (req, res) => {
     if (err) {
       console.error('Błąd zapytania do bazy danych (/resignJump): ' + err.message);
       res.status(500).json({ error: 'Błąd zapytania do bazy danych (/resignJump).' });
+    } else {
+      res.status(200).json(results);
+      // tutaj UPDATE liczby wolnych miejsc w planowane terminy - zrobiłem Trigger
+    }
+  });
+});
+
+router.post("/editJumpReservationById", async (req, res) => {
+  const values = [
+    req.body.termin_id,
+    req.body.rezerwacje_id,
+  ];
+  const sql = `UPDATE rezerwacje_terminow SET planowane_terminy_id = ? WHERE rezerwacje_id = ?`;
+
+  db.query(sql, values, (err, results) => {
+    if (err) {
+      console.error('Błąd zapytania do bazy danych (/editJumpReservationById): ' + err.message);
+      res.status(500).json({ error: 'Błąd zapytania do bazy danych (/editJumpReservationById).' });
     } else {
       res.status(200).json(results);
       // tutaj UPDATE liczby wolnych miejsc w planowane terminy - zrobiłem Trigger

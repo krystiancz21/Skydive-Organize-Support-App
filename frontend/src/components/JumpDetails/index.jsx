@@ -5,10 +5,12 @@ import axios from "axios";
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import Alert from 'react-bootstrap/Alert';
 
 const JumpDetails = () => {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [error, setError] = useState("")
     const [isAuth, setIsAuth] = useState(false);
@@ -16,7 +18,7 @@ const JumpDetails = () => {
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
 
-    // const [jumpData, setJumpData] = useState([]);
+    const [editSuccess, setEditSuccess] = useState(location.state?.message);
     const { jumpId } = useParams();
 
     const [jumpData, setJumpData] = useState({
@@ -87,11 +89,16 @@ const JumpDetails = () => {
         if (window.confirm("Czy na pewno chcesz zrezygnować?")) {
             axios.post('http://localhost:3001/api/jumps/resignJump', { rezerwacjaId: rezerwacjaId })
                 .then(res => {
-                    // KOMUNIKAT NA FONT ZE POPRAWNIE ZREZYGNOWANO I PRZEKIEROWANIE
+                    // KOMUNIKAT NA FRONT ZE POPRAWNIE ZREZYGNOWANO I PRZEKIEROWANIE
                     navigate("/myjumps");
                 })
                 .catch(err => console.log(err));
         }
+    };
+
+    const handleEditJump = () => {
+        const rezerwacjaId = jumpData.rezerwacje_id;
+        navigate(`/jump-edit/${rezerwacjaId}`);
     };
 
     return (
@@ -238,13 +245,24 @@ const JumpDetails = () => {
                                         <Button variant="danger" className="mt-3" id="przycisk" onClick={handleResign}>
                                             REZYGNUJE
                                         </Button>
-                                        <Button variant="warning" className='mt-3' id="przycisk">EDYTUJ</Button>
+                                        <Button variant="warning" className='mt-3' id="przycisk" onClick={handleEditJump}>
+                                            EDYTUJ
+                                        </Button>
                                     </>
                                 ) : (
                                     <></>
                                 )}
                             </Col>
                         </Row>
+                        {editSuccess &&
+                            <Row className='mt-4'>
+                                <Col>
+                                    <Alert className="text-center" key="success" variant="success">
+                                        {editSuccess}
+                                    </Alert>
+                                </Col>
+                            </Row>
+                        }
                     </Container></>
             ) : (
                 <></> // User niezalogowany
