@@ -1,7 +1,7 @@
 import { Container, Nav, Navbar, Button, Row, Col } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
-import { BsArrowRightShort, BsBagPlusFill, BsFillCalendarPlusFill } from 'react-icons/bs';
+import { BsArrowRightShort, BsBagPlusFill, BsFillCalendarPlusFill, BsFillCalendarCheckFill } from 'react-icons/bs';
 import { ImCancelCircle } from 'react-icons/im';
 import { MdAddCard } from "react-icons/md";
 import { useState, useEffect } from "react";
@@ -41,7 +41,7 @@ const EmployeeManageJumps = () => {
     }
 
     // Nawigacja dla poszczególnych ról
-    const getNavbar = (role, mail, handleDelete) => {
+    const getNavbar = (role, mail, handleLogout) => {
         switch (role) {
             case 'pracownik':
                 return (
@@ -89,7 +89,7 @@ const EmployeeManageJumps = () => {
         const year = new Date().getFullYear();
     
         return (
-            <footer className="text-center footer fixed-bottom">
+            <footer className="text-center footer mt-3">
                 <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
             </footer>
         );
@@ -134,6 +134,15 @@ const EmployeeManageJumps = () => {
                                 <Link to='/employee-add-new-offer'>
                                     <Button variant="secondary" className="mt-3" id="btn-jumps">
                                         <BsBagPlusFill /> Oferta <BsArrowRightShort />
+                                    </Button>
+                                </Link>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col className="text-center">
+                                <Link to='/employee-manage-reservation'>
+                                    <Button variant="secondary" className="mt-3" id="btn-jumps">
+                                        <BsFillCalendarCheckFill /> Rezerwacje <BsArrowRightShort />
                                     </Button>
                                 </Link>
                             </Col>

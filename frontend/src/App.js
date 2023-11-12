@@ -25,6 +25,7 @@ import EmployeePlanJumps from './components/EmployeePlanJumps';
 import EmployeeCancelJumps from './components/EmployeeCanceJumps';
 import EmployeePaymentMethod from './components/EmployeePaymentMethod';
 import EmployeeAddNewOffer from './components/EmployeeAddNewOffer';
+import EmployeeManageReservation from './components/EmployeeManageReservation';
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
       <Route path="/reservation/:jumpId" element={<Reservation />} />
       <Route path="/jump-details/:jumpId" element={<JumpDetails />} />
       <Route path="/jump-edit/:reservationId" element={<JumpEdit />} />
+      <Route path="/employee-manage-reservation" element={<EmployeeManageReservation />} />
       <Route path="/login" element={<Login />} />
       <Route path="/main" element={<Main />} />
       <Route path="/messages" element={<Messages />} />

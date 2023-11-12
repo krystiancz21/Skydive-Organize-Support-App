@@ -320,6 +320,7 @@ router.post("/editJumpReservationById", async (req, res) => {
     req.body.termin_id,
     req.body.rezerwacje_id,
   ];
+
   const sql = `UPDATE rezerwacje_terminow SET planowane_terminy_id = ? WHERE rezerwacje_id = ?`;
 
   db.query(sql, values, (err, results) => {
@@ -406,6 +407,23 @@ router.post("/addNewPlannedDate", async (req, res) => {
           res.status(200).json(results);
         }
       });
+    }
+  });
+});
+
+router.get("/showEmployeeAllReservations", async (req, res) => {
+  const sql = `SELECT rt.rezerwacje_id, u.imie, u.nazwisko, pt.nazwa, pt.data_czas, rt.status_skoku_id
+              FROM rezerwacje_terminow rt
+              JOIN planowane_terminy pt ON pt.terminy_id = rt.planowane_terminy_id
+              JOIN user u ON u.user_id = rt.user_id
+              ORDER BY pt.data_czas DESC`;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Błąd zapytania do bazy danych: ' + err.message);
+      res.status(500).json({ error: 'Błąd zapytania do bazy danych' });
+    } else {
+      res.status(200).json(results);
     }
   });
 });

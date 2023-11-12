@@ -91,7 +91,7 @@ const addNewOfferSchema = Joi.object({
     .label("Nazwa"),
   jumpPrice: Joi.number().required().label("Cena"),
   jumpSeats: Joi.number().required().label("Liczba miejsc"),
-  jumpLicense: Joi.number().required().label("Wymagana licencja"), // moze Joi.boolean() ?
+  jumpLicense: Joi.number().valid(0, 1).required().label("Wymagana licencja"), // moze Joi.boolean() ?
   jumpWeight: Joi.number().required().label("Masa ciała")
 }).messages(customMessages);
 

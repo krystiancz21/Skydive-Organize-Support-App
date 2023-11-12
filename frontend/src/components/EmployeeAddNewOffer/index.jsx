@@ -53,7 +53,8 @@ const EmployeeAddNewOffer = () => {
 
     const handleChange = ({ currentTarget: input }) => {
         setNewOfferData({ ...newOfferData, [input.name]: input.value })
-        //console.log(`Nowa wartość pola ${input.name}: ${input.value}`);
+        // console.log(`Nowa wartość pola ${input.name}: ${input.value}`);
+        console.log(newOfferData)
     }
 
     const handleSubmit = async (e) => {
@@ -78,7 +79,7 @@ const EmployeeAddNewOffer = () => {
                     setUpdateSuccess(true);
                 }
             }).catch(err => console.log('Błąd podczas dodawania oferty: ' + err.message));
-    
+
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error) {
                 setError(error.response.data.error);
@@ -114,7 +115,7 @@ const EmployeeAddNewOffer = () => {
                                 <h1 className="text-center">DODAJ RODZAJ SKOKU</h1>
                                 <Form className="text-center">
                                     <div className='max-width-form'>
-                                        <Form.Group as={Row} controlId="formEditOfferName" className="mb-3">
+                                        <Form.Group as={Row} controlId="formEditOfferName" className="mb-3 align-items-center">
                                             <Form.Label column sm={2}>
                                                 Nazwa
                                             </Form.Label>
@@ -127,7 +128,7 @@ const EmployeeAddNewOffer = () => {
                                                 />
                                             </Col>
                                         </Form.Group>
-                                        <Form.Group as={Row} controlId="formEditOfferPrice" className="mb-3">
+                                        <Form.Group as={Row} controlId="formEditOfferPrice" className="mb-3 align-items-center">
                                             <Form.Label column sm={2}>
                                                 Cena
                                             </Form.Label>
@@ -141,7 +142,7 @@ const EmployeeAddNewOffer = () => {
                                                 />
                                             </Col>
                                         </Form.Group>
-                                        <Form.Group as={Row} controlId="formEditOfferSeats" className="mb-3">
+                                        <Form.Group as={Row} controlId="formEditOfferSeats" className="mb-3 align-items-center">
                                             <Form.Label column sm={2}>
                                                 Liczba miejsc w samolocie
                                             </Form.Label>
@@ -155,7 +156,7 @@ const EmployeeAddNewOffer = () => {
                                                 />
                                             </Col>
                                         </Form.Group>
-                                        <Form.Group as={Row} controlId="formEditOfferLicense" className="mb-3">
+                                        {/* <Form.Group as={Row} controlId="formEditOfferLicense" className="mb-3">
                                             <Form.Label column sm={2}>
                                                 Wymagana licencja
                                             </Form.Label>
@@ -168,27 +169,37 @@ const EmployeeAddNewOffer = () => {
 
                                                 />
                                             </Col>
-                                        </Form.Group>
-                                        {/* <Form.Group as={Row} controlId="formEditOfferLicense" className="mb-3">
+                                        </Form.Group> */}
+                                        <Form.Group as={Row} controlId="formEditOfferLicense" className="mb-3 align-items-center">
                                             <Form.Label column sm={2}>
                                                 Wymagana licencja
                                             </Form.Label>
-                                            <Col sm={5}>
-                                                <Form.Check
-                                                    type="radio"
-                                                    label="Tak"
-                                                    id="On"
-                                                />
+                                            <Col sm={10}>
+                                                <div>
+                                                    <Form.Check
+                                                        type="radio"
+                                                        inline
+                                                        label="Tak"
+                                                        id="requiredLicenseYes"
+                                                        name="jumpLicense"
+                                                        value="1"
+                                                        checked={newOfferData.jumpLicense === "1"}
+                                                        onChange={handleChange}
+                                                    />
+                                                    <Form.Check
+                                                        type="radio"
+                                                        inline
+                                                        label="Nie"
+                                                        id="requiredLicenseNo"
+                                                        name="jumpLicense"
+                                                        value="0"
+                                                        checked={newOfferData.jumpLicense === "0"}
+                                                        onChange={handleChange}
+                                                    />
+                                                </div>
                                             </Col>
-                                            <Col sm={5}>
-                                                <Form.Check
-                                                    type="radio"
-                                                    label="Nie"
-                                                    id="Off"
-                                                />
-                                            </Col>
-                                        </Form.Group> */}
-                                        <Form.Group as={Row} controlId="formEditOfferWeight" className="mb-3">
+                                        </Form.Group>
+                                        <Form.Group as={Row} controlId="formEditOfferWeight" className="mb-3 align-items-center">
                                             <Form.Label column sm={2}>
                                                 Maksymalna masa
                                             </Form.Label>
@@ -201,7 +212,7 @@ const EmployeeAddNewOffer = () => {
                                                 />
                                             </Col>
                                         </Form.Group>
-                                        <Form.Group as={Row} controlId="formEditOfferImg" className="mb-3">
+                                        <Form.Group as={Row} controlId="formEditOfferImg" className="mb-3 align-items-center">
                                             <Form.Label column sm={2}>
                                                 Zdjęcie poglądowe
                                             </Form.Label>
@@ -249,7 +260,7 @@ const EmployeeAddNewOffer = () => {
                                 <h1 className="text-center">DODAJ RODZAJ SKOKU</h1>
                                 <Form className="text-center">
                                     <div className='max-width-form'>
-                                        <Form.Group as={Row} controlId="formEditOfferName" className="mb-3">
+                                        <Form.Group as={Row} controlId="formEditOfferName" className="mb-3 align-items-center">
                                             <Form.Label column sm={2}>
                                                 Nazwa
                                             </Form.Label>
@@ -262,7 +273,7 @@ const EmployeeAddNewOffer = () => {
                                                 />
                                             </Col>
                                         </Form.Group>
-                                        <Form.Group as={Row} controlId="formEditOfferPrice" className="mb-3">
+                                        <Form.Group as={Row} controlId="formEditOfferPrice" className="mb-3 align-items-center">
                                             <Form.Label column sm={2}>
                                                 Cena
                                             </Form.Label>
@@ -276,7 +287,7 @@ const EmployeeAddNewOffer = () => {
                                                 />
                                             </Col>
                                         </Form.Group>
-                                        <Form.Group as={Row} controlId="formEditOfferSeats" className="mb-3">
+                                        <Form.Group as={Row} controlId="formEditOfferSeats" className="mb-3 align-items-center">
                                             <Form.Label column sm={2}>
                                                 Liczba miejsc w samolocie
                                             </Form.Label>
@@ -290,21 +301,36 @@ const EmployeeAddNewOffer = () => {
                                                 />
                                             </Col>
                                         </Form.Group>
-                                        <Form.Group as={Row} controlId="formEditOfferLicense" className="mb-3">
+                                        <Form.Group as={Row} controlId="formEditOfferLicense" className="mb-3 align-items-center">
                                             <Form.Label column sm={2}>
                                                 Wymagana licencja
                                             </Form.Label>
                                             <Col sm={10}>
-                                                <FormControl
-                                                    type="text"
-                                                    name="jumpLicense"
-                                                    value={newOfferData.jumpLicense}
-                                                    onChange={handleChange}
-
-                                                />
+                                                <div>
+                                                    <Form.Check
+                                                        type="radio"
+                                                        inline
+                                                        label="Tak"
+                                                        id="requiredLicenseYes"
+                                                        name="jumpLicense"
+                                                        value="1"
+                                                        checked={newOfferData.jumpLicense === "1"}
+                                                        onChange={handleChange}
+                                                    />
+                                                    <Form.Check
+                                                        type="radio"
+                                                        inline
+                                                        label="Nie"
+                                                        id="requiredLicenseNo"
+                                                        name="jumpLicense"
+                                                        value="0"
+                                                        checked={newOfferData.jumpLicense === "0"}
+                                                        onChange={handleChange}
+                                                    />
+                                                </div>
                                             </Col>
                                         </Form.Group>
-                                        <Form.Group as={Row} controlId="formEditOfferWeight" className="mb-3">
+                                        <Form.Group as={Row} controlId="formEditOfferWeight" className="mb-3 align-items-center">
                                             <Form.Label column sm={2}>
                                                 Maksymalna masa
                                             </Form.Label>
@@ -317,7 +343,7 @@ const EmployeeAddNewOffer = () => {
                                                 />
                                             </Col>
                                         </Form.Group>
-                                        <Form.Group as={Row} controlId="formEditOfferImg" className="mb-3">
+                                        <Form.Group as={Row} controlId="formEditOfferImg" className="mb-3 align-items-center">
                                             <Form.Label column sm={2}>
                                                 Zdjęcie poglądowe
                                             </Form.Label>
