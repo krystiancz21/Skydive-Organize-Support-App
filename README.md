@@ -30,7 +30,7 @@ Uruchomienie:
 - [ ] odpowiadanie na pytania
 - [X] planowanie terminów skoków,
 - [ ] potwierdzenie dokonania płatności,
-- [ ] zarządzanie ofertą (dodawanie rodzaju skoku ( bo i tak są z góry dane 3 rodzaje skoku), określanie akceptowanych metod płatności, określanie cen skoków, określenie dodatkowych warunków które musi spełniać skoczek)
+- [X] zarządzanie ofertą (dodawanie, modyfikowanie, usuwanie)
 - [ ] planowanie grafiku zarezerwowanych skoków,
 - [X] (50%) odwoływanie skoków oraz rozesłanie informacji klientom,
 - [X] zarządzanie danymi klientów (zakładanie kont klientów, ewidencjonowanie licencji klientów)
