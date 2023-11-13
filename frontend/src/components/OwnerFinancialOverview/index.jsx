@@ -44,7 +44,7 @@ const OwnerFinancialOverview = () => {
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link href="#"><BiHomeAlt /></Nav.Link>
+                            <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                             <Nav.Link href="/offer">OFERTA</Nav.Link>
                             <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
                             <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
