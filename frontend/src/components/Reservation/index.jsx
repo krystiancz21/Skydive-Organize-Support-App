@@ -114,7 +114,7 @@ const Reservation = () => {
         }
 
         const paymentData = {
-            data_platnosci: new Date(),
+            // data_platnosci: new Date(),
             wplacona_kwota: 0, //cena skoku -narazie zero
             status_platnosci_id: 1, // 1-niezapłacone - zobaczymy co dalej 
             sposob_platnosci_id: paymentMethodId // wybrany sposób płatności

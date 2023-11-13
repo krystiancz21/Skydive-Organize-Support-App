@@ -411,11 +411,14 @@ router.post("/addNewPlannedDate", async (req, res) => {
   });
 });
 
-router.get("/showEmployeeAllReservations", async (req, res) => {
-  const sql = `SELECT rt.rezerwacje_id, u.imie, u.nazwisko, pt.nazwa, pt.data_czas, rt.status_skoku_id
+router.get("/showEmployeeNotConfirmReservations", async (req, res) => {
+  const sql = `SELECT rt.rezerwacje_id, rt.platnosc_id, u.imie, u.nazwisko, pt.nazwa, pt.data_czas, rt.status_skoku_id, 
+              p.wplacona_kwota, p.data_platnosci
               FROM rezerwacje_terminow rt
               JOIN planowane_terminy pt ON pt.terminy_id = rt.planowane_terminy_id
               JOIN user u ON u.user_id = rt.user_id
+              JOIN platnosc p ON p.platnosc_id = rt.platnosc_id
+              WHERE p.status_platnosci_id = 1 AND rt.status_skoku_id = 1
               ORDER BY pt.data_czas DESC`;
 
   db.query(sql, (err, results) => {
@@ -427,5 +430,47 @@ router.get("/showEmployeeAllReservations", async (req, res) => {
     }
   });
 });
+
+router.get("/showEmployeeConfirmReservations", async (req, res) => {
+  const sql = `SELECT rt.rezerwacje_id, rt.platnosc_id, u.imie, u.nazwisko, pt.nazwa, pt.data_czas, rt.status_skoku_id, 
+              p.wplacona_kwota, p.data_platnosci
+              FROM rezerwacje_terminow rt
+              JOIN planowane_terminy pt ON pt.terminy_id = rt.planowane_terminy_id
+              JOIN user u ON u.user_id = rt.user_id
+              JOIN platnosc p ON p.platnosc_id = rt.platnosc_id
+              WHERE p.status_platnosci_id = 3 AND rt.status_skoku_id = 1
+              ORDER BY pt.data_czas DESC`;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Błąd zapytania do bazy danych: ' + err.message);
+      res.status(500).json({ error: 'Błąd zapytania do bazy danych' });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
+router.get("/showEmployeeArchivalReservations", async (req, res) => {
+  const sql = `SELECT rt.rezerwacje_id, rt.platnosc_id, u.imie, u.nazwisko, pt.nazwa, pt.data_czas, rt.status_skoku_id, 
+              p.wplacona_kwota, p.data_platnosci
+              FROM rezerwacje_terminow rt
+              JOIN planowane_terminy pt ON pt.terminy_id = rt.planowane_terminy_id
+              JOIN user u ON u.user_id = rt.user_id
+              JOIN platnosc p ON p.platnosc_id = rt.platnosc_id
+              WHERE p.status_platnosci_id = 3 AND rt.status_skoku_id = 2
+              ORDER BY pt.data_czas DESC`;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Błąd zapytania do bazy danych: ' + err.message);
+      res.status(500).json({ error: 'Błąd zapytania do bazy danych' });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
+
 
 module.exports = router;

@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import moment from 'moment';
 import { useState, useEffect } from "react";
 import axios from "axios";
+import ToggleButton from 'react-bootstrap/ToggleButton';
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 
 const EmployeeManageReservation = () => {
     const [isAuth, setIsAuth] = useState(false);
@@ -14,6 +16,22 @@ const EmployeeManageReservation = () => {
     const [userRole, setUserRole] = useState('');
 
     const [currentReservatoins, setCurrentReservatoins] = useState([]);
+    const [confirmReservations, setConfirmReservations] = useState([]);
+    const [archivalReservations, setArchivalReservations] = useState([]);
+
+    const [selectedReservationType, setSelectedReservationType] = useState(2);
+    const getReservations = () => {
+        switch (selectedReservationType) {
+            case 1:
+                return confirmReservations;
+            case 2:
+                return currentReservatoins;
+            case 3:
+                return archivalReservations;
+            default:
+                return [];
+        }
+    };
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -31,10 +49,24 @@ const EmployeeManageReservation = () => {
             })
             .catch(err => console.log(err.message));
 
-        axios.get('http://localhost:3001/api/jumps/showEmployeeAllReservations')
+        axios.get('http://localhost:3001/api/jumps/showEmployeeNotConfirmReservations')
             .then(res => {
-                console.log(res.data)
                 setCurrentReservatoins(res.data);
+                // console.log(res.data)
+            })
+            .catch(err => console.log(err.message));
+
+        axios.get('http://localhost:3001/api/jumps/showEmployeeConfirmReservations')
+            .then(res => {
+                setConfirmReservations(res.data);
+                // console.log(res.data)
+            })
+            .catch(err => console.log(err.message));
+
+        axios.get('http://localhost:3001/api/jumps/showEmployeeArchivalReservations')
+            .then(res => {
+                setArchivalReservations(res.data);
+                // console.log(res.data)
             })
             .catch(err => console.log(err.message));
 
@@ -47,7 +79,16 @@ const EmployeeManageReservation = () => {
             }).catch(err => console.log(err));
     }
 
-
+    const handleConfirmJump = (rezerwacje_id, platnosc_id) => {
+        axios.post('http://localhost:3001/api/payment/employeeConfirmPayment', {
+            reservationId: rezerwacje_id,
+            platnoscId: platnosc_id
+        })
+            .then(res => {
+                window.location.reload();
+            })
+            .catch(err => console.log(err.message));
+    }
 
     return (
         <>
@@ -72,25 +113,85 @@ const EmployeeManageReservation = () => {
                             </Navbar>
                             <Container>
                                 <h1 className="text-center">REZERWACJE</h1>
-                                {currentReservatoins.length > 0 ? (
+                                <div className="d-flex justify-content-center pb-4">
+                                    <ToggleButtonGroup type="radio" name="options" defaultValue={2} onChange={setSelectedReservationType}>
+                                        <ToggleButton id="tbg-radio-1" value={1} variant="secondary">
+                                            Potwierdzone
+                                        </ToggleButton>
+                                        <ToggleButton id="tbg-radio-2" value={2} variant="secondary">
+                                            Niepotwierdzone
+                                        </ToggleButton>
+                                        <ToggleButton id="tbg-radio-3" value={3} variant="secondary">
+                                            Archiwalne
+                                        </ToggleButton>
+                                    </ToggleButtonGroup>
+                                </div>
+
+                                {getReservations().length > 0 ? (
                                     <>
-                                        <ul className="list-unstyled w-50 mx-auto">
-                                            {currentReservatoins.map((item, index) => (
-                                                <li key={index} className="jump-date-container">
-                                                    <h5 className="mb-1">{item.nazwa}</h5>
-                                                    <p className="mb-1">{item.imie} {item.nazwisko}</p>
-                                                    <p className="mb-1">
-                                                        Data: {moment(item.data_czas).format('DD.MM.YYYY')} Godzina: {moment(item.data_czas).format('HH:mm')}
-                                                    </p>
-                                                </li>
-                                            ))}
-                                        </ul>
+                                        {getReservations().map((item, index) => (
+                                            <Row key={index} className="accounts-container text-center mb-3">
+                                                <Row className='align-items-center justify-content-center'>
+                                                    <Col>{item.nazwa}</Col>
+                                                    <Col>{item.imie} {item.nazwisko}</Col>
+                                                    <Col>Data: {moment(item.data_czas).format('DD.MM.YYYY HH:mm')}</Col>
+                                                    <Col>{item.wplacona_kwota} PLN</Col>
+                                                    {selectedReservationType === 1 ? (
+                                                        <Col>Wpłata: {moment(item.data_platnosci).format('DD.MM.YY HH:mm')}</Col>
+                                                    ) : (
+                                                        <></>
+                                                    )}
+                                                    <Col>
+                                                        {selectedReservationType === 1 ? (
+                                                            <Button disabled variant="success">
+                                                                Potwierdzono
+                                                            </Button>
+                                                        ) : (
+                                                            <Button
+                                                                variant="outline-success"
+                                                                onClick={() => handleConfirmJump(item.rezerwacje_id, item.platnosc_id)}
+                                                            >
+                                                                Potwierdź płatność
+                                                            </Button>
+                                                        )}
+                                                    </Col>
+                                                </Row>
+                                            </Row>
+                                        ))}
+                                    </>
+                                ) : (
+                                    <>
+                                        <p className='text-center'>Brak rezerwacji.</p>
+                                    </>
+                                )}
+                                
+                                {/* {currentReservatoins.length > 0 ? (
+                                    <>
+                                        {currentReservatoins.map((item, index) => (
+                                            <Row key={index} className="accounts-container text-center mb-3">
+                                                <Row className='align-items-center justify-content-center'>
+                                                    <Col>{item.nazwa}</Col>
+                                                    <Col>{item.imie} {item.nazwisko}</Col>
+                                                    <Col>Data: {moment(item.data_czas).format('DD.MM.YYYY HH:mm')}</Col>
+                                                    <Col>{item.wplacona_kwota} PLN</Col>
+                                                    <Col>Wpłata: {moment(item.data_platnosci).format('DD.MM.YY')}</Col>
+                                                    <Col>
+                                                        <Button
+                                                            variant="success"
+                                                            onClick={() => handleConfirmJump(item.rezerwacje_id, item.platnosc_id)}
+                                                        >
+                                                            Potwierdź płatność
+                                                        </Button>
+                                                    </Col>
+                                                </Row>
+                                            </Row>
+                                        ))}
                                     </>
                                 ) : (
                                     <>
                                         <p>Brak rezerwacji.</p>
                                     </>
-                                )}
+                                )} */}
 
                             </Container>
                         </>

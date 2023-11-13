@@ -89,7 +89,7 @@ const EmployeeManageJumps = () => {
         const year = new Date().getFullYear();
     
         return (
-            <footer className="text-center footer mt-3">
+            <footer className="text-center footer fixed-bottom">
                 <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
             </footer>
         );
@@ -148,7 +148,8 @@ const EmployeeManageJumps = () => {
                             </Col>
                         </Row>
                     </Container>
-                    <SmallFooter/>
+                    <div className='pt-5 pb-5'></div>
+                    <SmallFooter />
                     </>
 
 

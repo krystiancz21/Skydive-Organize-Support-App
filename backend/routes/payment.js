@@ -21,13 +21,13 @@ router.get('/showPaymentMethod', (req, res) => {
 router.post("/addPayment", (req, res) => {
     // const { data_platnosci, wplacona_kwota, status_platnosci_id, sposob_platnosci_id } = req.body;
     const values = [
-        req.body.data_platnosci,
         req.body.wplacona_kwota,
         req.body.status_platnosci_id,
         req.body.sposob_platnosci_id,
     ];
-
-    const sql = "INSERT INTO platnosc (data_platnosci, wplacona_kwota, status_platnosci_id, sposob_platnosci_id) VALUES (?, ?, ?, ?)";
+    // req.body.data_platnosci,
+    // const sql = "INSERT INTO platnosc (data_platnosci, wplacona_kwota, status_platnosci_id, sposob_platnosci_id) VALUES (?, ?, ?, ?)";
+    const sql = "INSERT INTO platnosc (wplacona_kwota, status_platnosci_id, sposob_platnosci_id) VALUES (?, ?, ?)";
 
     db.query(sql, values, (err, result) => {
         if (err) {
@@ -74,5 +74,33 @@ router.post('/deletePaymentMethod', (req, res) => {
     });
 });
 
+router.post("/employeeConfirmPayment", async (req, res) => {
+    const sqlGetReservationPrice = `SELECT cena FROM rezerwacje_terminow WHERE rezerwacje_id = ?`;
+  
+    db.query(sqlGetReservationPrice, [req.body.reservationId], (err, reservationResults) => {
+      if (err) {
+        console.error('Błąd zapytania do bazy danych (/employeeConfirmJump): ' + err.message);
+        res.status(500).json({ error: 'Błąd zapytania do bazy danych (/employeeConfirmJump)' });
+      } else {
+        if (reservationResults.length > 0) {
+          const price = reservationResults[0].cena;
+          const sqlUpdatePayment = `UPDATE platnosc 
+                                    SET data_platnosci = NOW(), 
+                                    wplacona_kwota = ?, 
+                                    status_platnosci_id = 3 
+                                    WHERE platnosc_id = ?`;
+  
+          db.query(sqlUpdatePayment, [price, req.body.platnoscId], (err, paymentResults) => {
+            if (err) {
+              console.error('Błąd zapytania do bazy danych (/employeeConfirmJump): ' + err.message);
+              res.status(500).json({ error: 'Błąd zapytania do bazy danych (/employeeConfirmJump)' });
+            } else {
+              res.status(200).json(paymentResults);
+            }
+          });
+        }
+      }
+    });
+  });
 
 module.exports = router;
