@@ -135,14 +135,14 @@ const EmployeeManageReservation = () => {
                                                     <Col>{item.nazwa}</Col>
                                                     <Col>{item.imie} {item.nazwisko}</Col>
                                                     <Col>Data: {moment(item.data_czas).format('DD.MM.YYYY HH:mm')}</Col>
-                                                    <Col>{item.wplacona_kwota} PLN</Col>
-                                                    {selectedReservationType === 1 ? (
+                                                    <Col>{item.sposob_platnosci} - {item.wplacona_kwota} PLN</Col>
+                                                    {selectedReservationType === 1 || selectedReservationType === 3 ? (
                                                         <Col>Wpłata: {moment(item.data_platnosci).format('DD.MM.YY HH:mm')}</Col>
                                                     ) : (
                                                         <></>
                                                     )}
                                                     <Col>
-                                                        {selectedReservationType === 1 ? (
+                                                        {selectedReservationType === 1 || selectedReservationType === 3 ? (
                                                             <Button disabled variant="success">
                                                                 Potwierdzono
                                                             </Button>
