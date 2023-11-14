@@ -8,10 +8,16 @@ import { useEffect } from 'react';
 import axios from "axios"
 
 const OwnerFinancialOverview = () => {
+    const [dateFrom, setDateFrom] = useState('');
+    const [dateTo, setDateTo] = useState('');
+    const [totalAmount, setTotalAmount] = useState('');
+    const [jumpCount, setJumpCount] = useState('');
+
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
+
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -36,6 +42,24 @@ const OwnerFinancialOverview = () => {
                 window.location.reload(true);
             }).catch(err => console.log(err));
     }
+
+    const handleShowSummary = () => {
+        axios.get('http://localhost:3001/api/payment/showFinancialOverview', {
+            params: {
+                dateFrom,
+                dateTo,
+            },
+        })
+            .then(res => {
+                //console.log(res.data);
+                const jumpCount = res.data[0].jumpCount; // liczba skokow   
+                const totalAmount = res.data[0].totalAmount || 0; // kwota za liczbe odbytych skokow
+                //console.log(jumpCount, totalAmount);
+                setTotalAmount(totalAmount);
+                setJumpCount(jumpCount);
+            })
+            .catch(err => console.log(err));
+    };
 
     return (
         <>
@@ -66,7 +90,7 @@ const OwnerFinancialOverview = () => {
                 <Row>
                     <Form>
                         <Row>
-                            <Col lg={{ span: 5  , offset: 1 }}>
+                            <Col lg={{ span: 5, offset: 1 }}>
                                 <Form.Group as={Row} controlId="formDateFrom" className="mb-3">
                                     <Form.Label column sm={3}>
                                         Data od:
@@ -75,20 +99,24 @@ const OwnerFinancialOverview = () => {
                                         <FormControl
                                             type="date"
                                             name="dateFrom"
+                                            value={dateFrom}
+                                            onChange={(e) => setDateFrom(e.target.value)}
                                             required
                                         />
                                     </Col>
                                 </Form.Group>
                             </Col>
-                            <Col lg={{ span: 5  , offset: 0 }}>
-                            <Form.Group as={Row} controlId="formDateTo" className="mb-3">
+                            <Col lg={{ span: 5, offset: 0 }}>
+                                <Form.Group as={Row} controlId="formDateTo" className="mb-3">
                                     <Form.Label column sm={3}>
-                                    Data do:
+                                        Data do:
                                     </Form.Label>
                                     <Col sm={9}>
                                         <FormControl
                                             type="date"
                                             name="dateTo"
+                                            value={dateTo}
+                                            onChange={(e) => setDateTo(e.target.value)}
                                             required
                                         />
                                     </Col>
@@ -99,7 +127,9 @@ const OwnerFinancialOverview = () => {
                 </Row>
                 <Row className="mb-5">
                     <Col>
-                        <Button variant="success" type="submit">POKAŻ</Button>
+                        <Button variant="success" type="submit" onClick={handleShowSummary}>
+                            POKAŻ
+                        </Button>
                     </Col>
                 </Row>
                 <Row className="mb-2">
@@ -108,40 +138,36 @@ const OwnerFinancialOverview = () => {
                     </Col>
                 </Row>
                 <Row>
-                    <Form>
-                        <Row>
-                            <Col lg={{ span: 5  , offset: 1 }}>
-                                <Form.Group as={Row} controlId="formJumpsNumber" className="mb-3">
-                                    <Form.Label column sm={3}>
-                                        Liczba skoków:
-                                    </Form.Label>
-                                    <Col sm={9}>
-                                        <FormControl
-                                            type="input"
-                                            placeholder="36"
-                                            name="jumpsNumber"
-                                            required
-                                        />
-                                    </Col>
-                                </Form.Group>
+                    <Col lg={{ span: 5, offset: 1 }}>
+                        <Form.Group as={Row} controlId="formJumpsNumber" className="mb-3">
+                            <Form.Label column sm={3}>
+                                Liczba skoków:
+                            </Form.Label>
+                            <Col sm={9}>
+                                <FormControl
+                                    type="input"
+                                    name="jumpsNumber"
+                                    value={jumpCount}
+                                    disabled
+                                />
                             </Col>
-                            <Col lg={{ span: 5  , offset: 0 }}>
-                            <Form.Group as={Row} controlId="formAmountOfMoney" className="mb-3">
-                                    <Form.Label column sm={3}>
-                                        Kwota:
-                                    </Form.Label>
-                                    <Col sm={9}>
-                                        <FormControl
-                                            type="input"
-                                            placeholder="12600 PLN"
-                                            name="amountOfMoney"
-                                            required
-                                        />
-                                    </Col>
-                                </Form.Group>
+                        </Form.Group>
+                    </Col>
+                    <Col lg={{ span: 5, offset: 0 }}>
+                        <Form.Group as={Row} controlId="formAmountOfMoney" className="mb-3">
+                            <Form.Label column sm={3}>
+                                Kwota:
+                            </Form.Label>
+                            <Col sm={9}>
+                                <FormControl
+                                    type="input"
+                                    name="amountOfMoney"
+                                    value={totalAmount}
+                                    disabled
+                                />
                             </Col>
-                        </Row>
-                    </Form>
+                        </Form.Group>
+                    </Col>
                 </Row>
             </Container></>
     )
