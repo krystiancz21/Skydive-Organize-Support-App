@@ -383,6 +383,41 @@ END;
 //
 DELIMITER ;
 
+-- Procedura do aktualizacji stuatusu skoku
+USE skydive;
+DELIMITER //
+CREATE PROCEDURE UpdateJumpStatus()
+BEGIN
+  CREATE TEMPORARY TABLE IF NOT EXISTS temp_table AS (SELECT rt.rezerwacje_id 
+				  FROM rezerwacje_terminow rt 
+				  JOIN planowane_terminy pt ON rt.planowane_terminy_id = pt.terminy_id 
+				  WHERE pt.data_czas < NOW());
+
+  UPDATE rezerwacje_terminow
+  SET status_skoku_id = 2
+  WHERE rezerwacje_id IN (SELECT rezerwacje_id FROM temp_table);
+
+  DROP TEMPORARY TABLE IF EXISTS temp_table;
+END //
+DELIMITER ;
+
+-- MANUALNE ODPALENIE PROCEDURY 
+USE skydive;
+SET SQL_SAFE_UPDATES = 0;
+CALL UpdateJumpStatus();
+SET SQL_SAFE_UPDATES = 1;
+
+-- AUTOMAT - wykonywany raz dziennie
+USE skydive; 
+SET GLOBAL event_scheduler = ON;
+DELIMITER //
+CREATE EVENT IF NOT EXISTS auto_update_jump_status
+ON SCHEDULE EVERY 1 DAY
+STARTS (TIMESTAMP(CURRENT_DATE) + INTERVAL 1 DAY)
+DO
+CALL UpdateJumpStatus()//
+DELIMITER ;
+
 
 
 -- W razie jakby trzeba było usunąć trigger:

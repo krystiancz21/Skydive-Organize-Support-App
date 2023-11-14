@@ -32,7 +32,7 @@ router.post("/register", async (req, res) => {
 
       const emailExists = result[0].count > 0;
       if (emailExists) {
-        return res.json({ error: "The email address already exists" });
+        return res.json({ error: "Użytkownik o podanym adresie e-mail już istnieje." });
       } else {
         const sql = "INSERT INTO user (`imie`, `nazwisko`, `mail`, `haslo`, `telefon`) VALUES (?, ?, ?, ?, ?)";
 
