@@ -1,15 +1,13 @@
-import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, CardGroup, Image } from 'react-bootstrap';
+import { Container, Nav, Navbar, Button, Row, Col, Card } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
-import { BsArrowRightShort } from 'react-icons/bs';
 import styles from "./style.css"
 import axios from "axios";
 import { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logo from '../Images/logo.jpg';
 
 const Offer = () => {
-    const [error, setError] = useState("")
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
@@ -188,7 +186,7 @@ const Offer = () => {
                             <Container>
                                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                                 <Navbar.Collapse id="responsive-navbar-nav">
-                                    <Nav className="me-auto">
+                                    <Nav className="me-auto d-flex align-items-center" style={{ fontSize: '14px' }}>
                                         <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                         <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                         <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
@@ -202,24 +200,28 @@ const Offer = () => {
                         </Navbar>
                             <Container className={styles.content}>
                                 <h1 className="text-center">OFERTA</h1>
-                                <CardGroup>
+                                <Row className="justify-content-center">
                                     {jumpData.map((offer, index) => (
-                                        <Card key={offer.skok_id}>
-                                            <Card.Img variant="top" src={`http://localhost:3001/images/${offer.sciezka_do_grafiki.split('\\').pop()}`} alt={`img-oferta-${index + 1}`} />
-                                            <Card.Body>
-                                                <Card.Title>{offer.nazwa}</Card.Title>
-                                                <Card.Text>Cena: {offer.cena} zł</Card.Text>
-                                                <Link to={`/jump-calendar/${offer.skok_id}`}>
-                                                    <Button variant="primary">ZAREZERWUJ SKOK</Button>
-                                                </Link><p></p>
-                                                <Link to={`/offer-edit/${offer.skok_id}`}>
-                                                    <Button variant="success">EDYTUJ SKOK</Button>
-                                                </Link>
-                                            </Card.Body>
-                                        </Card>
+                                        <Col lg={4} key={offer.skok_id} className="mb-4">
+                                            <Card key={offer.skok_id}>
+                                                <Card.Img variant="top" src={`http://localhost:3001/images/${offer.sciezka_do_grafiki.split('\\').pop()}`} alt={`img-oferta-${index + 1}`} />
+                                                <Card.Body>
+                                                    <Card.Title>{offer.nazwa}</Card.Title>
+                                                    <Card.Text>Cena: {offer.cena} zł</Card.Text>
+                                                    <Link to={`/jump-calendar/${offer.skok_id}`}>
+                                                        <Button variant="primary">ZAREZERWUJ SKOK</Button>
+                                                    </Link><p></p>
+                                                    <Link to={`/offer-edit/${offer.skok_id}`}>
+                                                        <Button variant="success">EDYTUJ SKOK</Button>
+                                                    </Link>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
                                     ))}
-                                </CardGroup>
-                            </Container></>
+                                </Row>
+                            </Container>
+                            <Stopka />
+                            </>
                     )}
                 </>
             ) : (

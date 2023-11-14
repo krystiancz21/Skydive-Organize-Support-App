@@ -7,10 +7,11 @@ h1{
     width: 200px; 
 }
 
-#przycisk2{
+#przycisk1, #przycisk2{
     justify-content: center;
     margin: 15px;
 }
+
 .powrot{
     float: left;
     margin: 20px;

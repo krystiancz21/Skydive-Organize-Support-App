@@ -1,4 +1,4 @@
-import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, CardGroup, Image, Carousel } from 'react-bootstrap';
+import { Container, Nav, Navbar, Button, Row, Col, Card, CardGroup, Carousel } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
 import { BsArrowRightShort } from 'react-icons/bs';
@@ -7,7 +7,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 import styles from "./style.css"
-import obraz from '../Images/obraz.jpg';
 import m1 from '../Images/main1.jpg';
 import m2 from '../Images/main2.jpg';
 import m3 from '../Images/main3.jpg';
@@ -269,8 +268,14 @@ const Main = () => {
                                 <Container>
                                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                                     <Navbar.Collapse id="responsive-navbar-nav">
-                                        <Nav className="me-auto">
+                                        <Nav className="me-auto d-flex align-items-center" style={{ fontSize: '14px' }}>
                                             <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                            <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                            <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
+                                            <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                            <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                            <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                            <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
                                         </Nav>
                                         <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
                                         <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
@@ -332,8 +337,24 @@ const Main = () => {
                                             </Card>
                                         </Col>
                                     </Row>
+                                    <Row>
+                                        <Col md={6} className="mb-2">
+                                            <Card className='w-50 mx-auto'>
+                                                <Card.Img variant="top" src={terminy} alt="img-skoki" className='img-fluid' />
+                                                <Card.Body>
+                                                    <Card.Title>
+                                                        <Link to='/employee-manage-jumps'>
+                                                            <Button variant="primary" size="sm">ZARZĄDZANIE SKOKAMI <BsArrowRightShort /></Button>
+                                                        </Link>
+                                                    </Card.Title>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
+                                    </Row>
                                 </CardGroup>
-                            </Container></>
+                            </Container>
+                            <Stopka />
+                        </>
                     )}
                 </>
             ) : (

@@ -1,4 +1,4 @@
-import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, CardGroup, Image } from 'react-bootstrap';
+import { Container, Nav, Navbar, Form, Button, Row, Col } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
 import styles from "./style.css";
@@ -72,11 +72,28 @@ const MyJumps = () => {
         );
     };
 
-    return (
-        <>
-            {isAuth ? (
-                // User zalogowany
-                <>
+    // Nawigacja dla poszczególnych ról
+    const getNavbar = (role, mail, handleLogout) => {
+        switch (role) {
+            case 'klient':
+                return (<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                    <Container>
+                        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                        <Navbar.Collapse id="responsive-navbar-nav">
+                            <Nav className="me-auto">
+                                <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
+                                <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                            </Nav>
+                            <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
+                            <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                        </Navbar.Collapse>
+                    </Container>
+                </Navbar>
+                );
+            case 'pracownik':
+                return (
                     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                         <Container>
                             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -86,12 +103,47 @@ const MyJumps = () => {
                                     <Nav.Link href="/offer">OFERTA</Nav.Link>
                                     <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
                                     <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                    <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                    <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
                                 </Nav>
-                                <Nav.Link href="#"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
+                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
                                 <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                             </Navbar.Collapse>
                         </Container>
                     </Navbar>
+                );
+            case 'admin':
+                return (
+                    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                        <Container>
+                            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                            <Navbar.Collapse id="responsive-navbar-nav">
+                                <Nav className="me-auto d-flex align-items-center" style={{ fontSize: '14px' }}>
+                                    <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                    <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                    <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
+                                    <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                    <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                    <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                    <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
+                                </Nav>
+                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
+                                <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
+                );
+            default:
+                return null;
+        }
+    }
+
+    return (
+        <>
+            {isAuth ? (
+                // User zalogowany
+                <>
+                    {getNavbar(userRole, mail, handleLogout)}
                     <h1 className="text-center">MOJE SKOKI</h1>
                     <Container>
                         <Row className='mb-3'>
@@ -105,27 +157,6 @@ const MyJumps = () => {
                                 />
                             </Col>
                         </Row>
-                        {/* {myJumps.length > 0 ? (
-                            <>
-                                {myJumps.map((item, index) => (
-                                    <Row key={index} className="accounts-container mx-auto text-center mb-3">
-                                        <Col md={4} className='mt-2'>{item.nazwa}</Col>
-                                        <Col md={4} className='mt-2'>{moment(item.data_czas).format('DD.MM.YYYY HH:mm')}</Col>
-                                        <Col md={4}>
-                                            <Link to={`/jump-details/${item.rezerwacje_id}`}>
-                                                <Button variant="success">Szczegóły</Button>
-                                            </Link>
-                                        </Col>
-                                    </Row>
-                                ))}
-                            </>
-                        ) : (
-                            <>
-                                <p className="text-center">
-                                    Tutaj nic nie ma...
-                                </p>
-                            </>
-                        )} */}
                         {isChecked ? (
                             currentJumps.length > 0 ? (
                                 <>
@@ -167,8 +198,19 @@ const MyJumps = () => {
                         )}
                     </Container>
                     <SmallFooter />
+                </>
+            ) : (
+                <></> // User niezalogowany
+            )}
+        </>
+    );
+}
 
-                    {/* <Container className="form-container">
+export default MyJumps
+
+
+
+{/* <Container className="form-container">
                         <Row>
                             <Col md={4}>
                                 <Form.Group className="mb-2">
@@ -278,12 +320,3 @@ const MyJumps = () => {
                             </Col>
                         </Row>
                     </Container>*/}
-                </>
-            ) : (
-                <></> // User niezalogowany
-            )}
-        </>
-    );
-}
-
-export default MyJumps

@@ -1,10 +1,9 @@
-import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, CardGroup, Image } from 'react-bootstrap';
+import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
 import { BsFillPersonFill, BsArrowRightShort, BsFillBellFill } from 'react-icons/bs';
 import { Link } from "react-router-dom"
-import styles from "./style.css"
-import obraz from '../Images/obraz.jpg';
+import styles from "./style.css";
 import axios from "axios";
 import { useEffect, useState } from 'react';
 
@@ -145,7 +144,7 @@ const UserProfile = () => {
                             <Container>
                                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                                 <Navbar.Collapse id="responsive-navbar-nav">
-                                    <Nav className="me-auto">
+                                    <Nav className="me-auto d-flex align-items-center" style={{ fontSize: '14px' }}>
                                         <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                         <Nav.Link href="/offer">OFERTA</Nav.Link>
                                         <Nav.Link href="/reservation">TERMINY SKOKÓW</Nav.Link>

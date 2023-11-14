@@ -1,8 +1,7 @@
-import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, CardGroup, Image } from 'react-bootstrap';
+import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
-import { BsFillPersonFill, BsArrowRightShort, BsFillBellFill, BsPencilSquare, BsFillTrashFill } from 'react-icons/bs';
-import obraz from '../Images/obraz.jpg';
+import { BsPencilSquare, BsFillTrashFill } from 'react-icons/bs';
 import styles from "./style.css"
 import axios from "axios";
 import { useEffect, useState } from 'react';
@@ -12,7 +11,7 @@ const OfferEdit = () => {
     const [offerData, setOfferData] = useState({
         jumpName: "",
         jumpPrice: "",
-    })
+    });
     const [error, setError] = useState("");
     const [updateSuccess, setUpdateSuccess] = useState(false);
     const [isAuth, setIsAuth] = useState(false);
@@ -77,7 +76,7 @@ const OfferEdit = () => {
                     // Przekierowanie na stronę główną po usunięciu konta
                     window.location.href = "http://localhost:3000/offer";
                 })
-                .catch(err => console.log(err));
+                .catch(err => console.log(err.message));
         }
     }
 
@@ -97,15 +96,15 @@ const OfferEdit = () => {
                 filePath: filePath,
                 offerId: offerId
             });
+
             if (response.data.error) {
                 setError(response.data.error);
                 setUpdateSuccess(false);
-            } else if (response.data.Status === "Success") {
+            } else {
                 setError('');
                 setUpdateSuccess(true);
-            } else {
-                console.error("Błąd podczas aktualizacji oferty!");
             }
+
         } catch (error) {
             // console.error(error);
             console.error('Błąd podczas aktualizacji oferty: ' + error.message);
@@ -113,7 +112,7 @@ const OfferEdit = () => {
     };
 
     // Nawigacja dla poszczególnych ról
-    const getNavbar = (role, mail, handleDelete) => {
+    const getNavbar = (role, mail, handleLogout) => {
         switch (role) {
             case 'pracownik':
                 return (
@@ -139,7 +138,7 @@ const OfferEdit = () => {
                         <Container>
                             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                             <Navbar.Collapse id="responsive-navbar-nav">
-                                <Nav className="me-auto">
+                                <Nav className="me-auto d-flex align-items-center" style={{ fontSize: '14px' }}>
                                     <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                     <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                     <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
@@ -221,54 +220,6 @@ const OfferEdit = () => {
             ) : (
                 // User niezalogowany
                 <>
-                    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-                        <Container>
-                            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                            <Navbar.Collapse id="responsive-navbar-nav">
-                                <Nav className="me-auto">
-                                    <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-                                </Nav>
-                                <Link to="/login">
-                                    <Button variant="success">ZALOGUJ</Button>
-                                </Link>
-                            </Navbar.Collapse>
-                        </Container>
-                    </Navbar>
-                    <Container className={styles.content}>
-                        <h1 className="text-center">OFERTA</h1>
-                        <h2>{message}</h2>
-                        <CardGroup>
-                            <Card>
-                                <Card.Img variant="top" src={obraz} alt="img-oferta" />
-                                <Card.Body>
-                                    <Card.Title>Skok samodzielny z licencją<p>Cena: 600zł</p></Card.Title>
-                                    <Button variant="primary" className='przyciskButton' >
-                                        ZAREZERWUJ SKOK <BsArrowRightShort />
-                                    </Button>
-                                </Card.Body>
-                            </Card>
-                            <Card>
-                                <Card.Img variant="top" src={obraz} alt="img-terminy" />
-                                <Card.Body>
-                                    <Card.Title>Skok w tandemie<p>Cena: 900zł</p></Card.Title>
-                                    <div className="mb-2">
-                                        <Button variant="primary" className='przyciskButton' >
-                                            ZAREZERWUJ SKOK <BsArrowRightShort />
-                                        </Button>
-                                    </div>
-                                </Card.Body>
-                            </Card>
-                            <Card>
-                                <Card.Img variant="top" src={obraz} alt="img-wiadomosci" />
-                                <Card.Body>
-                                    <Card.Title>Skok w tandemie z kamerzystą<p>Cena: 1100zł</p></Card.Title>
-                                    <Button variant="primary" className='przyciskButton' >
-                                        ZAREZERWUJ SKOK <BsArrowRightShort />
-                                    </Button>
-                                </Card.Body>
-                            </Card>
-                        </CardGroup>
-                    </Container>
                 </>
             )}
         </>

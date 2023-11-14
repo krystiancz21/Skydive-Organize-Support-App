@@ -1,9 +1,8 @@
-import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, CardGroup, Image } from 'react-bootstrap';
+import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
-import { BiHomeAlt } from 'react-icons/bi'
-import { BsArrowLeft, BsPersonCircle, BsArrowRight } from 'react-icons/bs';
+import { BiHomeAlt } from 'react-icons/bi';
 import styles from "./style.css"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -14,7 +13,8 @@ const EmployeeCreateAccount = () => {
         email: "",
         password: "",
         phoneNumber: "",
-    })
+    });
+
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
@@ -72,6 +72,17 @@ const EmployeeCreateAccount = () => {
                 window.location.href = "/main";
             }).catch(err => console.log(err));
     }
+
+    const SmallFooter = () => {
+        const year = new Date().getFullYear();
+
+        return (
+            <footer className="text-center footer fixed-bottom">
+                <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
+            </footer>
+        );
+    };
+
 
     return (
         <>
@@ -181,14 +192,17 @@ const EmployeeCreateAccount = () => {
                                     {error && <div className="alert alert-danger">{error}</div>}
                                     <Button variant="success" type="submit">UTWÓRZ KONTO</Button>
                                 </Form>
-                            </Container></>
+                            </Container>
+                            <div className='pt-5 pb-5'></div>
+                            <SmallFooter />
+                        </>
                     )}
                     {userRole === 'admin' && (
                         <><Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                             <Container>
                                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                                 <Navbar.Collapse id="responsive-navbar-nav">
-                                    <Nav className="me-auto">
+                                    <Nav className="me-auto d-flex align-items-center" style={{ fontSize: '14px' }}>
                                         <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                         <Nav.Link href="/offer">OFERTA</Nav.Link>
                                         <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
@@ -285,7 +299,10 @@ const EmployeeCreateAccount = () => {
                                     {error && <div className="alert alert-danger">{error}</div>}
                                     <Button variant="success" type="submit">UTWÓRZ KONTO</Button>
                                 </Form>
-                            </Container></>
+                            </Container>
+                            <div className='pt-5 pb-5'></div>
+                            <SmallFooter />
+                        </>
                     )}
                 </>
             ) : (

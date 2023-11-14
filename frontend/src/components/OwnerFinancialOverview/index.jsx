@@ -1,11 +1,10 @@
-import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, CardGroup, Image } from 'react-bootstrap';
+import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
-import { BsArrowLeft, BsTrash, BsPencil } from 'react-icons/bs';
-import styles from "./style.css"
-import { useState } from "react"
+import styles from "./style.css";
+import { useState } from "react";
 import { useEffect } from 'react';
-import axios from "axios"
+import axios from "axios";
 
 const OwnerFinancialOverview = () => {
     const [dateFrom, setDateFrom] = useState('');
@@ -61,13 +60,23 @@ const OwnerFinancialOverview = () => {
             .catch(err => console.log(err));
     };
 
+    const SmallFooter = () => {
+        const year = new Date().getFullYear();
+
+        return (
+            <footer className="text-center footer fixed-bottom">
+                <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
+            </footer>
+        );
+    };
+
     return (
         <>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                 <Container>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
-                        <Nav className="me-auto">
+                        <Nav className="me-auto d-flex align-items-center" style={{ fontSize: '14px' }}>
                             <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                             <Nav.Link href="/offer">OFERTA</Nav.Link>
                             <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
@@ -80,8 +89,8 @@ const OwnerFinancialOverview = () => {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <Container className={styles.content}>
-                <h1 className="text-center">PODSUMOWANIE FINANSOWE</h1>
+            <Container className="text-center">
+                <h1>PODSUMOWANIE FINANSOWE</h1>
                 <Row className="mb-2">
                     <Col>
                         <h4>Wybierz datę:</h4>
@@ -169,7 +178,9 @@ const OwnerFinancialOverview = () => {
                         </Form.Group>
                     </Col>
                 </Row>
-            </Container></>
+            </Container>
+            <SmallFooter />
+        </>
     )
 }
 

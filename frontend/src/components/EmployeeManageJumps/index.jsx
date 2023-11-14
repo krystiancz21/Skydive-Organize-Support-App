@@ -5,7 +5,7 @@ import { BsArrowRightShort, BsBagPlusFill, BsFillCalendarPlusFill, BsFillCalenda
 import { ImCancelCircle } from 'react-icons/im';
 import { MdAddCard } from "react-icons/md";
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import styles from "./style.css";
 
@@ -67,7 +67,7 @@ const EmployeeManageJumps = () => {
                         <Container>
                             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                             <Navbar.Collapse id="responsive-navbar-nav">
-                                <Nav className="me-auto">
+                                <Nav className="me-auto d-flex align-items-center" style={{ fontSize: '14px' }}>
                                     <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                     <Nav.Link href="/offer">OFERTA</Nav.Link>
                                     <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
@@ -87,7 +87,7 @@ const EmployeeManageJumps = () => {
 
     const SmallFooter = () => {
         const year = new Date().getFullYear();
-    
+
         return (
             <footer className="text-center footer fixed-bottom">
                 <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
@@ -150,9 +150,7 @@ const EmployeeManageJumps = () => {
                     </Container>
                     <div className='pt-5 pb-5'></div>
                     <SmallFooter />
-                    </>
-
-
+                </>
             ) : (
                 // User niezalogowany
                 <></>

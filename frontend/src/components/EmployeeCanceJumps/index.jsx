@@ -1,7 +1,6 @@
-import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, CardGroup, Image } from 'react-bootstrap';
+import { Container, Nav, Navbar, Button, Row, Col } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
-import { BsArrowLeft, BsPersonCircle, BsArrowRight } from 'react-icons/bs';
 import styles from "./style.css";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -19,8 +18,6 @@ const EmployeeCancelJumps = () => {
     const [date, setDate] = useState(new Date());
     const [availableJumps, setAvailableJumps] = useState([]);
     const [availableDates, setAvailableDates] = useState([]);
-    const [jumpName, setJumpName] = useState('');
-
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -93,95 +90,112 @@ const EmployeeCancelJumps = () => {
         }
     }
 
+    // Nawigacja dla poszczególnych ról
+    const getNavbar = (role, mail, handleLogout) => {
+        switch (role) {
+            case 'pracownik':
+                return (
+                    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                        <Container>
+                            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                            <Navbar.Collapse id="responsive-navbar-nav">
+                                <Nav className="me-auto">
+                                    <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                    <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                    <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                    <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                </Nav>
+                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
+                                <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
+                );
+            case 'admin':
+                return (
+                    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                        <Container>
+                            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                            <Navbar.Collapse id="responsive-navbar-nav">
+                                <Nav className="me-auto d-flex align-items-center" style={{ fontSize: '14px' }}>
+                                    <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                    <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                    <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                    <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                    <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
+                                </Nav>
+                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
+                                <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
+                );
+            default:
+                return null;
+        }
+    }
+
+    const SmallFooter = () => {
+        const year = new Date().getFullYear();
+
+        return (
+            <footer className="text-center footer fixed-bottom">
+                <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
+            </footer>
+        );
+    };
+
     return (
         <>
             {isAuth ? (
                 <>
-                    {userRole === 'pracownik' && (
-                        <>
-                            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-                                <Container>
-                                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                                    <Navbar.Collapse id="responsive-navbar-nav">
-                                        <Nav className="me-auto">
-                                            <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-                                            <Nav.Link href="/employeeoffer">OFERTA</Nav.Link>
-                                            <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
-                                            <Nav.Link href="/employeeusersaccounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
-                                        </Nav>
-                                        <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
-                                        <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
-                                    </Navbar.Collapse>
-                                </Container>
-                            </Navbar>
-                            <Container>
-                                <Row className='mt-5'>
-                                    <Col>
-                                        <h2>Terminy skoków</h2>
-                                        <div className="my-3">
-                                            <p>
-                                                <span className="text-success">Kolor zielony</span> - oznacza terminy zaplanowanych skoków
-                                            </p>
-                                        </div>
-                                        <div className="my-3">
-                                            <Calendar
-                                                value={date}
-                                                onChange={handleDateChange}
-                                                minDate={new Date()}
-                                                tileContent={tileContent}
-                                            />
-                                        </div>
-                                    </Col>
-                                    <Col className="text-center">
-                                        <h2>Zaplanowane terminy</h2>
+                    {getNavbar(userRole, mail, handleLogout)}
+                    <Container>
+                        <Row className='mt-5'>
+                            <Col>
+                                <h2>Terminy skoków</h2>
+                                <div className="my-3">
+                                    <p>
+                                        <span className="text-success">Kolor zielony</span> - oznacza terminy zaplanowanych skoków
+                                    </p>
+                                </div>
+                                <div className="my-3">
+                                    <Calendar
+                                        value={date}
+                                        onChange={handleDateChange}
+                                        minDate={new Date()}
+                                        tileContent={tileContent}
+                                    />
+                                </div>
+                            </Col>
+                            <Col className="text-center">
+                                <h2>Zaplanowane terminy</h2>
 
-                                        {availableJumps.length > 0 ? (
-                                            <>
-                                                <ul className="list-unstyled w-50 mx-auto">
-                                                    {availableJumps.map((jump, index) => (
-                                                        <li key={index} className="accounts-container">
-                                                            <h5 className="mb-1">{jump.nazwa}</h5>
-                                                            <p className="mb-1">Data: {moment(jump.data_czas).format('DD.MM.YYYY HH:mm')}</p>
-                                                            <Button variant="danger" type="submit" className="mt-1" onClick={() => handleJumpCancel(jump.terminy_id)}>
-                                                                ODWOŁAJ
-                                                            </Button>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <p>W tym dniu nie ma zaplanowanych skoków. Wybierz inną datę.</p>
-                                            </>
-                                        )}
+                                {availableJumps.length > 0 ? (
+                                    <>
+                                        <ul className="list-unstyled w-50 mx-auto">
+                                            {availableJumps.map((jump, index) => (
+                                                <li key={index} className="accounts-container">
+                                                    <h5 className="mb-1">{jump.nazwa}</h5>
+                                                    <p className="mb-1">Data: {moment(jump.data_czas).format('DD.MM.YYYY HH:mm')}</p>
+                                                    <Button variant="danger" type="submit" className="mt-1" onClick={() => handleJumpCancel(jump.terminy_id)}>
+                                                        ODWOŁAJ
+                                                    </Button>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </>
+                                ) : (
+                                    <>
+                                        <p>W tym dniu nie ma zaplanowanych skoków. Wybierz inną datę.</p>
+                                    </>
+                                )}
 
-                                    </Col>
-
-                                </Row>
-                            </Container>
-                        </>
-                    )}
-                    {userRole === 'admin' && (
-                        <>
-                            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-                                <Container>
-                                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                                    <Navbar.Collapse id="responsive-navbar-nav">
-                                        <Nav className="me-auto">
-                                            <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-                                            <Nav.Link href="/offer">OFERTA</Nav.Link>
-                                            <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
-                                            <Nav.Link href="/employeemanagejumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
-                                            <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
-                                        </Nav>
-                                        <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
-                                        <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
-                                    </Navbar.Collapse>
-                                </Container>
-                            </Navbar>
-                            potem przekopiuj kontener od pracownika do admina!
-                        </>
-                    )}
+                            </Col>
+                        </Row>
+                    </Container>
+                    <div className='pt-5 pb-5'></div>
+                    <SmallFooter />
                 </>
             ) : (
                 // User niezalogowany

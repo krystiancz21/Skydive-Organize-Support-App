@@ -29,7 +29,7 @@ Uruchomienie:
 3. Funkcjonalności pracownika:
 - [ ] odpowiadanie na pytania
 - [X] planowanie terminów skoków,
-- [ ] potwierdzenie dokonania płatności,
+- [X] potwierdzenie dokonania płatności,
 - [X] zarządzanie ofertą (dodawanie, modyfikowanie, usuwanie)
 - [ ] planowanie grafiku zarezerwowanych skoków,
 - [X] (50%) odwoływanie skoków oraz rozesłanie informacji klientom,

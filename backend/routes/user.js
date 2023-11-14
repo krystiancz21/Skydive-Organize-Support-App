@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../db");
 const multer = require("multer");
-const { editClientSchema } = require("../utils/validation");
+const { editClientSchema, editUserSchema } = require("../utils/validation");
 
 
 router.get("/getUserData", async (req, res) => {

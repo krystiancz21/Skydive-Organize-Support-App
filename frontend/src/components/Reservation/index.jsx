@@ -1,11 +1,10 @@
-import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, CardGroup, Image } from 'react-bootstrap';
+import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi';
 import { useState, useEffect } from "react";
 import { useParams, Link } from 'react-router-dom';
 import axios from "axios";
 import moment from 'moment';
-import { BsArrowLeft, BsArrowRightShort } from 'react-icons/bs';
 import styles from "./style.css";
 
 const Reservation = () => {
@@ -119,7 +118,7 @@ const Reservation = () => {
             status_platnosci_id: 1, // 1-niezapłacone - zobaczymy co dalej 
             sposob_platnosci_id: paymentMethodId // wybrany sposób płatności
         };
-        
+
         const paymentResponse = await axios.post('http://localhost:3001/api/payment/addPayment', paymentData);
 
         if (paymentResponse.data.Status !== "Success") {
@@ -156,12 +155,78 @@ const Reservation = () => {
         }
     }
 
+    // Nawigacja dla poszczególnych ról
+    const getNavbar = (role, mail, handleLogout) => {
+        switch (role) {
+            case 'klient':
+                return (<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                    <Container>
+                        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                        <Navbar.Collapse id="responsive-navbar-nav">
+                            <Nav className="me-auto">
+                                <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
+                                <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                            </Nav>
+                            <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
+                            <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                        </Navbar.Collapse>
+                    </Container>
+                </Navbar>
+                );
+            case 'pracownik':
+                return (
+                    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                        <Container>
+                            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                            <Navbar.Collapse id="responsive-navbar-nav">
+                                <Nav className="me-auto">
+                                    <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                    <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                    <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
+                                    <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                    <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                    <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                </Nav>
+                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
+                                <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
+                );
+            case 'admin':
+                return (
+                    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                        <Container>
+                            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                            <Navbar.Collapse id="responsive-navbar-nav">
+                                <Nav className="me-auto d-flex align-items-center" style={{ fontSize: '14px' }}>
+                                    <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                    <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                    <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
+                                    <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                    <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                    <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                    <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
+                                </Nav>
+                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
+                                <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
+                );
+            default:
+                return null;
+        }
+    }
+
     return (
         <>
             {isAuth ? (
                 // User zalogowany
                 <>
-                    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                    {/* <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                         <Container>
                             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                             <Navbar.Collapse id="responsive-navbar-nav">
@@ -174,7 +239,8 @@ const Reservation = () => {
                                 <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                             </Navbar.Collapse>
                         </Container>
-                    </Navbar>
+                    </Navbar> */}
+                    {getNavbar(userRole, mail, handleLogout)}
                     <Container>
                         <h1 className="text-center">REZERWACJA SKOKU</h1>
                         <Card className="reservation-container mx-auto">

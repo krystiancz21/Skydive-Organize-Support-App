@@ -13,6 +13,7 @@ const JumpCalendar = () => {
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
+    const [userRole, setUserRole] = useState('');
     const [date, setDate] = useState(new Date());
     const [availableJumps, setAvailableJumps] = useState([]);
     const [availableDates, setAvailableDates] = useState([]);
@@ -28,6 +29,7 @@ const JumpCalendar = () => {
                 if (res.data.Status === "Success") {
                     setIsAuth(true);
                     setMail(res.data.mail); //email
+                    setUserRole(res.data.userRole); // Ustaw rolę użytkownika
                 } else {
                     setIsAuth(false);
                     setMessage(res.data.Error);
@@ -89,11 +91,28 @@ const JumpCalendar = () => {
             .catch(err => console.log(err));
     }, [date, type]);
 
-    return (
-        <>
-            {isAuth ? (
-                // User zalogowany
-                <>
+    // Nawigacja dla poszczególnych ról
+    const getNavbar = (role, mail, handleLogout) => {
+        switch (role) {
+            case 'klient':
+                return (<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                    <Container>
+                        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                        <Navbar.Collapse id="responsive-navbar-nav">
+                            <Nav className="me-auto">
+                                <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
+                                <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                            </Nav>
+                            <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
+                            <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                        </Navbar.Collapse>
+                    </Container>
+                </Navbar>
+                );
+            case 'pracownik':
+                return (
                     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                         <Container>
                             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -103,12 +122,47 @@ const JumpCalendar = () => {
                                     <Nav.Link href="/offer">OFERTA</Nav.Link>
                                     <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
                                     <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                    <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                    <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                </Nav>
+                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
+                                <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
+                );
+            case 'admin':
+                return (
+                    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                        <Container>
+                            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                            <Navbar.Collapse id="responsive-navbar-nav">
+                                <Nav className="me-auto d-flex align-items-center" style={{ fontSize: '14px' }}>
+                                    <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                    <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                    <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
+                                    <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                    <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                    <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                    <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
                                 </Nav>
                                 <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
                                 <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                             </Navbar.Collapse>
                         </Container>
                     </Navbar>
+                );
+            default:
+                return null;
+        }
+    }
+
+    return (
+        <>
+            {isAuth ? (
+                // User zalogowany
+                <>
+                    {getNavbar(userRole, mail, handleLogout)}
                     <Container>
                         <Row className='mt-5'>
                             <Col>

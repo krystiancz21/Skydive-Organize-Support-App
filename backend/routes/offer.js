@@ -38,7 +38,6 @@ router.get("/showOffer", async (req, res) => {
 });
 
 router.post("/updateOfferData", async (req, res) => {
-
   try {
     const { error } = editOfferSchema.validate(req.body.offerData);
 
@@ -124,7 +123,7 @@ router.post("/addNewOffer", async (req, res) => {
 });
 
 // Usuwanie oferty
-router.delete('/deleteOffer', (req, res) => {
+router.delete('/deleteOffer', async (req, res) => {
   const offerId = req.query.offerId;
 
   const sql = "DELETE FROM rodzaj_skoku WHERE skok_id = ?";

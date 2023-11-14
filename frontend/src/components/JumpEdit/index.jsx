@@ -6,7 +6,7 @@ import axios from "axios";
 import Calendar from 'react-calendar';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate  } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import 'react-calendar/dist/Calendar.css';
 
 const JumpEdit = () => {
@@ -14,6 +14,7 @@ const JumpEdit = () => {
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
+    const [userRole, setUserRole] = useState('');
 
     const [date, setDate] = useState(new Date());
     const [availableJumps, setAvailableJumps] = useState([]);
@@ -36,6 +37,7 @@ const JumpEdit = () => {
                 if (res.data.Status === "Success") {
                     setIsAuth(true);
                     setMail(res.data.mail); //email
+                    setUserRole(res.data.userRole); // Ustaw rolę użytkownika
                 } else {
                     setIsAuth(false);
                     setMessage(res.data.Error);
@@ -124,11 +126,28 @@ const JumpEdit = () => {
             .catch(err => console.log(err.message));
     };
 
-    return (
-        <>
-            {isAuth ? (
-                // User zalogowany
-                <>
+    // Nawigacja dla poszczególnych ról
+    const getNavbar = (role, mail, handleLogout) => {
+        switch (role) {
+            case 'klient':
+                return (<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                    <Container>
+                        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                        <Navbar.Collapse id="responsive-navbar-nav">
+                            <Nav className="me-auto">
+                                <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
+                                <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                            </Nav>
+                            <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
+                            <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                        </Navbar.Collapse>
+                    </Container>
+                </Navbar>
+                );
+            case 'pracownik':
+                return (
                     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                         <Container>
                             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -138,12 +157,57 @@ const JumpEdit = () => {
                                     <Nav.Link href="/offer">OFERTA</Nav.Link>
                                     <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
                                     <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                    <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                    <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                </Nav>
+                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
+                                <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
+                );
+            case 'admin':
+                return (
+                    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                        <Container>
+                            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                            <Navbar.Collapse id="responsive-navbar-nav">
+                                <Nav className="me-auto d-flex align-items-center" style={{ fontSize: '14px' }}>
+                                    <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                    <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                    <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
+                                    <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                    <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                    <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                    <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
                                 </Nav>
                                 <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
                                 <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                             </Navbar.Collapse>
                         </Container>
                     </Navbar>
+                );
+            default:
+                return null;
+        }
+    }
+
+    const SmallFooter = () => {
+        const year = new Date().getFullYear();
+
+        return (
+            <footer className="text-center footer fixed-bottom">
+                <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
+            </footer>
+        );
+    };
+
+    return (
+        <>
+            {isAuth ? (
+                // User zalogowany
+                <>
+                    {getNavbar(userRole, mail, handleLogout)}
                     <Container>
                         <Row className='mt-5'>
                             <Col>
@@ -192,6 +256,8 @@ const JumpEdit = () => {
                             </Col>
                         </Row>
                     </Container>
+                    <div className='pt-5 pb-5'></div>
+                    <SmallFooter />
                 </>
             ) : (
                 <></> // User niezalogowany

@@ -1,13 +1,12 @@
-import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, CardGroup, Image } from 'react-bootstrap';
+import { Container, Nav, Navbar, Button, Row, Col } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
-import { BsFillPersonFill, BsArrowRightShort, BsFillBellFill } from 'react-icons/bs';
 import styles from "./style.css"
 import axios from "axios";
 import Calendar from 'react-calendar';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import 'react-calendar/dist/Calendar.css';
 import logo from '../Images/logo.jpg';
 
@@ -15,6 +14,7 @@ const JumpDates = () => {
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
+    const [userRole, setUserRole] = useState('');
     const [date, setDate] = useState(new Date());
     const [availableJumps, setAvailableJumps] = useState([]);
     const [availableDates, setAvailableDates] = useState([]);
@@ -30,6 +30,7 @@ const JumpDates = () => {
                 if (res.data.Status === "Success") {
                     setIsAuth(true);
                     setMail(res.data.mail); //email
+                    setUserRole(res.data.userRole); // Ustaw rolę użytkownika
                 } else {
                     setIsAuth(false);
                     setMessage(res.data.Error);
@@ -118,19 +119,36 @@ const JumpDates = () => {
 
     const SmallFooter = () => {
         const year = new Date().getFullYear();
-    
+
         return (
             <footer className="text-center footer fixed-bottom">
                 <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
             </footer>
         );
     };
-    
-    return (
-        <>
-            {isAuth ? (
-                // User zalogowany
-                <>
+
+    // Nawigacja dla poszczególnych ról
+    const getNavbar = (role, mail, handleLogout) => {
+        switch (role) {
+            case 'klient':
+                return (<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                    <Container>
+                        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                        <Navbar.Collapse id="responsive-navbar-nav">
+                            <Nav className="me-auto">
+                                <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
+                                <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                            </Nav>
+                            <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
+                            <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                        </Navbar.Collapse>
+                    </Container>
+                </Navbar>
+                );
+            case 'pracownik':
+                return (
                     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                         <Container>
                             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -140,12 +158,47 @@ const JumpDates = () => {
                                     <Nav.Link href="/offer">OFERTA</Nav.Link>
                                     <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
                                     <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                    <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                    <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                </Nav>
+                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
+                                <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
+                            </Navbar.Collapse>
+                        </Container>
+                    </Navbar>
+                );
+            case 'admin':
+                return (
+                    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                        <Container>
+                            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                            <Navbar.Collapse id="responsive-navbar-nav">
+                                <Nav className="me-auto d-flex align-items-center" style={{ fontSize: '14px' }}>
+                                    <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
+                                    <Nav.Link href="/offer">OFERTA</Nav.Link>
+                                    <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
+                                    <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
+                                    <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
+                                    <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                    <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
                                 </Nav>
                                 <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
                                 <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
                             </Navbar.Collapse>
                         </Container>
                     </Navbar>
+                );
+            default:
+                return null;
+        }
+    }
+
+    return (
+        <>
+            {isAuth ? (
+                // User zalogowany
+                <>
+                    {getNavbar(userRole, mail, handleLogout)}
                     <Container>
                         <Row className='mt-5'>
                             <Col>
@@ -167,25 +220,25 @@ const JumpDates = () => {
                             <Col className="text-center">
                                 <h2>Wolne terminy na skoki</h2>
                                 {availableJumps.length > 0 ? (<>
-                                        <ul className="list-unstyled w-50 mx-auto">
-                                            {availableJumps.map((jump, index) => (
-                                                <li key={index} className="jump-date-container">
-                                                    <h5 className="mb-1">{jump.nazwa}</h5>
-                                                    <p className="mb-1">Data: {moment(jump.data_czas).format('DD.MM.YYYY')}</p>
-                                                    <p className="mb-1">Godzina: {moment(jump.data_czas).format('HH:mm')}</p>
-                                                    <p className="mb-1">Liczba wolnych miejsc: {jump.liczba_miejsc_w_samolocie}</p>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </>) : ( <>
-                                        <p>W tym dniu nie ma zaplanowanych skoków. Wybierz inną datę.</p>
-                                    </>
+                                    <ul className="list-unstyled w-50 mx-auto">
+                                        {availableJumps.map((jump, index) => (
+                                            <li key={index} className="jump-date-container">
+                                                <h5 className="mb-1">{jump.nazwa}</h5>
+                                                <p className="mb-1">Data: {moment(jump.data_czas).format('DD.MM.YYYY')}</p>
+                                                <p className="mb-1">Godzina: {moment(jump.data_czas).format('HH:mm')}</p>
+                                                <p className="mb-1">Liczba wolnych miejsc: {jump.liczba_miejsc_w_samolocie}</p>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </>) : (<>
+                                    <p>W tym dniu nie ma zaplanowanych skoków. Wybierz inną datę.</p>
+                                </>
                                 )}
                             </Col>
 
                         </Row>
                     </Container>
-                    <Stopka/>
+                    <Stopka />
                 </>
             ) : (
                 // User niezalogowany
@@ -242,17 +295,13 @@ const JumpDates = () => {
                                         <p>W tym dniu nie ma zaplanowanych skoków. Wybierz inną datę.</p>
                                     </>
                                 )}
-
                             </Col>
-
                         </Row>
                     </Container>
-                    <SmallFooter/>
+                    <SmallFooter />
                 </>
             )}
         </>
-
-
     )
 }
 

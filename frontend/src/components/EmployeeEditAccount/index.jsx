@@ -1,7 +1,7 @@
-import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, CardGroup, Image } from 'react-bootstrap';
+import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
-import { BsArrowLeft, BsPersonCircle, BsArrowRight, BsFillTrashFill, BsPencilSquare, BsUnlockFill, BsLockFill } from 'react-icons/bs';
+import { BsFillTrashFill, BsPencilSquare, BsUnlockFill, BsLockFill } from 'react-icons/bs';
 import styles from "./style.css"
 import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -77,7 +77,7 @@ const EmployeeEditAccount = () => {
             axios.get('http://localhost:3001/api/user/availableRoles')
                 .then(res => {
                     setAvailableRoles(res.data);
-                    console.log(res.data);
+                    // console.log(res.data);
                 })
                 .catch(err => console.log(err));
         }
@@ -257,6 +257,16 @@ const EmployeeEditAccount = () => {
         }
     };
 
+    const SmallFooter = () => {
+        const year = new Date().getFullYear();
+
+        return (
+            <footer className="text-center footer fixed-bottom">
+                <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
+            </footer>
+        );
+    };
+
     return (
         <>
             {isAuth ? (
@@ -367,7 +377,10 @@ const EmployeeEditAccount = () => {
                                     {error && <div className="alert alert-danger">{error}</div>}
                                     <Button variant="success" type="submit"><BsPencilSquare /> EDYTUJ KONTO</Button>
                                 </Form>
-                            </Container></>
+                            </Container>
+                            <div className='pt-5 pb-5'></div>
+                            <SmallFooter />
+                        </>
                     )}
                     {userRole === 'admin' && (
                         <>
@@ -375,7 +388,7 @@ const EmployeeEditAccount = () => {
                                 <Container>
                                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                                     <Navbar.Collapse id="responsive-navbar-nav">
-                                        <Nav className="me-auto">
+                                        <Nav className="me-auto d-flex align-items-center" style={{ fontSize: '14px' }}>
                                             <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                             <Nav.Link href="/offer">OFERTA</Nav.Link>
                                             <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
@@ -504,7 +517,10 @@ const EmployeeEditAccount = () => {
                                         </Col>
                                     </Row>
                                 </Form>
-                            </Container></>
+                            </Container>
+                            <div className='pt-5 pb-5'></div>
+                            <SmallFooter />
+                        </>
                     )}
                 </>
             ) : (

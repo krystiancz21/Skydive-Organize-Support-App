@@ -1,10 +1,10 @@
-import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, CardGroup, Image } from 'react-bootstrap';
+import { Container, Nav, Navbar, Button, Row, Col } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
-import { BsArrowLeft, BsPersonCircle, BsArrowRight } from 'react-icons/bs';
+import { BsPersonCircle, BsArrowRight } from 'react-icons/bs';
 import styles from "./style.css"
 import { useState, useEffect } from "react";
-import { useParams, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from "axios";
 
 const EmployeeUsersAccounts = () => {
@@ -69,7 +69,7 @@ const EmployeeUsersAccounts = () => {
 
     const SmallFooter = () => {
         const year = new Date().getFullYear();
-    
+
         return (
             <footer className="text-center footer fixed-bottom">
                 <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
@@ -129,7 +129,8 @@ const EmployeeUsersAccounts = () => {
                                     </Col>
                                 </Row>
                             </Container>
-                            <SmallFooter/>
+                            <div className='pt-5 pb-5'></div>
+                            <SmallFooter />
                         </>
                     )}
                     {userRole === 'admin' && (
@@ -137,7 +138,7 @@ const EmployeeUsersAccounts = () => {
                             <Container>
                                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                                 <Navbar.Collapse id="responsive-navbar-nav">
-                                    <Nav className="me-auto">
+                                    <Nav className="me-auto d-flex align-items-center" style={{ fontSize: '14px' }}>
                                         <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                         <Nav.Link href="/offer">OFERTA</Nav.Link>
                                         <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
@@ -203,7 +204,8 @@ const EmployeeUsersAccounts = () => {
                                     </Col>
                                 </Row>
                             </Container>
-                            <SmallFooter/>
+                            <div className='pt-5 pb-5'></div>
+                            <SmallFooter />
                         </>
                     )}
                 </>

@@ -1,7 +1,7 @@
-import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col, Card, CardGroup, Image } from 'react-bootstrap';
+import { Container, Nav, Navbar, Form, FormControl, Button, Row, Col } from 'react-bootstrap';
 import { AiOutlineUser } from "react-icons/ai";
 import { BiHomeAlt } from 'react-icons/bi'
-import { BsArrowLeft, BsFillTrashFill, BsPencilSquare } from 'react-icons/bs';
+import { BsFillTrashFill, BsPencilSquare } from 'react-icons/bs';
 import { useState } from "react"
 import { useEffect } from 'react';
 import axios from "axios"
@@ -144,7 +144,7 @@ const EditUserData = () => {
 
     const SmallFooter = () => {
         const year = new Date().getFullYear();
-    
+
         return (
             <footer className="text-center footer fixed-bottom">
                 <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
@@ -153,7 +153,7 @@ const EditUserData = () => {
     };
 
     // Nawigacja dla poszczególnych ról
-    const getNavbar = (role, mail, handleDelete) => {
+    const getNavbar = (role, mail, handleLogout) => {
         switch (role) {
             case 'klient':
                 return (<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -198,7 +198,7 @@ const EditUserData = () => {
                         <Container>
                             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                             <Navbar.Collapse id="responsive-navbar-nav">
-                                <Nav className="me-auto">
+                                <Nav className="me-auto d-flex align-items-center" style={{ fontSize: '14px' }}>
                                     <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                     <Nav.Link href="/offer">OFERTA</Nav.Link>
                                     <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
@@ -318,14 +318,16 @@ const EditUserData = () => {
                             {error && <div className="alert alert-danger">{error}</div>}
 
                             <div className='mt-4'>
-                                <Button variant="success" className="mt-3" id="przycisk2" onClick={handleEditUserData}>
+                                <Button variant="success" className="mt-3" id="przycisk1" onClick={handleEditUserData}>
                                     <BsPencilSquare /> EDYTUJ DANE
                                 </Button>
-                                {/* <Button variant="success" className="mt-3" id="przycisk2"><BsPencilSquare /> EDYTUJ DANE</Button> */}
+
                                 <Button variant="danger" className="mt-3" id="przycisk2" onClick={handleDeleteAccount}><BsFillTrashFill /> USUŃ KONTO</Button>
                             </div>
                         </Form>
-                    </Container></>
+                    </Container>
+                    <SmallFooter />
+                </>
             ) : (
                 // User niezalogowany
                 <></>
@@ -335,22 +337,3 @@ const EditUserData = () => {
 }
 
 export default EditUserData
-
-
-{/* <Form.Group as={Row} controlId="formEditUserFile" className="mb-3">
-    <Form.Label column sm={2}>
-        Licencja
-    </Form.Label>
-    <Col sm={8}>
-        <div className="d-flex flex-column">
-            <input
-                type="file"
-                accept=".jpg, .jpeg, .png, .pdf"
-                onChange={(e) => setFile(e.target.files[0])}
-            />
-            <Button variant="secondary" onClick={uploadFile} className="mt-2" style={{ width: '100px' }}>
-                Dodaj plik
-            </Button>
-        </div>
-    </Col>
-</Form.Group> */}
