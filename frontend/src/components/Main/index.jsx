@@ -15,6 +15,7 @@ import offer from '../Images/offer.jpg';
 import terminy from '../Images/terminy.jpg';
 import messages from '../Images/messages.jpg';
 import usericon from '../Images/usericon.png';
+import podsumowanie from '../Images/podsumowanie.jpg';
 
 const Karuzela = () => (
     <Carousel className="custom-carousel">
@@ -326,7 +327,7 @@ const Main = () => {
                                         </Col>
                                         <Col md={6} className="mb-2">
                                             <Card className='w-50 mx-auto'>
-                                                <Card.Img variant="top" src={terminy} alt="img-skoki" className='img-fluid' />
+                                                <Card.Img variant="top" src={podsumowanie} alt="img-skoki" className='img-fluid' />
                                                 <Card.Body>
                                                     <Card.Title>
                                                         <Link to='/owner-financial-overview'>
