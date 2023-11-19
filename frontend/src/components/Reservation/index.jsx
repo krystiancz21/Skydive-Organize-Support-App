@@ -7,6 +7,16 @@ import axios from "axios";
 import moment from 'moment';
 import styles from "./style.css";
 
+const SmallFooter = () => {
+    const year = new Date().getFullYear();
+
+    return (
+        <footer className="text-center footer fixed-bottom">
+            <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
+        </footer>
+    );
+};
+
 const Reservation = () => {
     const [isAuth, setIsAuth] = useState(false);
     const [userRole, setUserRole] = useState('');
@@ -226,20 +236,6 @@ const Reservation = () => {
             {isAuth ? (
                 // User zalogowany
                 <>
-                    {/* <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-                        <Container>
-                            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                            <Navbar.Collapse id="responsive-navbar-nav">
-                                <Nav className="me-auto">
-                                    <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-                                    <Nav.Link href="/offer">OFERTA</Nav.Link>
-                                    <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
-                                </Nav>
-                                <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
-                                <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
-                            </Navbar.Collapse>
-                        </Container>
-                    </Navbar> */}
                     {getNavbar(userRole, mail, handleLogout)}
                     <Container>
                         <h1 className="text-center">REZERWACJA SKOKU</h1>
@@ -342,6 +338,8 @@ const Reservation = () => {
                         </div>}
                         {error && <div className="alert alert-danger text-center mt-3">{error}</div>}
                     </Container>
+                    <div className='pb-5 pt-5'></div>
+                    <SmallFooter />
                 </>
             ) : (
                 <></> // User niezalogowany

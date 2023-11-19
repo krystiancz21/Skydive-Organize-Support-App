@@ -8,6 +8,7 @@ const userRoutes = require("./routes/user");
 const jumpsRoutes = require("./routes/jumps");
 const offerRoutes = require("./routes/offer");
 const paymentRoutes = require("./routes/payment");
+const messagesRoutes = require("./routes/messages");
 
 const port = process.env.PORT || 3001;
 
@@ -27,6 +28,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/jumps", jumpsRoutes);
 app.use("/api/offer", offerRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/messages", messagesRoutes);
 
 app.listen(port, () => {
   console.log(`Serwer działa na porcie ${port}`);

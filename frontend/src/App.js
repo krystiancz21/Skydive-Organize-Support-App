@@ -14,6 +14,7 @@ import JumpCalendar from './components/JumpCalendar';
 import JumpDates from './components/JumpDates';
 import JumpDetails from './components/JumpDetails';
 import JumpEdit from './components/JumpEdit';
+import NewMessage from './components/NewMessage';
 
 import OwnerFinancialOverview from './components/OwnerFinancialOverview';
 
@@ -53,6 +54,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/main" element={<Main />} />
       <Route path="/messages" element={<Messages />} />
+      <Route path="/new-message" element={<NewMessage />} />
       <Route path="/myjumps" element={<MyJumps />} />
       <Route path="/offer" element={<Offer />} />
       <Route path="/offer-edit/:offerId" element={<OfferEdit />} />
