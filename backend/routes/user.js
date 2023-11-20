@@ -138,11 +138,10 @@ router.post("/blockAccount", async (req, res) => {
 
     db.query(sql, values, (err, result) => {
         if (err) {
-            console.error("Błąd podczas zablokowania konta:", err);
-            return res.json({ Error: "Error blocking account" });
+            res.status(500).send({ error: 'Wystąpił błąd podczas blokowania konta użytkownika' });
+        } else {
+            res.send({ Status: 'Success' }); // Move this line inside the else block
         }
-
-        return res.json({ Status: "Account blocked successfully" });
     });
 });
 

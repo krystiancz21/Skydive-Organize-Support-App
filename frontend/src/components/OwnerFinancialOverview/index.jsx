@@ -38,7 +38,7 @@ const OwnerFinancialOverview = () => {
     const handleLogout = () => {
         axios.get('http://localhost:3001/api/auth/logout')
             .then(res => {
-                window.location.reload(true);
+                window.location.href = "/main";
             }).catch(err => console.log(err));
     }
 
