@@ -162,25 +162,38 @@ const EmployeeEditAccount = () => {
         e.preventDefault(); // Zapobiega przeładowaniu strony
 
         try {
-            const response = await axios.post('http://localhost:3001/api/user/updateClientRoleById', {
-                role: roleData.role,
+            // Pobranie aktualnej roli użytkownika przed aktualizacją
+            const currentRoleResponse = await axios.post('http://localhost:3001/api/user/getUserRole', {
                 clientId: clientId
             });
 
-            if (response.data.Status === 'Success') {
-                setUserRoleSuccess(true);
-                setError('');
-            } else {
-                setError(response.data.error);
+            const currentRoleData = currentRoleResponse.data[0];
+
+            // Porównanie aktualnej roli z wybraną rolą do aktualizacji
+            if (currentRoleData && currentRoleData.rola_rola_id === roleData.role) {
+                setError('Rola użytkownika nie została zmieniona.');
                 setUserRoleSuccess(false);
+            } else {
+                // Aktualizacja roli
+                const response = await axios.post('http://localhost:3001/api/user/updateClientRoleById', {
+                    role: roleData.role,
+                    clientId: clientId
+                });
+
+                if (response.data.Status === 'Success') {
+                    setUserRoleSuccess(true);
+                    setError('');
+                } else {
+                    setError(response.data.error);
+                    setUserRoleSuccess(false);
+                }
             }
         } catch (error) {
             console.error(error);
-            setError('Wystąpił błąd podczas aktualizacji danych użytkownika');
+            setError('Wystąpił błąd podczas aktualizacji roli użytkownika');
             setUserRoleSuccess(false);
         }
     };
-
 
     // Usuniecie konta
     const handleDeleteAccount = () => {
@@ -321,7 +334,6 @@ const EmployeeEditAccount = () => {
         <>
             {isAuth ? (
                 <>
-                    {/* Wyświetl odpowiednią nawigację w zależności od roli */}
                     {userRole === 'pracownik' && (
                         // User zalogowany
                         <>
