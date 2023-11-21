@@ -32,6 +32,7 @@ const getNavbar = (role, mail, handleLogout) => {
                             <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                             <Nav.Link href="/offer">OFERTA</Nav.Link>
                             <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
+                            <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                         </Nav>
                         <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser />  {mail}</Navbar.Brand></Nav.Link>
                         <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
@@ -49,6 +50,7 @@ const getNavbar = (role, mail, handleLogout) => {
                                 <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                 <Nav.Link href="/offer">OFERTA</Nav.Link>
                                 <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
+                                <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                 <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
                                 <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
                             </Nav>
@@ -68,6 +70,7 @@ const getNavbar = (role, mail, handleLogout) => {
                                 <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                 <Nav.Link href="/offer">OFERTA</Nav.Link>
                                 <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
+                                <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
                                 <Nav.Link href="/employee-users-accounts">KONTA UŻYTKOWNIKÓW</Nav.Link>
                                 <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
                                 <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
@@ -197,7 +200,7 @@ const NewMessage = () => {
                             </Form.Group>
 
                             <Form.Group className="mb-3" controlId="formContent">
-                                <Form.Label>Example textarea</Form.Label>
+                                <Form.Label>Treść wiadomości</Form.Label>
                                 <Form.Control
                                     as="textarea"
                                     rows={3}

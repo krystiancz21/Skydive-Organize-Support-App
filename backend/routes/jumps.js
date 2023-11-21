@@ -410,7 +410,7 @@ router.post("/addNewPlannedDate", async (req, res) => {
 });
 
 router.get("/showEmployeeNotConfirmReservations", async (req, res) => {
-  const sql = `SELECT rt.rezerwacje_id, rt.platnosc_id, u.imie, u.nazwisko, pt.nazwa, pt.data_czas, rt.status_skoku_id, 
+  const sql = `SELECT rt.rezerwacje_id, rt.platnosc_id, rt.cena, u.imie, u.nazwisko, pt.nazwa, pt.data_czas, rt.status_skoku_id, 
               p.wplacona_kwota, p.data_platnosci, sp.nazwa AS sposob_platnosci
               FROM rezerwacje_terminow rt
               JOIN planowane_terminy pt ON pt.terminy_id = rt.planowane_terminy_id

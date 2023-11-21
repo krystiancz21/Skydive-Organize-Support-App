@@ -173,7 +173,12 @@ const EmployeeManageReservation = () => {
                                             <Col>{item.nazwa}</Col>
                                             <Col>{item.imie} {item.nazwisko}</Col>
                                             <Col>Data: {moment(item.data_czas).format('DD.MM.YYYY HH:mm')}</Col>
-                                            <Col>{item.sposob_platnosci} - {item.wplacona_kwota} PLN</Col>
+                                            {/* <Col>{item.sposob_platnosci} - {item.wplacona_kwota} PLN</Col> */}
+                                            {selectedReservationType === 2 ? (
+                                                <Col>{item.sposob_platnosci} - {item.cena} PLN</Col>
+                                            ) : (
+                                                <Col>{item.sposob_platnosci} - {item.wplacona_kwota} PLN</Col>
+                                            )}
                                             {selectedReservationType === 1 || selectedReservationType === 3 ? (
                                                 <Col>Wpłata: {moment(item.data_platnosci).format('DD.MM.YY HH:mm')}</Col>
                                             ) : (

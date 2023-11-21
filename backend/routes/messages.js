@@ -62,20 +62,6 @@ router.post('/showUnreadMessages', async (req, res) => {
     });
 });
 
-
-
-// SELECT * FROM rola_user ru
-// JOIN rola r ON r.rola_id = ru.rola_rola_id
-// JOIN user u ON u.user_id = ru.user_id
-// przechwycenie roli
-// i chyba przechwycenie userID lub mail
-
-// klient -> pracownik | klient -> admin
-// pracownik -> admin | pracownik -> klient
-// admin -> pracownik | admin -> klient
-// OGÓLNIE TO POYEBANY TEMAT - żeby to tak robić 
-// pierdole narazie nie robie - za dużo jebańska 
-
 // Pobranie informacji o personach na podstronie /new-message
 router.get("/getReceivers", async (req, res) => {
     const sql = `SELECT user_id, imie, nazwisko, mail FROM user`;
