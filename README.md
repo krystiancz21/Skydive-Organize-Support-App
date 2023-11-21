@@ -21,18 +21,18 @@ Uruchomienie:
 - [X] możliwość rezerwacji terminu, poprzez wypełnienie formularza: (wybranie wolnego terminu oraz godziny, wybranie rodzaju skoku, wprowadzenie masy ciała, wybranie sposobu płatności)
 - [X] podgląd, edycja lub rezygnacja z zarezerwowanych terminów,
 - [X] podgląd, edycja własnych danych osobowych,
-- [ ] możliwość wysyłania wiadomości,
+- [X] możliwość wysyłania wiadomości,
 - [X] możliwość wylogowania,
 - [X] usunięcie konta.
 
 
 3. Funkcjonalności pracownika:
-- [ ] odpowiadanie na pytania
+- [X] odpowiadanie na pytania
 - [X] planowanie terminów skoków,
 - [X] potwierdzenie dokonania płatności,
 - [X] zarządzanie ofertą (dodawanie, modyfikowanie, usuwanie)
 - [ ] planowanie grafiku zarezerwowanych skoków,
-- [X] (50%) odwoływanie skoków oraz rozesłanie informacji klientom,
+- [X] odwoływanie skoków oraz rozesłanie informacji klientom,
 - [X] zarządzanie danymi klientów (zakładanie kont klientów, ewidencjonowanie licencji klientów)
 
 
