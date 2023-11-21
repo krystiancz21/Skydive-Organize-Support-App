@@ -115,11 +115,14 @@ const Messages = () => {
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
+    const [userID, setUserID] = useState('');
 
     const [checked, setChecked] = useState(false);
     const [radioValue, setRadioValue] = useState('1');
-    const [myMsg, setMyMsg] = useState([]);
     const [selectedMessage, setSelectedMessage] = useState(null);
+    const [myMsg, setMyMsg] = useState([]);
+    const [readMsg, setReadMsg] = useState([]);
+    const [unreadMsg, setUnreadMsg] = useState([]);
 
     //sprawdzamy autoryzacje
     axios.defaults.withCredentials = true;
@@ -149,13 +152,37 @@ const Messages = () => {
 
     useEffect(() => {
         if (mail) {
-            axios.post('http://localhost:3001/api/messages/showMessages', { senderMail: mail })
+            axios.post('http://localhost:3001/api/user/getUserIdByMail', { userMail: mail })
+                .then(res => {
+                    setUserID(res.data[0].user_id);
+                    // console.log(res.data[0].user_id)
+                })
+                .catch(err => console.log(err.message));
+
+        }
+    }, [mail]);
+
+    useEffect(() => {
+        if (userID) {
+            axios.post('http://localhost:3001/api/messages/showMyMessages', { userID: userID })
                 .then(res => {
                     setMyMsg(res.data);
                 })
                 .catch(err => console.log(err.message));
+
+            axios.post('http://localhost:3001/api/messages/showReadMessages', { userID: userID })
+                .then(res => {
+                    setReadMsg(res.data);
+                })
+                .catch(err => console.log(err.message));
+
+            axios.post('http://localhost:3001/api/messages/showUnreadMessages', { userID: userID })
+                .then(res => {
+                    setUnreadMsg(res.data);
+                })
+                .catch(err => console.log(err.message));
         }
-    }, [mail]);
+    }, [userID]);
 
     const markAsRead = (messageId) => {
         axios.post('http://localhost:3001/api/messages/markAsRead', { messageId: messageId })
@@ -166,6 +193,23 @@ const Messages = () => {
             })
             .catch(err => console.log(err.message));
     }
+
+    useEffect(() => {
+        setSelectedMessage(null);
+    }, [radioValue]);
+    
+    const getMessages = () => {
+        switch (radioValue) {
+            case '1':
+                return readMsg;
+            case '2':
+                return unreadMsg;
+            case '3':
+                return myMsg;
+            default:
+                return [];
+        }
+    };
 
     return (
         <>
@@ -183,7 +227,7 @@ const Messages = () => {
                                     variant='outline-secondary'
                                     name="radio"
                                     value="1"
-                                    checked="1"
+                                    checked={radioValue === '1'}
                                     onChange={(e) => setRadioValue(e.currentTarget.value)}
                                 >
                                     Odczytane
@@ -195,7 +239,7 @@ const Messages = () => {
                                     variant='outline-secondary'
                                     name="radio"
                                     value="2"
-                                    checked="2"
+                                    checked={radioValue === '2'}
                                     onChange={(e) => setRadioValue(e.currentTarget.value)}
                                 >
                                     Nieodczytane
@@ -207,7 +251,7 @@ const Messages = () => {
                                     variant='outline-secondary'
                                     name="radio"
                                     value="3"
-                                    checked="3"
+                                    checked={radioValue === '3'}
                                     onChange={(e) => setRadioValue(e.currentTarget.value)}
                                 >
                                     Moje wiadomości
@@ -223,7 +267,7 @@ const Messages = () => {
                         <Row>
                             <Col md={4}>
                                 <div>
-                                    {myMsg.map((item, index) => (
+                                    {getMessages().map((item, index) => (
                                         <Row key={index} className={'msg-container text-center mb-2 clickable'} onClick={() => setSelectedMessage(item)}>
                                             <Col sm={2} className="d-flex align-items-center">
                                                 <BiMessageRoundedDots />
@@ -254,71 +298,12 @@ const Messages = () => {
                                             <strong>Data:</strong> {moment(selectedMessage.data_czas).format('DD.MM.YYYY HH:mm')}
                                         </p>
                                         <p>{selectedMessage.tresc}</p>
-                                        {!selectedMessage.odczytane && (
+                                        {radioValue === '2' && !selectedMessage.odczytane && (
                                             <Button variant="success" onClick={() => markAsRead(selectedMessage.wiadomosci_id)}>Oznacz jako odczytane</Button>
                                         )}
                                     </div>
                                 )}
                             </Col>
-
-                            {/* <div>
-                                {myMsg.map((item, index) => (
-                                    <Row key={index} className='msg-container text-center d-flex align-items-center mb-2'>
-                                        <Col><BiMessageRoundedDots /></Col>
-                                        <Col>{item.tytul}</Col>
-                                        <Col>{item.imie} {item.nazwisko}</Col>
-                                        <Col>{moment(item.data_czas).format('DD.MM.YYYY HH:mm')}</Col>
-                                    </Row>
-                                ))}
-                            </div> */}
-
-                            {/* <Col md={4}>
-                                <Row className={'msg-container text-center mb-2'}>
-                                    <Col sm={2} className="d-flex align-items-center">
-                                        <BiMessageRoundedDots />
-                                    </Col>
-                                    <Col sm={10}>
-                                        <Row>
-                                            <Col>
-                                                <h5>Zapytanie o skok w tandemie z kamerzystą</h5>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col>Marek Kowalski</Col>
-                                            <Col>21.11.2023</Col>
-                                        </Row>
-                                    </Col>
-                                </Row>
-                                <Row className={'msg-container text-center mb-2'}>
-                                    <Col sm={2} className="d-flex align-items-center">
-                                        <BiMessageRoundedDots />
-                                    </Col>
-                                    <Col sm={10}>
-                                        <Row>
-                                            <Col>
-                                                <h5>Zapytanie o skok bez spadochronu</h5>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col>Janina Mostowiak</Col>
-                                            <Col>23.10.2023</Col>
-                                        </Row>
-                                    </Col>
-                                </Row>
-                            </Col>
-                            <Col md={8}>
-                                <div className="msg-container">
-                                    <h2>Tytuł</h2>
-                                    <p>
-                                        <strong>Nadawca:</strong> Marek Kowalski
-                                    </p>
-                                    <p>
-                                        <strong>Data:</strong> 21.11.2023
-                                    </p>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-                                    <Button variant="success">Oznacz jako odczytane</Button>
-                                </div>
-                            </Col> */}
                         </Row>
                     </Container>
                     <Stopka />
@@ -333,162 +318,3 @@ const Messages = () => {
 }
 
 export default Messages
-
-
-{/* <Container className={styles.content}>
-                        <h1 className="text-center">WIADOMOŚCI</h1>
-                        <div className="d-flex justify-content-center pb-4">
-                            <ButtonGroup>
-                                <ToggleButton
-                                    key="1"
-                                    id="radio-1"
-                                    type="radio"
-                                    variant='outline-primary'
-                                    name="radio"
-                                    value="1"
-                                    checked="1"
-                                    onChange={(e) => setRadioValue(e.currentTarget.value)}
-                                >
-                                    Odczytane
-                                </ToggleButton>
-                                <ToggleButton
-                                    key="2"
-                                    id="radio-2"
-                                    type="radio"
-                                    variant='outline-primary'
-                                    name="radio"
-                                    value="2"
-                                    checked="2"
-                                    onChange={(e) => setRadioValue(e.currentTarget.value)}
-                                >
-                                    Nieodczytane
-                                </ToggleButton>
-                            </ButtonGroup>
-                        </div>
-
-                        <Row>
-                            <Col>
-                                <Row className="msg-container mb-2">
-                                    <Row className='align-items-center justify-content-center'>
-                                        <Col>
-                                            <BiMessageRoundedDots />
-                                        </Col>
-                                        <Col>
-                                            <span className="msg-title">Tytuł:</span> Zapytanie o skok
-                                        </Col>
-                                        <Col>
-                                            Nadawca: Jan Kowalski
-                                        </Col>
-                                        <Col>
-                                            Data: 21.11.2000
-                                        </Col>
-                                        <Col>
-                                            <Button variant="success">
-                                                Odczytaj
-                                            </Button>
-                                        </Col>
-                                    </Row>
-                                </Row>
-                            </Col>
-                        </Row>
-                    </Container>
-                    <Stopka /> */}
-
-{/* <Container className={styles.content}>
-    <h1 className="text-center">WIADOMOŚCI</h1>
-    <Row>
-        <Col>
-            <h3>Lista wiadomości</h3>
-            <Row className="msg-container">
-                <Row className="mb-3">
-                    <Col>
-                        <span className="msg-title">Tytuł:</span> Zapytanie o skok
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <BsPersonCircle />
-                    </Col>
-                    <Col>
-                        Nadawca: Jan
-                    </Col>
-                </Row>
-            </Row>
-        </Col>
-        
-        <Col>
-            <h3>Wyślij wiadomość do pracownika</h3>
-            <Form>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Tytuł</Form.Label>
-                    <Form.Control type="text" placeholder="Tytuł" />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                    <Form.Label>Treść</Form.Label>
-                    <textarea name="wiadomosc" cols="85" rows="10"></textarea>
-                </Form.Group>
-                <Button variant="success" type="submit" size="lg">WYŚLIJ</Button>
-            </Form>
-        </Col>
-    </Row>
-</Container>
-<Stopka /> */}
-
-
-//     return (
-//         <>
-//             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-//                 <Container>
-//                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-//                     <Navbar.Collapse id="responsive-navbar-nav">
-//                         <Nav className="me-auto">
-//                             <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
-//                             <Nav.Link href="/offer">OFERTA</Nav.Link>
-//                             <Nav.Link href="/jump-dates">TERMINY SKOKÓW</Nav.Link>
-//                         </Nav>
-//                         <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
-//                         <Button variant="danger" onClick={handleLogout}>WYLOGUJ</Button>
-//                     </Navbar.Collapse>
-//                 </Container>
-//             </Navbar>
-//             <Container className={styles.content}>
-//                 <h1 className="text-center">WIADOMOŚCI</h1>
-//                 <Row>
-//                     <Col>
-//                         <h3>Lista wiadomości</h3>
-//                         <Row className="msg-container">
-//                             <Row className="mb-3">
-//                                 <Col>
-//                                     <span className="msg-title">Tytuł:</span> Zapytanie o skok
-//                                 </Col>
-//                             </Row>
-//                             <Row>
-//                                 <Col>
-//                                     <BsPersonCircle />
-//                                 </Col>
-//                                 <Col>
-//                                     Nadawca: Jan
-//                                 </Col>
-//                             </Row>
-//                         </Row>
-//                     </Col>
-//                     <Col>
-//                         <h3>Wyślij wiadomość do pracownika</h3>
-//                         <Form>
-//                             <Form.Group className="mb-3" controlId="formBasicEmail">
-//                                 <Form.Label>Tytuł</Form.Label>
-//                                 <Form.Control type="text" placeholder="Tytuł" />
-//                             </Form.Group>
-//                             <Form.Group className="mb-3" controlId="formBasicPassword">
-//                                 <Form.Label>Treść</Form.Label>
-//                                 <textarea name="wiadomosc" cols="85" rows="10"></textarea>
-//                             </Form.Group>
-//                             <Button variant="success" type="submit" size="lg">WYŚLIJ</Button>
-//                         </Form>
-//                     </Col>
-//                 </Row>
-//             </Container>
-//             <Stopka />
-//         </>
-//     )
-// }

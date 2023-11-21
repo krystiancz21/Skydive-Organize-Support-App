@@ -85,6 +85,17 @@ const EmployeeCancelJumps = () => {
                     // Aktualizuj stan po pomyślnym anulowaniu skoku
                     // setAvailableJumps(availableJumps.filter(jump => jump.id !== jumpId));
                     window.location.reload(true);
+                    
+                    // Wysyłanie wiadomości do użytkowników
+                    //TUTAJ CHYBA BĘDZIE WYSŁANIE INFO
+                    // axios.post(`http://localhost:3001/api/messages/sendMessageCancelJump`, {
+                    //     users: res.data.users, // lista użytkowników, którzy mieli skakać
+                    //     message: 'Twój skok został odwołany.' // treść wiadomości
+                    // })
+                    //     .then(res => {
+                    //         console.log('Wiadomość wysłana pomyślnie');
+                    //     })
+                    //     .catch(err => console.log(err));
                 })
                 .catch(err => console.log(err));
         }

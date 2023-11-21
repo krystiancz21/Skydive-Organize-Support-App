@@ -33,6 +33,19 @@ router.post("/getUserDataById", async (req, res) => {
     })
 });
 
+router.post("/getUserIdByMail", async (req, res) => {
+    const userMail = req.body.userMail;
+    const sql = "SELECT user_id FROM user WHERE mail = ?";
+
+    db.query(sql, [userMail], (err, data) => {
+        if (err) {
+            res.status(500).send({ error: 'Wystąpił błąd podczas pobierania ID użytkownika' });
+        } else {
+            res.status(200).send(data);
+        }
+    })
+});
+
 router.post("/updateClientDataById", async (req, res) => {
     // Tutaj możesz dodać logikę weryfikacji danych wejściowych
     // Sprawdzenie, czy email istnieje w bazie danych, itp
