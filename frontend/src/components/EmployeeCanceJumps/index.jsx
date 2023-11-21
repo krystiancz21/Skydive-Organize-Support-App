@@ -80,22 +80,14 @@ const EmployeeCancelJumps = () => {
 
     const handleJumpCancel = (jumpId) => {
         if (window.confirm("Czy na pewno chcesz odwołać skok?")) {
-            axios.post(`http://localhost:3001/api/jumps/cancelPlannedJump`, { jumpId: jumpId })
+            axios.post(`http://localhost:3001/api/messages/sendMessageCancelJump`, { jumpId: jumpId })
+                .then(res => {
+                    // Wysłanie wiadomości o anulowaniu skoku
+                    return axios.post(`http://localhost:3001/api/jumps/cancelPlannedJump`, { jumpId: jumpId });
+                })
                 .then(res => {
                     // Aktualizuj stan po pomyślnym anulowaniu skoku
-                    // setAvailableJumps(availableJumps.filter(jump => jump.id !== jumpId));
                     window.location.reload(true);
-                    
-                    // Wysyłanie wiadomości do użytkowników
-                    //TUTAJ CHYBA BĘDZIE WYSŁANIE INFO
-                    // axios.post(`http://localhost:3001/api/messages/sendMessageCancelJump`, {
-                    //     users: res.data.users, // lista użytkowników, którzy mieli skakać
-                    //     message: 'Twój skok został odwołany.' // treść wiadomości
-                    // })
-                    //     .then(res => {
-                    //         console.log('Wiadomość wysłana pomyślnie');
-                    //     })
-                    //     .catch(err => console.log(err));
                 })
                 .catch(err => console.log(err));
         }

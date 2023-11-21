@@ -21,7 +21,7 @@ const Reservation = () => {
     const [isAuth, setIsAuth] = useState(false);
     const [userRole, setUserRole] = useState('');
 
-    const [updateSuccess, setUpdateSuccess] = useState(false);
+    const [updateSuccess, setUpdateSuccess] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
 
@@ -153,10 +153,15 @@ const Reservation = () => {
             const response = await axios.post('http://localhost:3001/api/jumps/reserveJump', formData);
             if (response.data.error) {
                 setError(response.data.error);
-                setUpdateSuccess(false);
+                // setUpdateSuccess(false);
+                setUpdateSuccess('');
             } else if (response.data.Status === "Success") {
                 setError('');
-                setUpdateSuccess(true);
+                if (paymentMethodId == 1) {
+                    setUpdateSuccess('Pomyślnie zarezerwowano skok. Proszę wpłacić należną kwotę przy kasie.');
+                } else if (paymentMethodId == 2) {
+                    setUpdateSuccess(`Pomyślnie zarezerwowano skok. Proszę wykonać przelew w kwocie ${jumpType.cena} PLN na nr konta: PL779071200774771957185353583493.`);
+                }
             } else {
                 console.error("Błąd podczas aktualizacji danych!");
             }
@@ -334,7 +339,7 @@ const Reservation = () => {
                         </Card>
 
                         {updateSuccess && <div className="alert alert-success text-center mt-3">
-                            Pomyślnie udało się zarezerwować skok!
+                            {updateSuccess}
                         </div>}
                         {error && <div className="alert alert-danger text-center mt-3">{error}</div>}
                     </Container>

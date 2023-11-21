@@ -344,8 +344,6 @@ router.post("/cancelPlannedJump", async (req, res) => {
       console.error('Błąd zapytania do bazy danych (/cancelPlannedJump): ' + err.message);
       res.status(500).json({ error: 'Błąd zapytania do bazy danych (/cancelPlannedJump).' });
     } else {
-      // nie działa w wypadku gdy mamy rezerwację na dany skok - trzeba coś wymyśle 
-      // wstępnie rozwiązuje to tak:
       const sql = `DELETE FROM planowane_terminy WHERE terminy_id = ?`;
 
       db.query(sql, [jumpId], (err, results) => {
@@ -354,40 +352,7 @@ router.post("/cancelPlannedJump", async (req, res) => {
           res.status(500).json({ error: 'Błąd zapytania do bazy danych 2 (/cancelPlannedJump).' });
         } else {
           res.status(200).json(results);
-          // PO usunięciu rezerwacji trzeba wysłać wiadomości do klientów!
-        }
-      });
-    }
-  });
-});
-
-
-// odwoływanie skoków - mod - do dokończenia lub wyjebania 
-router.post("/cancelPlannedJump222", async (req, res) => {
-  const jumpId = req.body.jumpId;
-
-  const getUsersSql = `SELECT user_id FROM rezerwacje_terminow WHERE planowane_terminy_id = ?`;
-
-  db.query(getUsersSql, [jumpId], (err, users) => {
-    if (err) {
-      console.error('Błąd zapytania do bazy danych (/cancelPlannedJump): ' + err.message);
-      res.status(500).json({ error: 'Błąd zapytania do bazy danych (/cancelPlannedJump).' });
-    } else {
-      // Usuń rezerwację
-      const deleteSql = `DELETE FROM rezerwacje_terminow WHERE planowane_terminy_id = ?`;
-
-      db.query(deleteSql, [jumpId], (err, results) => {
-        if (err) {
-          console.error('Błąd zapytania do bazy danych 2 (/cancelPlannedJump): ' + err.message);
-          res.status(500).json({ error: 'Błąd zapytania do bazy danych 2 (/cancelPlannedJump).' });
-        } else {
-          // Teraz masz dostęp do ID użytkowników, którzy zarezerwowali skok
-          const userIds = users.map(user => user.user_id);
-
-          // Możesz teraz wysłać wiadomość do tych użytkowników
-          // ...
-
-          res.status(200).json(results);
+          // przed usunięciem skoku wysyłane jest info do klientów -> /sendMessageCancelJump
         }
       });
     }

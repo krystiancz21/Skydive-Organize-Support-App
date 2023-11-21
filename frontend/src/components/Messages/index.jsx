@@ -197,7 +197,7 @@ const Messages = () => {
     useEffect(() => {
         setSelectedMessage(null);
     }, [radioValue]);
-    
+
     const getMessages = () => {
         switch (radioValue) {
             case '1':
@@ -285,6 +285,30 @@ const Messages = () => {
                                             </Col>
                                         </Row>
                                     ))}
+                                    
+                                    {/* 
+                                    {getMessages().length > 0 ? (
+                                        getMessages().map((item, index) => (
+                                            <Row key={index} className={'msg-container text-center mb-2 clickable'} onClick={() => setSelectedMessage(item)}>
+                                                <Col sm={2} className="d-flex align-items-center">
+                                                    <BiMessageRoundedDots />
+                                                </Col>
+                                                <Col sm={10}>
+                                                    <Row>
+                                                        <Col>
+                                                            <h5>{item.tytul}</h5>
+                                                        </Col>
+                                                    </Row>
+                                                    <Row>
+                                                        <Col>{item.imie} {item.nazwisko}</Col>
+                                                        <Col>{moment(item.data_czas).format('DD.MM.YYYY HH:mm')}</Col>
+                                                    </Row>
+                                                </Col>
+                                            </Row>
+                                        ))
+                                    ) : (
+                                        <p className='text-center'>Brak wiadomości...</p>
+                                    )} */}
                                 </div>
                             </Col>
                             <Col md={8}>
@@ -292,7 +316,7 @@ const Messages = () => {
                                     <div className="msg-container">
                                         <h2>{selectedMessage.tytul}</h2>
                                         <p>
-                                            <strong>Nadawca:</strong> {selectedMessage.imie} {selectedMessage.nazwisko}
+                                            <strong>{radioValue === '3' ? 'Do:' : 'Od:'}</strong> {selectedMessage.imie} {selectedMessage.nazwisko}
                                         </p>
                                         <p>
                                             <strong>Data:</strong> {moment(selectedMessage.data_czas).format('DD.MM.YYYY HH:mm')}
