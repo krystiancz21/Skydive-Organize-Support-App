@@ -16,6 +16,7 @@ const OwnerFinancialOverview = () => {
     const [message, setMessage] = useState('');
     const [mail, setMail] = useState('');
     const [userRole, setUserRole] = useState('');
+    const [error, setError] = useState("");
 
 
     //sprawdzamy autoryzacje
@@ -43,6 +44,12 @@ const OwnerFinancialOverview = () => {
     }
 
     const handleShowSummary = () => {
+        // Sprawdzenie, czy dataTo jest większa niż dataFrom
+        if (new Date(dateTo) < new Date(dateFrom)) {
+            setError('Nieprawidłowy zakres dat. Data końcowa powinna być późniejsza niż data początkowa.');
+            return;
+        }
+
         axios.get('http://localhost:3001/api/payment/showFinancialOverview', {
             params: {
                 dateFrom,
@@ -178,6 +185,7 @@ const OwnerFinancialOverview = () => {
                         </Form.Group>
                     </Col>
                 </Row>
+                {error && <div className="alert alert-danger">{error}</div>}
             </Container>
             <SmallFooter />
         </>
