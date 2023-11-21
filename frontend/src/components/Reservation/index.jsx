@@ -158,7 +158,7 @@ const Reservation = () => {
             } else if (response.data.Status === "Success") {
                 setError('');
                 if (paymentMethodId == 1) {
-                    setUpdateSuccess('Pomyślnie zarezerwowano skok. Proszę wpłacić należną kwotę przy kasie.');
+                    setUpdateSuccess('Pomyślnie zarezerwowano skok. Proszę wpłacić należną kwotę na miejscu w dniu skoku.');
                 } else if (paymentMethodId == 2) {
                     setUpdateSuccess(`Pomyślnie zarezerwowano skok. Proszę wykonać przelew w kwocie ${jumpType.cena} PLN na nr konta: PL779071200774771957185353583493.`);
                 }
