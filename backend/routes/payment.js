@@ -113,7 +113,6 @@ router.get("/showFinancialOverview", (req, res) => {
             console.error('Błąd zapytania do bazy danych: ' + err.message);
             res.status(500).json({ error: 'Błąd zapytania do bazy danych' });
         } else {
-            //console.log(results);
             // Zwróć wyniki jako odpowiedź w formacie JSON
             res.status(200).json(results);
         }

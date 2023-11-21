@@ -23,6 +23,8 @@ const EmployeeEditAccount = () => {
     const [isAuth, setIsAuth] = useState(false);
     const [editUserSuccess, setEditUserSuccess] = useState(false);
     const [editUserRoleSuccess, setUserRoleSuccess] = useState(false);
+    const [blockUserAccount, setBlockUserAccount] = useState(false);
+    const [unblockUserAccount, setUnblockUserAccount] = useState(false);
 
     const [updateSuccess, setUpdateSuccess] = useState(false);
     const [updateFile, setUpdateFile] = useState(false);
@@ -38,10 +40,6 @@ const EmployeeEditAccount = () => {
     const handleChange = ({ currentTarget: input }) => {
         setData({ ...data, [input.name]: input.value })
     }
-
-    // const handleChangeRole = ({ currentTarget: input }) => {
-    //     setRoleData({ ...roleData, [input.name]: input.value });
-    // }
 
     const handleChangeRole = ({ currentTarget: input }) => {
         setRoleData({ ...roleData, [input.name]: parseInt(input.value, 10) });
@@ -164,25 +162,38 @@ const EmployeeEditAccount = () => {
         e.preventDefault(); // Zapobiega przeładowaniu strony
 
         try {
-            const response = await axios.post('http://localhost:3001/api/user/updateClientRoleById', {
-                role: roleData.role,
+            // Pobranie aktualnej roli użytkownika przed aktualizacją
+            const currentRoleResponse = await axios.post('http://localhost:3001/api/user/getUserRole', {
                 clientId: clientId
             });
 
-            if (response.data.Status === 'Success') {
-                setUserRoleSuccess(true);
-                setError('');
-            } else {
-                setError(response.data.error);
+            const currentRoleData = currentRoleResponse.data[0];
+
+            // Porównanie aktualnej roli z wybraną rolą do aktualizacji
+            if (currentRoleData && currentRoleData.rola_rola_id === roleData.role) {
+                setError('Rola użytkownika nie została zmieniona.');
                 setUserRoleSuccess(false);
+            } else {
+                // Aktualizacja roli
+                const response = await axios.post('http://localhost:3001/api/user/updateClientRoleById', {
+                    role: roleData.role,
+                    clientId: clientId
+                });
+
+                if (response.data.Status === 'Success') {
+                    setUserRoleSuccess(true);
+                    setError('');
+                } else {
+                    setError(response.data.error);
+                    setUserRoleSuccess(false);
+                }
             }
         } catch (error) {
             console.error(error);
-            setError('Wystąpił błąd podczas aktualizacji danych użytkownika');
+            setError('Wystąpił błąd podczas aktualizacji roli użytkownika');
             setUserRoleSuccess(false);
         }
     };
-
 
     // Usuniecie konta
     const handleDeleteAccount = () => {
@@ -197,28 +208,80 @@ const EmployeeEditAccount = () => {
     }
 
     // Zablokowanie konta
-    const handleBlockAccount = () => {
-        if (window.confirm("Czy na pewno chcesz zablokować konto?")) {
-            axios.post(`http://localhost:3001/api/user/blockAccount/?email=${data.email}`)
-                .then(res => {
-                    // Przekierowanie na stronę wstecz po zablokowaniu konta
-                    window.location.href = "http://localhost:3000/employee-users-accounts";
-                })
-                .catch(err => console.log(err));
+    const handleBlockAccount = async (e) => {
+        e.preventDefault(); // Zapobiega przeładowaniu strony
+
+        try {
+            // Pobranie informacji o koncie przed wysłaniem żądania blokady
+            const accountInfoResponse = await axios.post(`http://localhost:3001/api/user/getUserDataById`, { clientId: clientId });
+
+            if (accountInfoResponse.data && accountInfoResponse.data.length > 0) {
+                const accountData = accountInfoResponse.data[0];
+
+                // Sprawdzenie, czy konto jest już zablokowane
+                if (accountData.zablokowane_do && new Date(accountData.zablokowane_do) > new Date()) {
+                    setError('To konto już jest zablokowane.');
+                    setBlockUserAccount(false);
+                } else {
+                    // Wysłanie żądania blokady
+                    const response = await axios.post(`http://localhost:3001/api/user/blockAccount/?email=${data.email}`);
+
+                    if (response.data && response.data.Status === 'Success') {
+                        setBlockUserAccount(true);
+                        setError('');
+                    } else {
+                        setError(response.data ? response.data.error : 'Nieoczekiwana odpowiedź serwera');
+                        setBlockUserAccount(false);
+                    }
+                }
+            } else {
+                setError('Nie znaleziono danych dla podanego identyfikatora klienta.');
+                setBlockUserAccount(false);
+            }
+        } catch (error) {
+            console.error(error);
+            setError('Wystąpił błąd podczas zablokowania konta użytkownika');
+            setBlockUserAccount(false);
         }
-    }
+    };
 
     // Odblokowanie konta
-    const handleUnblockAccount = () => {
-        if (window.confirm("Czy na pewno chcesz odblokować konto?")) {
-            axios.post(`http://localhost:3001/api/user/unblockAccount/?email=${data.email}`)
-                .then(res => {
-                    // Przekierowanie na stronę wstecz po odblokowaniu konta
-                    window.location.href = "http://localhost:3000/employee-users-accounts";
-                })
-                .catch(err => console.log(err));
+    const handleUnblockAccount = async (e) => {
+        e.preventDefault(); // Zapobiega przeładowaniu strony
+
+        try {
+            // Pobranie informacji o koncie przed wysłaniem żądania odblokowania
+            const accountInfoResponse = await axios.post(`http://localhost:3001/api/user/getUserDataById`, { clientId: clientId });
+
+            if (accountInfoResponse.data && accountInfoResponse.data.length > 0) {
+                const accountData = accountInfoResponse.data[0];
+
+                // Sprawdzenie, czy konto jest już odblokowane
+                if (!accountData.zablokowane_do || accountData.zablokowane_do === "0000-00-00 00:00:00" || new Date(accountData.zablokowane_do) <= new Date()) {
+                    setError('Konto nie jest zablokowane.');
+                    setUnblockUserAccount(false);
+                } else {
+                    // Wysłanie żądania odblokowania
+                    const response = await axios.post(`http://localhost:3001/api/user/unblockAccount/?email=${data.email}`);
+
+                    if (response.data && response.data.Status === 'Account unblocked successfully') {
+                        setUnblockUserAccount(true);
+                        setError('');
+                    } else {
+                        setError(response.data ? response.data.error : 'Nieoczekiwana odpowiedź serwera');
+                        setUnblockUserAccount(false);
+                    }
+                }
+            } else {
+                setError('Nie znaleziono danych dla podanego identyfikatora klienta.');
+                setUnblockUserAccount(false);
+            }
+        } catch (error) {
+            console.error(error);
+            setError('Wystąpił błąd podczas odblokowania konta użytkownika');
+            setUnblockUserAccount(false);
         }
-    }
+    };
 
     // Dodanie licencji
     const uploadFile = async () => {
@@ -271,7 +334,6 @@ const EmployeeEditAccount = () => {
         <>
             {isAuth ? (
                 <>
-                    {/* Wyświetl odpowiednią nawigację w zależności od roli */}
                     {userRole === 'pracownik' && (
                         // User zalogowany
                         <>
@@ -392,7 +454,7 @@ const EmployeeEditAccount = () => {
                                             <Nav.Link href="/main"><BiHomeAlt /></Nav.Link>
                                             <Nav.Link href="/offer">OFERTA</Nav.Link>
                                             <Nav.Link href="/messages">WIADOMOŚCI</Nav.Link>
-                                            <Nav.Link href="/employeemanagejumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
+                                            <Nav.Link href="/employee-manage-jumps">ZARZĄDZANIE SKOKAMI</Nav.Link>
                                             <Nav.Link href="/owner-financial-overview">PODSUMOWANIE FINANSOWE</Nav.Link>
                                         </Nav>
                                         <Nav.Link href="/userprofile"><Navbar.Brand><AiOutlineUser /> {mail}</Navbar.Brand></Nav.Link>
@@ -501,6 +563,8 @@ const EmployeeEditAccount = () => {
                                     </div>
                                     {editUserSuccess && <div className="alert alert-success">Pomyślnie udało zmienić dane użytkownika!</div>}
                                     {editUserRoleSuccess && <div className="alert alert-success">Pomyślnie udało zmienić rolę użytkownika!</div>}
+                                    {blockUserAccount && <div className="alert alert-success">Konto użytkownika zostało zablokowane!</div>}
+                                    {unblockUserAccount && <div className="alert alert-success">Konto użytkownika zostało odblokowane!</div>}
                                     {updateFile && <div className="alert alert-success">Pomyślnie dodano załącznik!</div>}
                                     {error && <div className="alert alert-danger">{error}</div>}
                                     <Row>
