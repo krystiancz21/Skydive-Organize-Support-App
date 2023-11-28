@@ -9,6 +9,16 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import 'react-calendar/dist/Calendar.css';
 
+const SmallFooter = () => {
+    const year = new Date().getFullYear();
+
+    return (
+        <footer className="text-center footer fixed-bottom">
+            <p className="m-0 stopa">System wspomagający organizację skoków spadochronowych | Autorzy: Krystian Czapla, Kacper Czajka, Mariusz Choroś | &copy; {year}</p>
+        </footer>
+    );
+};
+
 const JumpCalendar = () => {
     const [isAuth, setIsAuth] = useState(false);
     const [message, setMessage] = useState('');
@@ -207,6 +217,8 @@ const JumpCalendar = () => {
                             </Col>
                         </Row>
                     </Container>
+                    <div className='pt-5 pb-5'></div>
+                    <SmallFooter />
                 </>
             ) : (
                 <></> // User niezalogowany

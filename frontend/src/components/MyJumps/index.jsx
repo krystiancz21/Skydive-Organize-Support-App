@@ -174,7 +174,7 @@ const MyJumps = () => {
                                     ))}
                                 </>
                             ) : (
-                                <p className="text-center">Tutaj nic nie ma...</p>
+                                <p className="text-center">Brak rezerwacji.</p>
                             )
                         ) : (
                             archivalJumps.length > 0 ? (
@@ -193,7 +193,7 @@ const MyJumps = () => {
                                     ))}
                                 </>
                             ) : (
-                                <p className="text-center">Tutaj nic nie ma...</p>
+                                <p className="text-center">Brak rezerwacji.</p>
                             )
                         )}
                     </Container>

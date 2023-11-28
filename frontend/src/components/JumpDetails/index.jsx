@@ -258,7 +258,7 @@ const JumpDetails = () => {
                             </Col>
                         </Row>
                         <Row>
-                            <Col md={4}>
+                            {/* <Col md={4}>
                                 <Form.Group className="mb-2">
                                     <Form.Label>Liczba osób w samolocie</Form.Label>
                                     <FormControl
@@ -268,7 +268,7 @@ const JumpDetails = () => {
                                         disabled
                                     />
                                 </Form.Group>
-                            </Col>
+                            </Col> */}
                             <Col md={4}>
                                 <Form.Group className="mb-2">
                                     <Form.Label>Sposób zapłaty</Form.Label>
