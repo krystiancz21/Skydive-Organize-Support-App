@@ -7,8 +7,6 @@ Uruchomienie:
     npm start
     ```
 
-# [Instrukcja do gita](https://github.com/krystiancz21/Inzynierka/blob/main/git_guide.md)
-
 # Do zorbienia:
 1. Funkcjonalności niezalogowanego użytkownika:
 - [X] możliwość rejestracji,
@@ -44,4 +42,6 @@ Uruchomienie:
 - [X] możliwość edycji kont użytkowników,
 - [X] możliwość usuwania kont użytkowników,
 - [X] blokowanie kont/odblokowanie.
+
+[Instrukcja do gita](https://github.com/krystiancz21/Inzynierka/blob/main/git_guide.md)
 
