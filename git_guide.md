@@ -1,5 +1,5 @@
 # Poradnik jak w używać git'a
-Komenda której zawsze można używać i nie zrobi rozpierdolu
+Komenda której zawsze można używać
 ```
 git status
 ```
