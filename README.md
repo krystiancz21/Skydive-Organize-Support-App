@@ -1,13 +1,13 @@
 # System wspomagający organizację skoków spadochronowych
 Niniejsza praca inżynierska przedstawia aplikację webową, która posiada pełen zestaw funkcjonalności wspierających organizację skoków spadochronowych. System ten ma na celu ułatwienie możliwości skorzystania z usług dla klientów, usprawnienie wykonywania pracy dla obsługi klienta oraz administratorów.
 
-Wykorzystane technologie: React, Express, Node.js, MySQL
+Wykorzystane technologie: React, Express, Node.js, MySQL.
 
 ### Uruchomienie projektu
-Aby uruchomić lolanie aplikację, należy:
+Aby uruchomić lokalnie aplikację, należy:
 1. Sklonować repozytorium
 2. Zaimportować bazę danych np. w phpmyadmin
-3. Przejść do scieżki /frontend oraz /backend, a następnie zainsalować niezbędne zależności:
+3. Przejść do scieżki /frontend oraz /backend, a następnie zainstalować niezbędne zależności:
     ```
     npm i
     ```
@@ -44,15 +44,13 @@ Aby uruchomić lolanie aplikację, należy:
 
 
 #### Funkcjonalności administratora:
-- możliwość przeglądu kont pracowników,
-- możliwość podglądu podsumowania finansowego, 
-- możliwość tworzenia kont użytkowników,
+- przeglądanie kont pracowników oraz klientów,
+- możliwość tworzenia, edycji i usuwania kont użytkowników,
 - możliwość zarządzania rolami użytkowników,
-- możliwość edycji kont użytkowników,
-- możliwość usuwania kont użytkowników,
-- blokowanie kont/odblokowanie.
+- podgląd podsumowania finansowego, 
+- blokowanie kont i odblokowanie kont.
 
-# Przykładowe ekrany prezentujące apliakcję
+# Przykładowe ekrany prezentujące aplikację
 ### Rejestracja do aplikacji
 ![Register](images/register.png)
 
@@ -65,7 +63,7 @@ Aby uruchomić lolanie aplikację, należy:
 ### Rezerwacja terminu skoku spadochronowego
 ![Reservation2](images/reservation_2.png)
 
-### Szczegóły skoku
+### Szczegóły rezerwacji skoku
 ![Reservation_details](images/reservation_details.png)
 
 ### Edycja terminu rezerwacji
