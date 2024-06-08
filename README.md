@@ -1,78 +1,96 @@
-# System wspomagający organizację skoków spadochronowych
-Niniejsza praca inżynierska przedstawia aplikację webową, która posiada pełen zestaw funkcjonalności wspierających organizację skoków spadochronowych. System ten ma na celu ułatwienie możliwości skorzystania z usług dla klientów, usprawnienie wykonywania pracy dla obsługi klienta oraz administratorów.
+# Table of contents
+* [General info](#general-info)
+* [Technologies](#technologies)
+* [Setup project](#setup-project)
+* [Functional Requirements](#functional-requirements)
+* [Aplication preview](#aplication-preview)
+  
+# General info
+### The System Supporting the Organization of Skydiving
+This engineering work presents a web application that has a full set of functionalities to support the organization of skydiving. The system is designed to facilitate service opportunities for customers, streamline the execution of work for customer service and administrators.
 
-Wykorzystane technologie: React, Express, Node.js, MySQL.
+# Technologies
+React | Express | Node.js | MySQL
 
-### Uruchomienie projektu
-Aby uruchomić lokalnie aplikację, należy:
-1. Sklonować repozytorium
-2. Zaimportować bazę danych np. w phpmyadmin
-3. Przejść do scieżki /frontend oraz /backend, a następnie zainstalować niezbędne zależności:
+# Setup project
+1. Clone repository.
+2. Create database with name `skydive` and run the [code from the file.](skrypt_baza.sql)
+3. Setup and run the server site:
+   - go to the `/backend` path, then install the necessary dependencies:
     ```
     npm i
     ```
-4. Uruchomić (odpowienio klienta oraz serwer):
+    - launch the server:
     ```
     npm start
     ```
 
-# Funkcjonalności aplikacji
-#### Funkcjonalności niezalogowanego użytkownika:
-- możliwość rejestracji,
-- możliwość sprawdzenia aktualnej oferty firmy,
-- możliwość sprawdzenia wolnych terminów na skoki spadochronowe,
-- możliwość zalogowania.
+4. Setup and run the client site:
+   - go to the `/frontend` path, then install the necessary dependencies:
+    ```
+    npm i
+    ```
+    - launch the client:
+    ```
+    npm start
+    ```
 
 
-#### Funkcjonalności zalogowanego użytkownika (klienta):
-- możliwość rezerwacji terminu, poprzez wypełnienie formularza: (wybranie wolnego terminu oraz godziny, wybranie rodzaju skoku, wprowadzenie masy ciała, wybranie sposobu płatności)
-- podgląd, edycja lub rezygnacja z zarezerwowanych terminów,
-- podgląd, edycja własnych danych osobowych,
-- możliwość wysyłania wiadomości,
-- możliwość wylogowania,
-- usunięcie konta.
+# Functional Requirements
+#### Functions of a non-logged-in user:
+- registration and log in,
+- check the current offer of the company,
+- check free dates for parachute jumps.
 
 
-#### Funkcjonalności pracownika:
-- odpowiadanie na pytania
-- planowanie terminów skoków,
-- potwierdzenie dokonania płatności,
-- zarządzanie ofertą (dodawanie, modyfikowanie, usuwanie)
-- planowanie grafiku zarezerwowanych skoków,
-- odwoływanie skoków oraz rozesłanie informacji klientom,
-- zarządzanie danymi klientów (zakładanie kont klientów, ewidencjonowanie licencji klientów)
+#### Functionality of the logged-in user (client):
+- possibility to book an appointment, by filling out the form: (selecting the available date and time, choosing the type of jump, entering the weight, choosing the method of payment),
+- preview, edit or cancel reserved appointments,
+- preview, edit your own personal data,
+- send and recieve messages,
+- log out and delete account.
 
 
-#### Funkcjonalności administratora:
-- przeglądanie kont pracowników oraz klientów,
-- możliwość tworzenia, edycji i usuwania kont użytkowników,
-- możliwość zarządzania rolami użytkowników,
-- podgląd podsumowania finansowego, 
-- blokowanie kont i odblokowanie kont.
+#### Employee functionalities:
+- scheduling jump dates,
+- confirmation of payment,
+- managing the offer (adding, modifying, deleting),
+- planning the schedule of booked jumps,
+- cancelling jumps and sending out information to customers,
+- customer data management (setting up customer accounts, recording customer licenses),
+- send and recieve messages.
 
-# Przykładowe ekrany prezentujące aplikację
-### Rejestracja do aplikacji
+
+#### Administrator functionalities:
+- management of user accounts (create, edit, delete), 
+- ability to manage user roles,
+- viewing of financial summary, 
+- locking accounts and unlocking accounts.
+
+
+# Aplication preview
+### Registration for the application
 ![Register](images/register.png)
 
-### Oferta - dostępne rodzaje skoków spadochronowych
+### Offer - available types of skydive jumps
 ![Offer](images/offer.png)
 
-### Przegląd i wybór terminu skoku
+### Review and selection of jump date
 ![Reservation](images/reservation.png)
 
-### Rezerwacja terminu skoku spadochronowego
+### Booking a date for a skydive jump
 ![Reservation2](images/reservation_2.png)
 
-### Szczegóły rezerwacji skoku
+### Jump booking details
 ![Reservation_details](images/reservation_details.png)
 
-### Edycja terminu rezerwacji
+### Edit booking date
 ![Change_reservation](images/change_reservation.png)
 
-### Podgląd i edycja danych użytkownika
+### Viewing and editing user data
 ![Edit_user_data](images/edit_user_data.png)
 
-### Zarządzanie ofertą skoków przez pracownika
+### Management of the jump offer by the employee
 ![Planing_jump_date](images/planing_jump_date.png)
 
 ![Delete_jump_date](images/delete_jump_date.png)
